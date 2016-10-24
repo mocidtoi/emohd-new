@@ -38,6 +38,7 @@ Template.Scene.onRendered(function() {
             display: 'bottom',
             minWidth: 100,
             showInput:true,
+            inputClass: "full-width",
             group: {
                 groupWheel: true,
                 header:false,
@@ -57,7 +58,8 @@ Template.Scene.onRendered(function() {
             theme: 'mobiscroll',
             lang: 'en',
             display: 'bottom',
-            inputClass: "text-right padding-right-4-percent",
+            //inputClass: "text-right padding-right-4-percent",
+            inputClass: "full-width text-right",
             minWidth: 200,
             onSelect: function(valueText, inst) {
                 Session.set('show-save-btn', true);

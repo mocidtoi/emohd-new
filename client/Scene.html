@@ -1,24 +1,23 @@
 <template name="Scene">
-    <!-- Page -->
-    <div class="page-content container-fluid margin-top-{{top_margin}}" style="padding-top: 17px">
-        <div class="row" data-plugin="matchHeight" data-by-row="true">
-            <div class="main-container">
-                <!-- Example List Divider -->
-                <div class="example-wrap">
-                    <div class="clearfix block-heading">
-                        <h4 class="example-title">{{scene.name}}</h4>
-                        <a class="right-bt addBtn" href="#"><i class="icon ti-plus" aria-hidden="true"></i></a>
-                    </div>
-                    <div class="list-group list-group-dividered list-group-full">
-                        {{#each sd in scenedev}}
-                        <a class="list-group-item">
-                            <div class="pull-left">
-                                <a data-action="remove-scenedev" data-id="{{sd.id}}"><i class="icon ti-trash" aria-hidden="true"></i></a>
-                            </div>
-                            <ul class="clearfix group-select">
+    <div class="page">
+        <ul class="room-list" style="padding-left:0;padding-right:0;">
+            <li><div>
+                <span>{{scene.name}}</span>
+                <a id="addTask" href="#" class="button-style-2 align-right">
+                    <i class="icon icon-fit iot-color-brand iot-icon-plus align-right" aria-hidden="true"></i>
+                </a>
+            </div></li>
+            <li><div style="padding:0;">
+                <ul class="device-list" style="padding-left:0;padding-right:0;">
+                    {{#each sd in scenedev}}
+                    <li><div class="glass">
+                            <ul style="list-style:none;" class="clearfix group-select zero-padding">
+                                <li style="width: 8vw;" class="column"><span class="" data-action='remove-task' data-id="id">
+                                    <i class="icon icon-fit iot-icon-plus" aria-hidden="true"></i>
+                                </span></li>
                                 {{#if sd.devId}}
                                 {{#with device sd.devId}}
-                                <li class="column-1" style="width: 30%;">
+                                <li style="width: 30vw;" class="column column-1">
                                     <select class="list-down" data-id="{{sd.id}}">
                                         {{#each r in rooms}}
                                         <optgroup label="{{r.name}}">
@@ -30,11 +29,11 @@
                                     </select>
                                 </li>
                                     {{#with room groupId}}
-                                <li class="column-2" style="width: 40%;">
-                                    <input type="text" class="mbsc-control mbsc-control-ev" readonly data-id="{{sd.id}}" data-devId="{{sd.devId}}" value="{{name}}">
+                                <li style="width: 30vw;" class="column column-2">
+                                    <input type="text" class="mbsc-control mbsc-control-ev full-width" readonly data-id="{{sd.id}}" data-devId="{{sd.devId}}" value="{{name}}">
                                 </li>
                                     {{/with}}
-                                <li class="last-column" style="width: 30%">
+                                <li style="width: 20vw;" class="column last-column">
                                     <select class="list-down" data-id="{{sd.id}}">
                                         <option value=1 {{isSelected 1 sd.action}}>turn ON</option>
                                         <option value=0 {{isSelected 0 sd.action}}>turn OFF</option>
@@ -43,7 +42,7 @@
                                 </li>
                                 {{/with}}
                                 {{else}}
-                                <li class="column-1" style="width: 40%;">
+                                <li class="column column-1">
                                     <select class="list-down" data-id="{{sd.id}}">
                                         {{#each r in rooms}}
                                         <optgroup label="{{r.name}}">
@@ -54,10 +53,10 @@
                                         {{/each}}
                                     </select>
                                 </li>
-                                <li class="column-2" style="width: 40%;">
+                                <li class="column column-2">
                                     <input type="text" class="mbsc-control mbsc-control-ev" readonly data-id="{{sd.id}}">
                                 </li>
-                                <li class="last-column" style="width: 20%">
+                                <li class="column last-column">
                                     <select class="list-down" data-id="{{sd.id}}">
                                         <option value=1 {{isSelected 1 sd.action}}>turn ON</option>
                                         <option value=0 {{isSelected 0 sd.action}}>turn OFF</option>
@@ -66,16 +65,34 @@
                                 </li>
                                 {{/if}}
                             </ul>
-                        </a>
-                        {{/each}}
-                    </div>
-                </div>
-                <div class="button-group">
-                    <button type="button" class="btn btn-raised btn-danger btn-block">DELETE</button>
-                </div>
-                <!-- End Example List Divider -->
-            </div>
-        </div>
+<!--
+                        <span class="" data-id="id">
+                            <select id="action{{id}}" class="list-down">
+                                <option {{selected action}}>Đèn 1</option>
+                                <option {{notSelected action}}>Đèn 2</option>
+                            </select>
+                        </span>
+                        <span class="" data-id="id">
+                            <select id="action{{id}}" class="list-down">
+                                <option {{selected action}}>Phòng ngủ 1</option>
+                                <option {{notSelected action}}>Phòng ngủ 2</option>
+                            </select>
+                        </span>
+
+                        <span class="right-bt" data-id="id">
+                            <select id="action{{id}}" class="list-down">
+                                <option {{selected action}}>Bật</option>
+                                <option {{notSelected action}}>Tắt</option>
+                            </select>
+                        </span>
+-->
+                    </div></li>
+                    {{/each}}
+                </ul>
+            </div></li>
+            <li style="padding:1em;">
+                <button id="removeDevice" type="button" class="btn btn-raised btn-danger btn-block"><h5 class="text-uppercase">Delete</h5></button>
+            </li>
+        </ul>
     </div>
-    <!-- End Page -->
 </template>

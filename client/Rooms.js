@@ -10,14 +10,13 @@ Template.Rooms.onRendered(function() {
                     Meteor.clearTimeout(timeoutHandle);
                 }
                 timeoutHandle = Meteor.setTimeout(function() {
-                    console.log('Rippler');
-                    self.$(".item-scene").rippler({
+                    self.$(".scene-item").rippler({
                         effectClass      :  'rippler-effect'
                         ,effectSize      :  16      // Default size (width & height)
                         ,addElement      :  'div'   // e.g. 'svg'(feature)
                         ,duration        :  400
                     });
-                    self.$(".item-curtain").rippler({
+                    self.$(".curtain-item").rippler({
                         effectClass      :  'rippler-effect'
                         ,effectSize      :  16      // Default size (width & height)
                         ,addElement      :  'div'   // e.g. 'svg'(feature)
@@ -49,6 +48,36 @@ Template.Rooms.helpers({
 		return [{removable:true, roomId:gid}];
 	},
 	isOn: isDevOn,
+    itemClass: function(type, id) {
+        switch(parseInt(type)) {
+        case Constants.DEVTYPE_CURTAIN:
+            return "iot-color-llg";
+            break;
+        case Constants.DEVTYPE_SCENE:
+            return "iot-color-brand-2";
+            break;
+        default:
+            try {
+                return Device.findOne(id).status == 49?"iot-color-brand":"iot-color-llg";
+            }
+            catch(err) {
+                return "iot-color-llg";
+            }
+        }
+    },
+    containerClass: function(type) {
+        switch(parseInt(type)) {
+        case Constants.DEVTYPE_CURTAIN:
+            return "curtain-item";
+            break;
+        case Constants.DEVTYPE_SCENE:
+            return "scene-item";
+            break;
+        default:
+            return "";
+        }
+    },
+/*
     statusClass: function(type, id) {
         switch(parseInt(type)) {
         case Constants.DEVTYPE_CURTAIN:
@@ -65,7 +94,7 @@ Template.Rooms.helpers({
                 return "item-device";
             }
         }
-    },
+    },*/
     icon: function(typeId) {
         return IconList[typeId].icon;
     },
@@ -86,7 +115,8 @@ Template.Rooms.events({
         var roomId = event.currentTarget.getAttribute("data-room-id");
         Session.set("room-id", roomId);
     },
-    'click .list-group-item.item-device,.list-group-item.item-scene': function(event) {
+    //'click .list-group-item.item-device,.list-group-item.item-scene': function(event) {
+    'click .button-style-1': function(event) {
         var devId = parseInt(event.currentTarget.getAttribute('data-id'));
         console.log("Rooms, device toggle " + {
 			id: devId,

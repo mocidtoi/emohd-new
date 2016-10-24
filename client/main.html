@@ -14,7 +14,7 @@
 <template name="ApplicationLayout">
     <div class="titlebar">
         {{>yield "leftNav"}}
-        <div class="brand titlebar-center"><span>Rooms</span></div>
+        <div class="brand titlebar-center"><span>{{_ title}}</span></div>
         {{>yield "rightNav"}}
     </div>
 <!--
@@ -78,9 +78,11 @@
 </template>
 
 <template name="BackBtn">
-    <button type="button" class="navbar-toggle navbar-toggle-left hided" data-toggle="menubar" onclick="history.back();">
+    <!--<button type="button" class="navbar-toggle navbar-toggle-left hided" data-toggle="menubar" onclick="history.back();">
         <i class="icon dicon-back" aria-hidden="true"></i>
     </button>
+-->
+    <a class="titlebar-left brand" onclick="history.back();">{{_ "back"}}</a>
 </template>
 
 <template name="AddBtn">
@@ -91,9 +93,10 @@
 </template>
 
 <template name="SaveBtn">
-    <button type="button" class="navbar-toggle collapsed {{hide}}">
+    <!--<button type="button" class="navbar-toggle collapsed {{hide}}">
         <span style="color:#ffc; font-size:17px;">{{_ "save"}}</span>
-    </button>
+    </button>-->
+    <button class="titlebar-right brand {{hide}}"><span>{{_ "save"}}</span></button>
 </template>
 
 <template name="SettingsBtn">
@@ -103,7 +106,8 @@
 </template>
 
 <template name="CancelBtn">
-    <button type="button" class="navbar-toggle navbar-toggle-left" data-toggle="menubar">
+    <!--<button type="button" class="navbar-toggle navbar-toggle-left" data-toggle="menubar">
         <a href="{{back}}" style="color:#fff; font-size:17px">{{_ "back"}}</a>
-    </button>
+    </button>-->
+    <a href="{{back}}" class="titlebar-left brand">{{_ "back"}}</a>
 </template>

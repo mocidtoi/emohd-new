@@ -9,8 +9,8 @@
                     {{#each device id}}{{#if removable}}
                     <a class="col-xs-12 removeAction iot-color-brand text-center" data-room-id="{{roomId}}">{{_ "delete"}}</a>
                     {{else}}
-                    <li><div>
-                        <a class="button-style-1"><i class="icon icon-big iot-color-llg iot-icon-dieu-hoa"></i><span>{{name}}</span></a>
+                    <li><div class="{{containerClass type}}">
+                        <a class="button-style-1" data-id="{{id}}"><i class="icon icon-big {{itemClass type id}} iot-icon-dieu-hoa"></i><span>{{name}}</span></a>
                         <a class="button-style-2 align-right" href="/Device/{{groupId}}/{{id}}"><i class="icon iot-color-brand iot-icon-settings align-right"></i></a>
                     </div></li>
                     {{/if}}{{/each}}

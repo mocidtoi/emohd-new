@@ -599,17 +599,30 @@ Meteor.startup(function() {
     var future = new Future();
     sequelize.sync().then(function() {
         Task.findAll().then(function(tsk) {
+            console.log("---- " + tsk.length);
             for (var i = 0; i < tsk.length; i++) {
                 if (tsk[i] && tsk[i].active) {
                     var schedule = later.parse.text("at " + tsk[i].time)
-                    taskPool[tsk[i].id] = later.setInterval(function() {
+                    var task = tsk[i];
+                    /*
+                    taskPool[task.id] = later.setInterval(function() {
+                        console.log("---- Do event --- " + task.time);
+                        command({
+                            id: task.deviceId,
+                            act: task.action ? 'on' : 'off'
+                        }, function(res) {
+                            myLog(res)
+                        });
+                    }, schedule);
+                    */
+                    /*taskPool[tsk[i].id] = later.setInterval(function() {
                         command({
                             id: tsk[i].deviceId,
                             act: tsk[i].action ? 'on' : 'off'
                         }, function(res) {
                             myLog(res)
                         });
-                    }, schedule);
+                    }, schedule);*/
                 }
             }
             onStartupSuccess();

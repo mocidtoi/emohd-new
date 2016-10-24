@@ -54,6 +54,7 @@ Template.Device.onRendered(function() {
                     theme: 'mobiscroll', 
                     lang: 'en', 
                     display: 'bottom', 
+                    inputClass: "full-width text-right",
                     minWidth: 200,
                     onSelect: function(valueText, inst) {
                         Session.set('show-save-btn', true);
@@ -92,7 +93,7 @@ Template.Device.events({
 
         Session.set('show-save-btn', true);
     },
-    "click div[data-action='remove-task']": function(event, instance) {
+    "click span[data-action='remove-task']": function(event, instance) {
         var task_id = parseInt(event.currentTarget.getAttribute('data-id'));
         myConfirm( TAPi18n.__("Are you sure?"), TAPi18n.__("Do you really want to remove this task?"), function() {
             Meteor.apply('removeTask', [task_id], {wait: false});

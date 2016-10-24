@@ -9,9 +9,9 @@ Template.Notifications.helpers({
     newClass: function(notif) {
         if(notif && notif.isNew == true) {
             notif.isNew = false;
-            return "notification-new";
+            return "iot-color-lg";
         }
-        return "";
+        return "iot-color-llg";
     },
     icon: function(type) {
         return IconList[type].icon;

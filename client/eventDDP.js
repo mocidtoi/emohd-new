@@ -90,6 +90,7 @@ configNotifier = function() {
     var toutHandler = null;
     Notifier.addListener('sceneAction', function(message) {
         var m = JSON.parse(message);
+        console.log("Received sceneAction");
         m.isNew = true
         Meteor.Notification.queue(m);
         if(toutHandler != null) {

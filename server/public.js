@@ -109,16 +109,40 @@ if (process.env.MOCKUP == 'yes') {
             }
             if (data[2] == 0x32) { // D12  --> Bcast OUT
                 var res = new Buffer(8);
-                res[0] = 0x44;
-                res[1] = 0x33;
-                res[2] = 0x33;
-                res[3] = data[3];
-                res[4] = parseInt(Math.random() * 1000) % 100
-                res[5] = parseInt(Math.random() * 1000) % 100
-                //res[4] = 0x29;
-                //res[5] = 0x16;
-                res[6] = 0x10;
-                res[7] = data[7];
+                switch(data[7]) {
+                    // 0x30 = '0': COMMAND_OFF, 
+                    // 0x31: COMMAND_ON, 
+                    // 0x32: COMMAND_CHECK, 
+                    // 0x33: COMMAND_TOA, 
+                    // 0x34: COMMAND_PERJOIN
+                    case 0x30: 
+                    case 0x31:
+                    case 0x32:
+                        res[0] = 0x44; // D
+                        res[1] = 0x33; // D3
+                        res[2] = 0x34; // D34 --> status IN
+                        res[3] = data[3]; // Button ID
+                        res[4] = data[4]; // NetAddr 
+                        res[5] = data[5]; // NetAddr
+                        res[6] = data[6]; // Endpoint
+                        res[7] = data[7]; // 
+                        break;
+                    case 0x33:
+                        console.log("TURN OFF ALLLLLLLLL");
+                        break;
+                    case 0x34:
+                        res[0] = 0x44;
+                        res[1] = 0x33;
+                        res[2] = 0x33;
+                        res[3] = data[3];
+                        res[4] = parseInt(Math.random() * 1000) % 100
+                        res[5] = parseInt(Math.random() * 1000) % 100
+                        //res[4] = 0x29;
+                        //res[5] = 0x16;
+                        res[6] = 0x10;
+                        res[7] = data[7];
+                        break;
+                }
                 serialPort.writeToComputer(res);
             }
         }

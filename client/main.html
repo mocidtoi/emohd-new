@@ -1,0 +1,109 @@
+<head>
+  <title>emohd</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+</head>
+<body class="dashboard">
+  <script src='/bootstrap.min.js'></script>
+  <script src='/packery/js/packery.pkgd.js'></script>
+  <script src="/mobiscroll.js"></script>
+  <script src="/jquery.rippler.min.js"></script>
+  <script src="/nouislider.min.js"></script>
+</body>
+
+<template name="ApplicationLayout">
+    <div class="titlebar">
+        {{>yield "leftNav"}}
+        <div class="brand titlebar-center"><span>Rooms</span></div>
+        {{>yield "rightNav"}}
+    </div>
+<!--
+        <nav class="site-navbar navbar navbar-inverse navbar-fixed-top navbar-mega nav-down" role="navigation">
+                {{>yield "leftNav"}}
+                <div class="navbar-brand navbar-brand-center site-gridmenu-toggle" data-toggle="gridmenu">
+                    <a href="#" style="color: #fff;">{{_ title}}</a>
+                </div>
+                {{>yield "rightNav"}}
+        </nav>
+-->
+        {{#if has_widget}}
+            {{>NetAtmo}}
+        {{/if}}
+        <div class="transitions-container">
+            {{>yield}}
+        </div>
+        {{>TabBar}}
+        {{>yield "player"}}
+
+    {{>yield "modal-addroom"}}
+    {{>yield "modal-adddev"}}
+    {{>yield "modal-addscene"}}
+    {{>yield "modal-config"}}
+    {{>yield "modal-curtain"}}
+    {{>ModalConfirm}}
+    {{>LoadingScreen}}
+    {{>ModalSettings}}
+</template>
+
+<template name="Blank">
+</template>
+
+<template name="LoadingScreen1">
+    <div class="loading">
+        {{>spinner}}
+        <div style=" position: absolute; top: 55%; width: 100%; text-align: center;">
+            <!-- <span class="loading-msg">{{message}}</span> -->
+            {{#if isCordova}}
+            <button class="col-xs-12 btn btn-link" id='reconnect' href="#">{{_ "Reconnect"}}</button>
+            <button class="col-xs-12 btn btn-link" id='scan' href="#">{{_ "scanConfig"}}</button>
+            {{/if}}
+            <button class="col-xs-12 btn btn-link" data-toggle="modal" data-target="#modal-settings">{{_ "settingServer"}}</button>
+            <button id='wificonfig' class="col-xs-12 btn btn-link">{{_ "Config WiFi"}}</button>
+        </div>
+    </div>
+</template>
+<template name="LoadingScreen">
+    <div class="loading {{connStatus}} {{hide}}">
+        {{>spinner}}
+        <div style=" position: absolute; top: 55%; width: 100%; text-align: center;">
+            <!-- <span class="loading-msg">{{message}}</span> -->
+            {{#if isCordova}}
+            <button class="col-xs-12 btn btn-link" id='reconnect' href="#">{{_ "Reconnect"}}</button>
+            <button class="col-xs-12 btn btn-link" id='scan' href="#">{{_ "scanConfig"}}</button>
+            {{/if}}
+            <button class="col-xs-12 btn btn-link" data-toggle="modal" data-target="#modal-settings">{{_ "settingServer"}}</button><p></p>
+            <button id='wificonfig' class="col-xs-12 btn btn-link">{{_ "Config WiFi"}}</button>
+        </div>
+    </div>
+</template>
+
+<template name="BackBtn">
+    <button type="button" class="navbar-toggle navbar-toggle-left hided" data-toggle="menubar" onclick="history.back();">
+        <i class="icon dicon-back" aria-hidden="true"></i>
+    </button>
+</template>
+
+<template name="AddBtn">
+    <!--<button type="button" class="navbar-toggle collapsed" data-toggle="modal" data-target="#{{modal}}">
+        <i class="icon ti-plus" aria-hidden="true"></i>
+    </button>-->
+    <a class="titlebar-right button-style-2 align-right text-right" data-toggle="modal" data-target="#{{modal}}"><i class="icon icon-fit icon-down-10-percent iot-icon-plus"></i></a>
+</template>
+
+<template name="SaveBtn">
+    <button type="button" class="navbar-toggle collapsed {{hide}}">
+        <span style="color:#ffc; font-size:17px;">{{_ "save"}}</span>
+    </button>
+</template>
+
+<template name="SettingsBtn">
+    <button type="button" data-action="Kodi" class="navbar-toggle collapsed">
+        <span style="color:#fff; font-size:20px" class="ti-settings"></span>
+    </button>
+</template>
+
+<template name="CancelBtn">
+    <button type="button" class="navbar-toggle navbar-toggle-left" data-toggle="menubar">
+        <a href="{{back}}" style="color:#fff; font-size:17px">{{_ "back"}}</a>
+    </button>
+</template>

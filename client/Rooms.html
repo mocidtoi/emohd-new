@@ -1,0 +1,23 @@
+<template name="Rooms">
+    <div class="page">
+        <ul class="room-list">
+            {{#each group}}
+            <li>
+                <div><span>{{name}}</span>
+                <a class="button-style-2 align-right" href="#" data-toggle="modal" data-target="#add_device" data-room-id="{{id}}"><i class="icon iot-color-brand icon-fit iot-icon-plus align-right"></i></a></div>
+                <ul class="device-list">
+                    {{#each device id}}{{#if removable}}
+                    <a class="col-xs-12 removeAction iot-color-brand text-center" data-room-id="{{roomId}}">{{_ "delete"}}</a>
+                    {{else}}
+                    <li><div>
+                        <a class="button-style-1"><i class="icon icon-big iot-color-llg iot-icon-dieu-hoa"></i><span>{{name}}</span></a>
+                        <a class="button-style-2 align-right" href="/Device/{{groupId}}/{{id}}"><i class="icon iot-color-brand iot-icon-settings align-right"></i></a>
+                    </div></li>
+                    {{/if}}{{/each}}
+                </ul>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+</template>
+

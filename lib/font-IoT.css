@@ -1,0 +1,151 @@
+@charset "UTF-8";
+
+@font-face {
+  font-family: "iot";
+  src:url("../font/iot.eot");
+  src:url("../font/iot.eot?#iefix") format("embedded-opentype"),
+    url("../font/iot.woff") format("woff"),
+    url("../font/iot.ttf") format("truetype"),
+    url("../font/iot.svg#iot") format("svg");
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+[data-icon]:before {
+  font-family: "iot" !important;
+  content: attr(data-icon);
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[class^="iot-icon-"]:before,
+[class*=" iot-icon-"]:before {
+  font-family: "iot" !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.iot-icon-doc-sach:before {
+  content: "\64";
+}
+.iot-icon-downlight:before {
+  content: "\65";
+}
+.iot-icon-hang-ngay:before {
+  content: "\66";
+}
+.iot-icon-thao-luan:before {
+  content: "\68";
+}
+.iot-icon-thu-gian:before {
+  content: "\69";
+}
+.iot-icon-ti-vi:before {
+  content: "\6a";
+}
+.iot-icon-camera:before {
+  content: "\61";
+}
+.iot-icon-den-chum:before {
+  content: "\62";
+}
+.iot-icon-den-chung:before {
+  content: "\63";
+}
+.iot-icon-den-trang-tri:before {
+  content: "\6b";
+}
+.iot-icon-den-tuong:before {
+  content: "\6c";
+}
+.iot-icon-di-ngu:before {
+  content: "\6d";
+}
+.iot-icon-hoc-bai:before {
+  content: "\6e";
+}
+.iot-icon-nghe-nhac:before {
+  content: "\6f";
+}
+.iot-icon-quat:before {
+  content: "\70";
+}
+.iot-icon-ra-phong:before {
+  content: "\71";
+}
+.iot-icon-rem-chung:before {
+  content: "\72";
+}
+.iot-icon-rem-voan:before {
+  content: "\75";
+}
+.iot-icon-tiep-khach:before {
+  content: "\77";
+}
+.iot-icon-trinh-chieu:before {
+  content: "\78";
+}
+.iot-icon-tuoi-cay:before {
+  content: "\79";
+}
+.iot-icon-vao-phong:before {
+  content: "\7a";
+}
+.iot-icon-xem-tivi:before {
+  content: "\41";
+}
+.iot-icon-an-toi:before {
+  content: "\42";
+}
+.iot-icon-dieu-hoa:before {
+  content: "\43";
+}
+.iot-icon-diu-nhe:before {
+  content: "\44";
+}
+.iot-icon-rem-cuon:before {
+  content: "\73";
+}
+.iot-icon-rem-vai:before {
+  content: "\74";
+}
+.iot-icon-den-hat-khe:before {
+  content: "\67";
+}
+.iot-icon-power:before {
+  content: "\76";
+}
+.iot-icon-script:before {
+  content: "\45";
+}
+.iot-icon-settings:before {
+  content: "\46";
+}
+.iot-icon-more:before {
+  content: "\47";
+}
+.iot-icon-notifications:before {
+  content: "\48";
+}
+.iot-icon-plus:before {
+  content: "\49";
+}
+.iot-icon-favourite:before {
+  content: "\4a";
+}
+.iot-icon-rooms:before {
+  content: "\4b";
+}

@@ -360,8 +360,9 @@ ul.device-list > li > div > a > span {
     color: white;
 }
 .modal-centering {
-    top: 50vh;
-    transform: translate(0,-50%);
+    transform: translate(0, 50%) !important;
+    -ms-transform: translate(0, 50%) !important; /* IE 9 */
+    -webkit-transform: translate(0, 50%) !important; /* Safari and Chrome */
 }
 .column {
     display: inline-block;

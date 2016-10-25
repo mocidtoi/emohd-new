@@ -12,7 +12,7 @@
                     {{#each sd in scenedev}}
                     <li><div class="glass">
                             <ul style="list-style:none;" class="clearfix group-select zero-padding">
-                                <li style="width: 8vw;" class="column"><span class="" data-action='remove-task' data-id="id">
+                                <li style="width: 8vw;" class="column"><span class="" data-action='remove-scenedev' data-id="{{sd.id}}">
                                     <i class="icon icon-fit iot-icon-plus" aria-hidden="true"></i>
                                 </span></li>
                                 {{#if sd.devId}}
@@ -33,7 +33,7 @@
                                     <input type="text" class="mbsc-control mbsc-control-ev full-width" readonly data-id="{{sd.id}}" data-devId="{{sd.devId}}" value="{{name}}">
                                 </li>
                                     {{/with}}
-                                <li style="width: 20vw;" class="column last-column">
+                                <li style="width: 21vw;" class="column last-column">
                                     <select class="list-down" data-id="{{sd.id}}">
                                         <option value=1 {{isSelected 1 sd.action}}>turn ON</option>
                                         <option value=0 {{isSelected 0 sd.action}}>turn OFF</option>
@@ -42,7 +42,7 @@
                                 </li>
                                 {{/with}}
                                 {{else}}
-                                <li class="column column-1">
+                                <li style="width: 30vw;" class="column column-1">
                                     <select class="list-down" data-id="{{sd.id}}">
                                         {{#each r in rooms}}
                                         <optgroup label="{{r.name}}">
@@ -53,10 +53,10 @@
                                         {{/each}}
                                     </select>
                                 </li>
-                                <li class="column column-2">
+                                <li style="width: 30vw;" class="column column-2">
                                     <input type="text" class="mbsc-control mbsc-control-ev" readonly data-id="{{sd.id}}">
                                 </li>
-                                <li class="column last-column">
+                                <li style="width: 21vw;" class="column last-column">
                                     <select class="list-down" data-id="{{sd.id}}">
                                         <option value=1 {{isSelected 1 sd.action}}>turn ON</option>
                                         <option value=0 {{isSelected 0 sd.action}}>turn OFF</option>
@@ -65,27 +65,6 @@
                                 </li>
                                 {{/if}}
                             </ul>
-<!--
-                        <span class="" data-id="id">
-                            <select id="action{{id}}" class="list-down">
-                                <option {{selected action}}>Đèn 1</option>
-                                <option {{notSelected action}}>Đèn 2</option>
-                            </select>
-                        </span>
-                        <span class="" data-id="id">
-                            <select id="action{{id}}" class="list-down">
-                                <option {{selected action}}>Phòng ngủ 1</option>
-                                <option {{notSelected action}}>Phòng ngủ 2</option>
-                            </select>
-                        </span>
-
-                        <span class="right-bt" data-id="id">
-                            <select id="action{{id}}" class="list-down">
-                                <option {{selected action}}>Bật</option>
-                                <option {{notSelected action}}>Tắt</option>
-                            </select>
-                        </span>
--->
                     </div></li>
                     {{/each}}
                 </ul>

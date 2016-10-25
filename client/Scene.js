@@ -59,7 +59,7 @@ Template.Scene.onRendered(function() {
             lang: 'en',
             display: 'bottom',
             //inputClass: "text-right padding-right-4-percent",
-            inputClass: "full-width text-right",
+            inputClass: "full-width text-left",
             minWidth: 200,
             onSelect: function(valueText, inst) {
                 Session.set('show-save-btn', true);
@@ -156,14 +156,15 @@ Template.Scene.events({
             }
         );
     },
-    'click a.addBtn': function(event, instance) {
+    'click #addTask': function(event, instance) {
         console.log('add scenedev');
         var id = parseInt(Router.current().params.scid);
         console.log(id);
         Meteor.apply('addSceneDev', [id], {wait:false});
     },
-    'click a[data-action="remove-scenedev"]': function(event, instance) {
+    'click span[data-action="remove-scenedev"]': function(event, instance) {
         var scid = parseInt(event.currentTarget.getAttribute('data-id'));
+        console.log(scid);
         myConfirm(TAPi18n.__("Are you sure?"), 
             TAPi18n.__("Do you really want to remove this device from this scene?"), function() {
                 Meteor.apply('removeSceneDev', [scid], {wait:false});

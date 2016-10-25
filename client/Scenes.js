@@ -8,7 +8,9 @@ Template.Scenes.helpers({
     }
 });
 Template.Scenes.events({
-    'click div.list-group-item[data-id]': function(event, instance) {
+   //'click div.list-group-item[data-id]': function(event, instance) {
+   'click .button-style-1': function(event, instance) {
+        console.log( parseInt(event.currentTarget.getAttribute('data-id')));
         var elem = event.currentTarget;
         Meteor.apply('sceneAction', [elem.getAttribute('data-id')], {wait:false});
         $(elem).removeClass('no-background', 1000);

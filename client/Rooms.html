@@ -8,9 +8,11 @@
                 <a href="#" data-toggle="modal" data-target="#add_device" data-room-id="{{id}}"><i class="icon iot-color-brand icon-fit iot-icon-plus align-right"></i></a></div>
                 <ul class="device-list">
                     {{#each device id}}{{#if removable}}
-                    <a class="col-xs-12 removeAction iot-color-brand text-center" data-room-id="{{roomId}}">{{_ "delete"}}</a>
+                    <li><div style="text-align:center; border:none;">
+                    <a class="removeAction iot-color-brand text-center" data-room-id="{{roomId}}">{{_ "delete"}}</a>
+                    </div></li>
                     {{else}}
-                    <li><div class="{{containerClass type}}">
+                    <li><div class=" {{containerClass type}}">
                         <a class="button-style-1" data-id="{{id}}">
                             <i class="icon icon-big {{itemClass type id}} iot-icon-dieu-hoa"></i>
                             <span>{{name}}</span>

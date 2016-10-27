@@ -9,7 +9,7 @@ Template.Rooms.onRendered(function() {
                 if (timeoutHandle != null) {
                     Meteor.clearTimeout(timeoutHandle);
                 }
-                timeoutHandle = Meteor.setTimeout(function() {
+                /*timeoutHandle = Meteor.setTimeout(function() {
                     self.$(".scene-item").rippler({
                         effectClass      :  'rippler-effect'
                         ,effectSize      :  16      // Default size (width & height)
@@ -23,7 +23,7 @@ Template.Rooms.onRendered(function() {
                         ,duration        :  400
                     });
                     timeoutHandle = null;
-                }, 100);
+                }, 100);*/
             }
         },
         /*

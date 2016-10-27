@@ -1,46 +1,46 @@
 <template name="More">
-    <div class="page-content container-fluid margin-top-{{top_margin}}" style="padding-top:17px;padding-right:25px;">
+    <div class="page-content container-fluid" style="padding-top:17px;padding-right:25px;margin-top: 40px;">
         <div class="row">
             <div class="more-list">
-                <div class="tile col-xs-4 col-sm-2">                           
+                <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4 text-center">                           
                     <a class="icon_list text-center" data-toggle="modal" data-target="#modal-settings">
-                        <div class="icondemo bg-glass border-glass rippler rippler-default">
+                        <div class="icondemo  border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
                             <i class="icon iot-icon-settings-1" aria-hidden="true"></i>
                         </div>
-                        <span>{{_ "Settings"}}</span>
                     </a>
+                    <span>{{_ "Settings"}}</span>
                 </div>
-                <div class="tile col-xs-4 col-sm-2">                           
+                <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4 text-center">                           
                     <a class="icon_list text-center" data-href='/admin/config'>
-                        <div class="icondemo bg-glass border-glass rippler rippler-default">
+                        <div class="icondemo  border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
                             <i class="icon  iot-icon-signal" aria-hidden="true"></i>
                         </div>
-                        <span>{{_ "WiFi"}}</span>
                     </a>
+                    <span>{{_ "WiFi"}}</span>
                 </div>
-                <div class="tile col-xs-4 col-sm-2">                           
+                <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4 text-center">                           
                     <a class="icon_list text-center" data-href='/Musics'>
-                        <div class="icondemo bg-glass border-glass rippler rippler-default">
+                        <div class="icondemo  border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
                             <i class="icon iot-icon-sound" aria-hidden="true"></i>
                         </div>
-                        <span>{{_ "Musics"}}</span>
                     </a>
+                    <span>{{_ "Musics"}}</span>
                 </div>
-                <div class="tile col-xs-4 col-sm-2">                           
+                <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4 text-center">                           
                     <a id="clock-syn" class="icon_list text-center ">
-                        <div class="icondemo bg-glass border-glass rippler rippler-default">
+                        <div class="icondemo  border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
                             <i class="icon iot-icon-clk-syn" aria-hidden="true"></i>
                         </div>
-                        <span>Clock-syn.</span>
                     </a>
+                    <span>Clock-syn.</span>
                 </div>
-                <div class="tile col-xs-4 col-sm-2">                           
+                <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4 text-center">                           
                     <a class="icon_list text-center" id="language">
-                        <div class="icondemo bg-glass border-glass rippler rippler-default">
-                            <span style="margin-top:24px;vertical-align:center">{{language}}</span>
+                        <div class="icondemo  border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
+                            <span style="position: absolute;left: 50%; top:50%; transform: translate(-50%, -50%); font-weight: bold;">{{language}}</span>
                         </div>
-                        <span>{{_ "Languages"}}</span>
                     </a>
+                    <span>{{_ "Languages"}}</span>
                 </div>
             </div>
         </div>

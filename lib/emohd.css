@@ -87,10 +87,15 @@ body {
     line-height:1;
     vertical-align: middle;
 }
-a, a:hover, a:active {
+a, a:hover{
     color: rgba(118,118,118,1);
     text-decoration:none;
 }
+a:active, .scene-item a:active span, a:active *{
+    color: green;
+    text-decoration:none;
+}
+
 .iot-color-brand {
     color: #008dd0;
 }
@@ -367,3 +372,21 @@ ul.device-list > li > div > a > span {
 .column {
     display: inline-block;
 }
+
+.icon_list .icondemo {
+    height: 70px;
+    border-radius: 5px;
+    margin-top: 15px;
+    -webkit-box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
+}
+
+.icon_list .icondemo i {
+    margin-top: 24px;
+}
+.icon_list .icondemo.border-glass {
+    border: solid 1px rgba(0,141,208,0.2);
+}
+

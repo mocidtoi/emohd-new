@@ -3,13 +3,13 @@
         <div class="fav-list">
             {{#each favorites}} {{#with device deviceId}}
             <div class="tile col-xs-4 col-sm-2 padding-4">                           
-                <div class="content text-center {{disabled status}}" data-devId="{{id}}">
+                <a style="display: block;" class="content text-center {{disabled status}}" data-devId="{{id}}">
                     <div class="item-label text-left zero-margin-bottom">{{name}}</div>
                     <i class="icon icon-in-tile iot-icon-downlight dicon-{{icon type}}"></i>
                     {{#with room groupId}}
                     <div class="item-label zero-margin-top"><small>{{name}}</small></div>
                     {{/with}}
-                </div>
+                </a>
             </div>
             {{/with}} {{/each}}
         </div>

@@ -59,7 +59,7 @@ Template.Scene.onRendered(function() {
             lang: 'en',
             display: 'bottom',
             //inputClass: "text-right padding-right-4-percent",
-            inputClass: "full-width text-left",
+            inputClass: "full-width text-right",
             minWidth: 200,
             onSelect: function(valueText, inst) {
                 Session.set('show-save-btn', true);

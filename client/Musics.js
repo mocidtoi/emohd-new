@@ -25,8 +25,8 @@ Template.Musics.helpers({
     isPlaying: function(songId) {
         if( PlayingItem.find().count() > 0 ) {
             var playingItem = PlayingItem.find().fetch()[0];
-            return (songId == playingItem.id)?"ti-control-pause":"ti-control-play";
+            return (songId == playingItem.id)?"iot-icon-control-pause":"iot-icon-control-play";
         }
-        return "ti-control-play";
+        return "iot-icon-control-play";
     }
 });

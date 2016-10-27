@@ -1,27 +1,46 @@
 <template name="Musics">
-    <div class="page-content container-fluid margin-top-{{top_margin}}" style="padding-right:25px">
-        <div class="row" data-plugin="matchHeight" data-by-row="true">
-            <div class="main-container">
-                <!-- Example List Divider -->
-                <div class="example-wrap">
-                    <div class="clearfix block-heading">
-                        <h4 class="example-title">Song list ({{songCount}})</h4>
-                        <a id='reload' class="right-bt" href="#"><span class="iot-icon-script"></span></a>
-                    </div>
-                    <div class="list-group list-group-dividered list-group-full">
-                        {{#each songs}}
+    <div class="page">
+        <ul style="padding-left:0; padding-right:0;" class="room-list">
+            <li><div>
+                <span class="button-style-1"><strong>Song list ({{songCount}})</strong></span>
+                <a id='reload' class="button-style-2 align-right" href="#">
+                    <i class="icon icon-fit iot-icon-cw align-right"></i>
+                </a>
+            </div></li>
+            <li>
+                <ul style="padding-left:0; padding-right:0;" class="device-list stripped-list">
+                    <!-- Example List Divider -->
+                    <li><div>
+                        <a class="button-style-1 overflow-hidden">VO nguoi ta</a>
+                        <a class="button-style-2 align-right">
+                            <i class="icon icon-fit iot-icon-control-pause align-right" aria-hidden="true"></i>
+                        </a>
+                    </div></li>
+                    <li><div>
+                        <a class="button-style-1 overflow-hidden">Em cua ngay hom qua</a>
+                        <a class="button-style-2 align-right">
+                            <i class="icon icon-fit iot-icon-control-pause align-right" aria-hidden="true"></i>
+                        </a>
+                    </div></li>
+                    <li><div>
+                        <a class="button-style-1 overflow-hidden">Nothing gonna change my love for you</a>
+                        <a class="button-style-2 align-right">
+                            <i class="icon icon-fit iot-icon-control-play align-right" aria-hidden="true"></i>
+                        </a>
+                    </div></li>
+                    {{#each songs}}
+                    <li><div>
                         <a class="list-group-item" data-songId="{{id}}" data-songIdx={{@index}}>
                             <span>{{title}}</span>
-                            <div class="right-bt">
+                            <a class="right-bt">
                                 <i class="icon {{isPlaying id}}" aria-hidden="true"></i>
-                            </div>
+                            </a>
                         </a>
-                        {{/each}}
-                    </div>
-                </div>
-                <!-- End Example List Divider -->
-            </div>
-        </div>
+                    </div></li>
+                    {{/each}}
+                    <!-- End Example List Divider -->
+                </ul>
+            </li>
+        </ul>
     </div>
-
 </template>

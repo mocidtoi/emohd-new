@@ -87,15 +87,16 @@ body {
     line-height:1;
     vertical-align: middle;
 }
-a, a:hover{
+a, a:hover {
     color: rgba(118,118,118,1);
     text-decoration:none;
 }
-a:active, .scene-item a:active span, a:active .iot-color-brand-2{
-    color: green;
+/*
+a:active, .scene-item a:active span, a:active * {
+    color: lightgreen;
     text-decoration:none;
 }
-
+*/
 .iot-color-brand {
     color: #008dd0;
 }
@@ -149,7 +150,7 @@ a:active, .scene-item a:active span, a:active .iot-color-brand-2{
     transition: top 0.2s ease-in-out;
     z-index: 1001;
 }
-.titlebar-center {
+.titlebar-center, .icon-centering {
     position: absolute;
     left: 50%;
     top: 50%;
@@ -260,6 +261,7 @@ a:active, .scene-item a:active span, a:active .iot-color-brand-2{
     padding-top: 40px;
     padding-bottom: 60px;
     font-size: 18px;
+    min-height:110vh;
 }
 ul.room-list, ul.device-list, ul.notif-list {
     padding: 0.5em;
@@ -303,6 +305,9 @@ ul.room-list > li > div > span {
 ul.device-list > li > div > a > span {
     font-size: 16px;
     margin-left: 1em;
+}
+.scene-item, .curtain-item {
+    overflow: hidden;
 }
 .scene-item span {
     color: black;
@@ -365,14 +370,54 @@ ul.device-list > li > div > a > span {
     color: white;
 }
 .modal-centering {
-    transform: translate(0, 50%) !important;
-    -ms-transform: translate(0, 50%) !important; /* IE 9 */
-    -webkit-transform: translate(0, 50%) !important; /* Safari and Chrome */
+    position: absolute;
+    top: 50%;
+    left:0.1em;
+    right: 0.1em;
+    -webkit-transform: translate(0, -50%) !important;
+    -ms-transform: translate(0, -50%) !important;
+    -o-transform: translate(0, -50%) !important;
+    transform: translate(0,-50%) !important;
 }
 .column {
     display: inline-block;
 }
 
+.nav>li.pos-lt {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+.nav>li.pos-rt {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+.nav>li.pos-lb {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+}
+.nav>li.pos-rb {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+}
+.w-percent-70 {
+    width: 70%;
+    margin-left: 0.5em;
+    display: inline-block;
+}
+.t-vmiddle {
+    vertical-align: middle;
+}
+.rounded {
+    padding:4px;
+    border-radius:8px
+}
+.xsmall {
+    font-size: 100%;
+}
 .icon_list .icondemo {
     height: 70px;
     border-radius: 5px;
@@ -383,9 +428,6 @@ ul.device-list > li > div > a > span {
     transition: all 0.2s;
 }
 
-.icon_list .icondemo i {
-    margin-top: 24px;
-}
 .icon_list .icondemo.border-glass {
     border: solid 1px rgba(0,141,208,0.2);
 }
@@ -402,7 +444,6 @@ ul.device-list > li > div > a > span {
 .slider-time span {
     font-weight: normal;
     font-size: 12px;
-    color: rgba(255, 255, 255, .8);
 }
 .example-title,
 h4.example-title {
@@ -417,13 +458,13 @@ h4.example-title {
 /*///////////////*/
 
 .play-control {
+    opacity: 0.8;
     position: fixed;
     bottom: 55px;
     right: 0;
     z-index: 1030;
     width: 100%;
     transition: bottom 0.2s ease-in-out;
-    background: rgba(23, 25, 39, 0.8);
 }
 
 .top-slider {
@@ -458,6 +499,81 @@ h4.example-title {
 .bottom-slider ul li a {
     line-height: 55px;
     font-size: 20px;
-    color: rgba(255, 255, 255, .8);
 }
 
+.nav-pills li.active i {
+    color: white;
+}
+.nav-pills li i {
+    color: green;
+}
+.nav > li > a {
+    padding: 10px 10px;
+}
+.rippler-effect {
+    background-color: #808080;
+}
+.overflow-hidden {
+    overflow:hidden;
+    line-height: 1;
+    height: 1em;
+}
+.stripped-list li {
+    padding-top:0.5em;
+}
+.stripped-list li:nth-child(odd) {
+    background-color:rgba(235, 235, 235, 1);
+}
+.stripped-list li:nth-child(even) {
+    background-color: transparent;
+}
+.noUi-target.noUi-connect {
+    box-shadow: none;
+}
+
+.noUi-target {
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+}
+
+.noUi-connect {
+    background: #0A8CCB;
+    box-shadow: inset 0 0 3px rgba(51, 51, 51, .45);
+    -webkit-transition: background 450ms;
+    transition: background 450ms;
+}
+
+.noUi-horizontal {
+    height: 5px;
+}
+
+.noUi-background {
+    background: #fff;
+    box-shadow: none;
+}
+
+.noUi-horizontal .noUi-handle {
+    width: 15px;
+    height: 15px;
+    left: -7px;
+    top: -5px;
+    border: 1px solid black;
+}
+
+.noUi-origin {
+    border-radius: 0;
+}
+
+.noUi-handle {
+    border: none;
+    border-radius: 50%;
+    background: #FFF;
+    cursor: default;
+    box-shadow: inset 0 0 1px #FFF, inset 0 1px 7px #EBEBEB, 0 3px 6px -3px #BBB;
+}
+
+.noUi-handle:after,
+.noUi-handle:before {
+    content: none;
+}

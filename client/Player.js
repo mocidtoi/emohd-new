@@ -106,10 +106,10 @@ Template.Player.helpers({
     },
     isPlaying: function() {
         try {
-            return (Progress.find().fetch()[0].speed == 1)?"iot-icon-script":"iot-icon-script";
+            return (Progress.find().fetch()[0].speed == 1)?"iot-icon-control-pause":"iot-icon-control-play";
         }
         catch(err) {
-            return "iot-icon-script";
+            return "iot-icon-control-play";
         }
     },
     isOn: function() {

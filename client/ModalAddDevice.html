@@ -57,34 +57,34 @@
     <form id="form-{{index}}" data-idx="{{index}}">
         {{#if found}}
             <div class="form-group text-right">
-                <label style="width: 15%" class="text-center t-vmiddle">
-                    <i id="icon-{{index}}" style="font-size: 24px" class="dicon-light" data-value="0"></i>
+                <label style="width: 15%" class="text-right t-vmiddle">
+                    <i id="icon-{{index}}" style="font-size: 24px" class="iot-icon-script" data-value="0"></i>
                 </label>
-                <input type='text' class="text-left form-control w-percent-80" value="Light" readonly>
+                <input type='text' class="text-left form-control w-percent-70" value="Light" readonly>
             </div>
             <div class="form-group text-right">
                 <label class="t-vmiddle">{{_ "Name"}}</label>
-                <input type="text" class="gangname form-control w-percent-80" placeholder={{_ "Button name"}} value="{{foundName}}" readonly>
+                <input type="text" class="gangname form-control w-percent-70" placeholder={{_ "Button name"}} value="{{foundName}}" readonly>
             </div>
             <div class="form-group text-right">
                 <label class="t-vmiddle">{{_ "Room"}}</label>
-                <input type="text" class="form-control w-percent-80" readonly value="{{roomName}}">
+                <input type="text" class="form-control w-percent-70" readonly value="{{roomName}}">
             </div>
             <button type="button" data-idx="{{index}}" disabled class="{{showAdd}} btn btn-block btn-primary addBtn">{{_ "Add"}} {{_ "button"}} #{{index}}</button>
         {{else}}
             <div class="form-group text-right">
-                <label style="width: 15%" class="text-center t-vmiddle">
-                    <i id="icon-{{index}}" style="font-size: 24px" class="dicon-light" data-value="0"></i>
+                <label style="width: 15%" class="text-right t-vmiddle">
+                    <i id="icon-{{index}}" style="font-size: 24px" class="iot-icon-script" data-value="0"></i>
                 </label>
-                <input type='text' class="text-left form-control w-percent-80" value={{_ "Light button"}} readonly>
+                <input type='text' class="text-left form-control w-percent-70" value={{_ "Light button"}} readonly>
             </div>
             <div class="form-group text-right">
                 <label class="t-vmiddle">{{_ "Name"}}</label>
-                <input type="text" class="gangname form-control w-percent-80" placeholder={{_ "Button name"}} required>
+                <input type="text" class="gangname form-control w-percent-70" placeholder={{_ "Button name"}} required>
             </div>
             <div class="form-group text-right">
                 <label class="t-vmiddle">{{_ "Room"}}</label>
-                <input type="text" class="form-control w-percent-80" readonly value="{{roomName}}">
+                <input type="text" class="form-control w-percent-70" readonly value="{{roomName}}">
             </div>
             <button type="button" data-idx="{{index}}" data-btnIdx="{{btnIdx}}" class="{{showAdd}} btn btn-block btn-primary addBtn">{{_ "Add"}} {{_ "button"}} #{{index}}</button>
         {{/if}}
@@ -93,28 +93,28 @@
 
 <template name="FragmentAddCurtain">
     <div class="form-group text-right">
-        <label style="width: 15%" class="text-center t-vmiddle">
-            <i id="icon-0" style="font-size: 24px" class="dicon-curtain" data-value="2"></i>
+        <label style="width: 15%" class="text-right t-vmiddle">
+            <i id="icon-0" style="font-size: 24px" class="iot-icon-curtain" data-value="2"></i>
         </label>
-        <input type='text' class="text-left form-control w-percent-80" value={{_ "Curtain"}} readonly>
+        <input type='text' class="text-left form-control w-percent-70" value={{_ "Curtain"}} readonly>
     </div>
     <div class="form-group text-right">
         <label class="t-vmiddle">{{_ "Name"}}</label>
-        <input type="text" class="gangname form-control w-percent-80" placeholder={{_ "Button name"}} required>
+        <input type="text" class="gangname form-control w-percent-70" placeholder={{_ "Button name"}} required>
     </div>
     <div class="form-group text-right">
         <label class="t-vmiddle">{{_ "Room"}}</label>
-        <input type="text" class="form-control w-percent-80" readonly value="{{roomName}}">
+        <input type="text" class="form-control w-percent-70" readonly value="{{roomName}}">
     </div>
     <button type="button" class="btn btn-block btn-primary addBtn" data-idx="{{index}}" data-btnIdx="{{btnIdx}}">{{_ "Add"}} {{_ "curtain"}}</button>
 </template>
 
 <template name="FragmentAddScene">
     <div class="form-group text-right">
-        <label style="width: 15%" class="text-center t-vmiddle">
-            <i id="icon-{{index}}" style="font-size: 24px" class="dicon-scene" data-value="1"></i>
+        <label style="width: 15%" class="text-right t-vmiddle">
+            <i id="icon-{{index}}" style="font-size: 24px" class="iot-icon-script" data-value="1"></i>
         </label>
-        <input type='text' class="text-left form-control w-percent-80" value={{_ "Command"}} readonly>
+        <input type='text' class="text-left form-control w-percent-70" value={{_ "Command"}} readonly>
     </div>
     <div class="form-group text-right">
         <label class="t-vmiddle">{{_ "Scene"}}</label>
@@ -129,7 +129,7 @@
     </div>
     <div class="form-group text-right">
         <label class="t-vmiddle">{{_ "Room"}}</label>
-        <input type="text" class="form-control w-percent-80" placeholder="Room name" readonly value="{{roomName}}">
+        <input type="text" class="form-control w-percent-70" placeholder="Room name" readonly value="{{roomName}}">
     </div>
     <button type="button" class="btn btn-block btn-primary addBtn" data-idx="{{index}}" data-btnIdx="{{btnIdx}}">{{_ "Add"}} {{_ "command button"}}</button>
 </template>

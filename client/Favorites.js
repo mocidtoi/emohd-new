@@ -54,7 +54,7 @@ Template.Favorites.helpers({
         return (index == 0)?"1":"0";
     },
     disabled: function(status) {
-        return (status == 48)?"iot-bgcolor-llg":"iot-bgcolor-brand";
+        return (status == 49)?"iot-bgcolor-brand":"iot-bgcolor-llg";
     }
 });
 

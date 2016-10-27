@@ -367,3 +367,39 @@ ul.device-list > li > div > a > span {
 .column {
     display: inline-block;
 }
+
+.nav>li.pos-lt {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+.nav>li.pos-rt {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+.nav>li.pos-lb {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+}
+.nav>li.pos-rb {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+}
+.w-percent-70 {
+    width: 70%;
+    margin-left: 0.5em;
+    display: inline-block;
+}
+.t-vmiddle {
+    vertical-align: middle;
+}
+.rounded {
+    padding:4px;
+    border-radius:8px
+}
+.xsmall {
+    font-size: 100%;
+}

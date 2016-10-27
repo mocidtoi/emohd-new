@@ -57,7 +57,7 @@ function onDeviceAdded(templtInstance, idx) {
     console.log("onDeviceAdded " + idx);
     console.dir(templtInstance.$('.nav-pills a[data-toggle="pill"]'));
     console.dir(templtInstance.$('.tab-pane button.addBtn'));
-    templtInstance.$('.nav-pills a[data-toggle="pill"]').eq(idx).append("<i style='margin-left: 0.5em;' class='rounded xsmall glyphicon glyphicon-ok bg-success'></i>");
+    templtInstance.$('.nav-pills a[data-toggle="pill"]').eq(idx).append("<i style='margin-left: 0.5em;color:green;' class='rounded xsmall icon iot-icon-check-circle'></i>");
     // disable button in modal content
     templtInstance.$('.tab-pane button.addBtn').eq(idx).prop('disabled', true);
 }
@@ -70,7 +70,7 @@ Template.ModalAddDevice.modalBodyEvents = {
         console.dir(instance.data.founds[i]);
         if(instance.data && instance.data.founds[i] && (!(instance.data.added[i]))) {
             instance.data.added[i] = true;
-            instance.$('.nav-pills a[href="#gang' + i + '"]').append("<i style='margin-left: 0.5em;' class='rounded xsmall glyphicon glyphicon-ok bg-success'></i>");
+            instance.$('.nav-pills a[href="#gang' + i + '"]').append("<i style='margin-left: 0.5em;color:green;' class='rounded xsmall icon iot-icon-check-circle'></i>");
         }
     }
 };
@@ -335,7 +335,7 @@ Template.FragmentAdd.onRendered(function() {
                     lang: 'en', 
                     display: 'bottom', 
                     minWidth: 200,
-                    inputClass: 'form-control w-percent-80',
+                    inputClass: 'form-control w-percent-70',
                     // https://github.com/acidb/mobiscroll/issues/341
                     onShow: function () {
                         $(window).off('focusin');
@@ -509,7 +509,7 @@ Template.FragmentAddScene.onRendered(function(){
                 lang: 'en', 
                 display: 'bottom', 
                 minWidth: 200,
-                inputClass: 'form-control gangtype w-percent-80 sceneName',
+                inputClass: 'form-control gangtype w-percent-70 sceneName',
                 // https://github.com/acidb/mobiscroll/issues/341
                 onShow: function () {
                     $(window).off('focusin');

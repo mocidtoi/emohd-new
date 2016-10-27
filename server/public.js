@@ -1034,6 +1034,7 @@ Meteor.publish('data', function(token) {
         self.added('scenedev', sceneDev.id, sceneDev.toJSON());
     });
     SceneDev.addHook('afterUpdate', self._session.id, function(sceneDev, option){
+        myLog('scenedev changed');
         self.changed('scenedev', sceneDev.id, sceneDev.toJSON());
     });
     SceneDev.addHook('afterDestroy', self._session.id, function(sceneDev, option){

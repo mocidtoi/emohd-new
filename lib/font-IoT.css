@@ -149,3 +149,24 @@
 .iot-icon-rooms:before {
   content: "\4b";
 }
+.iot-icon-trash-o:before {
+  content: "\4c";
+}
+.iot-icon-exclamation-circle:before {
+  content: "\4d";
+}
+.iot-icon-check-circle:before {
+  content: "\4e";
+}
+.iot-icon-signal:before {
+  content: "\4f";
+}
+.iot-icon-right-open:before {
+  content: "\50";
+}
+.iot-icon-sound:before {
+  content: "\51";
+}
+.iot-icon-settings-1:before {
+  content: "\52";
+}

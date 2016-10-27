@@ -10,13 +10,13 @@ Template.Rooms.onRendered(function() {
                     Meteor.clearTimeout(timeoutHandle);
                 }
                 timeoutHandle = Meteor.setTimeout(function() {
-                    self.$(".scene-item").rippler({
+                    self.$(".scene-item a").rippler({
                         effectClass      :  'rippler-effect'
                         ,effectSize      :  16      // Default size (width & height)
                         ,addElement      :  'div'   // e.g. 'svg'(feature)
                         ,duration        :  400
                     });
-                    self.$(".curtain-item").rippler({
+                    self.$(".curtain-item a").rippler({
                         effectClass      :  'rippler-effect'
                         ,effectSize      :  16      // Default size (width & height)
                         ,addElement      :  'div'   // e.g. 'svg'(feature)

@@ -11,7 +11,6 @@
   font-style: normal;
 
 }
-
 [data-icon]:before {
   font-family: "iot" !important;
   content: attr(data-icon);
@@ -172,4 +171,28 @@
 }
 .iot-icon-clk-syn:before {
   content: "\53";
+}
+.iot-icon-control-play:before {
+  content: "\54";
+}
+.iot-icon-control-pause:before {
+  content: "\55";
+}
+.iot-icon-control-shuffle:before {
+  content: "\56";
+}
+.iot-icon-control-skip-backward:before {
+  content: "\57";
+}
+.iot-icon-control-skip-forward:before {
+  content: "\58";
+}
+.iot-icon-volume:before {
+  content: "\59";
+}
+.iot-icon-reload:before {
+  content: "\5a";
+}
+.iot-icon-cw:before {
+  content: "\30";
 }

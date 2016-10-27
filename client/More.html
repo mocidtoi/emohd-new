@@ -1,54 +1,46 @@
 <template name="More">
-    <div class="page-content container-fluid margin-top-{{top_margin}}" style="padding-top:17px;padding-right:25px;">
+    <div class="page-content container-fluid" style="padding-top:17px;padding-right:25px;margin-top: 40px;">
         <div class="row">
             <div class="more-list">
-                <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4">
+                <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4 text-center">                           
                     <a class="icon_list text-center" data-toggle="modal" data-target="#modal-settings">
-                        <div class="icondemo bg-glass border-glass rippler rippler-default">
-                            <i class="icon dicon-settings-1" aria-hidden="true"></i>
+                        <div class="icondemo  border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
+                            <i class="icon icon-fit icon-centering iot-icon-settings-1" aria-hidden="true"></i>
                         </div>
-                        <span>{{_ "Settings"}}</span>
                     </a>
+                    <span>{{_ "Settings"}}</span>
                 </div>
-                <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4">
+                <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4 text-center">                           
                     <a class="icon_list text-center" data-href='/admin/config'>
-                        <div class="icondemo bg-glass border-glass rippler rippler-default">
-                            <i class="icon dicon-signal" aria-hidden="true"></i>
+                        <div class="icondemo  border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
+                            <i class="icon icon-fit icon-centering iot-icon-signal" aria-hidden="true"></i>
                         </div>
-                        <span>{{_ "WiFi"}}</span>
                     </a>
+                    <span>{{_ "WiFi"}}</span>
                 </div>
-                <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4">
+                <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4 text-center">                           
                     <a class="icon_list text-center" data-href='/Musics'>
-                        <div class="icondemo bg-glass border-glass rippler rippler-default">
-                            <i class="icon dicon-sound" aria-hidden="true"></i>
+                        <div class="icondemo border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
+                            <i class="icon icon-fit icon-centering iot-icon-sound" aria-hidden="true"></i>
                         </div>
-                        <span>{{_ "Musics"}}</span>
                     </a>
+                    <span>{{_ "Musics"}}</span>
                 </div>
-                <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4">
-                    <a class="icon_list text-center" data-action='Netatmo'>
-                        <div class="icondemo bg-glass border-glass rippler rippler-default">
-                            <i class="icon dicon-netatmo" aria-hidden="true"></i>
-                        </div>
-                        <span>{{_ "Air quality"}}</span>
-                    </a>
-                </div>
-                <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4">
+                <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4 text-center">                           
                     <a id="clock-syn" class="icon_list text-center ">
-                        <div class="icondemo bg-glass border-glass rippler rippler-default">
-                            <i class="icon dicon-clk-syn" aria-hidden="true"></i>
+                        <div class="icondemo  border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
+                            <i class="icon icon-fit icon-centering iot-icon-clk-syn" aria-hidden="true"></i>
                         </div>
-                        <span>Clock-syn.</span>
                     </a>
+                    <span>Clock-syn.</span>
                 </div>
-                <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4">
+                <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4 text-center">                           
                     <a class="icon_list text-center" id="language">
-                        <div class="icondemo bg-glass border-glass rippler rippler-default">
-                            <span style="margin-top:24px;vertical-align:center">{{language}}</span>
+                        <div class="icondemo border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
+                            <span class="icon-centering"><strong>{{language}}</strong></span>
                         </div>
-                        <span>{{_ "Languages"}}</span>
                     </a>
+                    <span>{{_ "Languages"}}</span>
                 </div>
             </div>
         </div>

@@ -87,10 +87,16 @@ body {
     line-height:1;
     vertical-align: middle;
 }
-a, a:hover, a:active {
+a, a:hover {
     color: rgba(118,118,118,1);
     text-decoration:none;
 }
+/*
+a:active, .scene-item a:active span, a:active * {
+    color: lightgreen;
+    text-decoration:none;
+}
+*/
 .iot-color-brand {
     color: #008dd0;
 }
@@ -144,7 +150,7 @@ a, a:hover, a:active {
     transition: top 0.2s ease-in-out;
     z-index: 1001;
 }
-.titlebar-center {
+.titlebar-center, .icon-centering {
     position: absolute;
     left: 50%;
     top: 50%;
@@ -299,6 +305,9 @@ ul.device-list > li > div > a > span {
     font-size: 16px;
     margin-left: 1em;
 }
+.scene-item, .curtain-item {
+    overflow: hidden;
+}
 .scene-item span {
     color: black;
 }
@@ -360,9 +369,14 @@ ul.device-list > li > div > a > span {
     color: white;
 }
 .modal-centering {
-    transform: translate(0, 50%) !important;
-    -ms-transform: translate(0, 50%) !important; /* IE 9 */
-    -webkit-transform: translate(0, 50%) !important; /* Safari and Chrome */
+    position: absolute;
+    top: 50%;
+    left:0.1em;
+    right: 0.1em;
+    -webkit-transform: translate(0, -50%) !important;
+    -ms-transform: translate(0, -50%) !important;
+    -o-transform: translate(0, -50%) !important;
+    transform: translate(0,-50%) !important;
 }
 .column {
     display: inline-block;
@@ -402,4 +416,30 @@ ul.device-list > li > div > a > span {
 }
 .xsmall {
     font-size: 100%;
+}
+.icon_list .icondemo {
+    height: 70px;
+    border-radius: 5px;
+    margin-top: 15px;
+    -webkit-box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
+}
+
+.icon_list .icondemo.border-glass {
+    border: solid 1px rgba(0,141,208,0.2);
+}
+
+.nav-pills li.active i {
+    color: white;
+}
+.nav-pills li i {
+    color: green;
+}
+.nav > li > a {
+    padding: 10px 10px;
+}
+.rippler-effect {
+    background-color: #808080;
 }

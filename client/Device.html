@@ -16,7 +16,7 @@
             </li>
             <li>
                 <div>
-                    <span>Hẹn giờ</span>
+                    <span>{{_ "schedule"}}</span>
                     <a id="addTask" href="#" class="button-style-2 align-right">
                         <i class="icon icon-fit iot-color-brand iot-icon-plus align-right" aria-hidden="true"></i>
                     </a>
@@ -31,8 +31,8 @@
                         <input style="margin-left:1em;" type="text" class="time-select timepicker td-input" data-id="{{id}}" placeholder="" value="{{time}}">
                         <span style="width: 3em;padding-right: 0.5em;bottom:0;" class="right-bt" data-id="id">
                             <select id="action{{id}}" class="list-down">
-                                <option {{selected action}}>Bật</option>
-                                <option {{notSelected action}}>Tắt</option>
+                                <option {{selected action}}>{{_ "turnon"}}</option>
+                                <option {{notSelected action}}>{{_ "turnoff"}}</option>
                             </select>
                         </span>
                     </div></li>

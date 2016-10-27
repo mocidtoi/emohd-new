@@ -73,7 +73,7 @@
             <button type="button" data-idx="{{index}}" disabled class="{{showAdd}} btn btn-block btn-primary addBtn">{{_ "Add"}} {{_ "button"}} #{{index}}</button>
         {{else}}
             <div class="form-group text-right">
-                <label style="width: 15%" class="text-center t-vmiddle">
+                <label style="width: 15%" class="text-right t-vmiddle">
                     <i id="icon-{{index}}" style="font-size: 24px" class="iot-icon-script" data-value="0"></i>
                 </label>
                 <input type='text' class="text-left form-control w-percent-70" value={{_ "Light button"}} readonly>
@@ -93,7 +93,7 @@
 
 <template name="FragmentAddCurtain">
     <div class="form-group text-right">
-        <label style="width: 15%" class="text-center t-vmiddle">
+        <label style="width: 15%" class="text-right t-vmiddle">
             <i id="icon-0" style="font-size: 24px" class="iot-icon-curtain" data-value="2"></i>
         </label>
         <input type='text' class="text-left form-control w-percent-70" value={{_ "Curtain"}} readonly>
@@ -111,7 +111,7 @@
 
 <template name="FragmentAddScene">
     <div class="form-group text-right">
-        <label style="width: 15%" class="text-center t-vmiddle">
+        <label style="width: 15%" class="text-right t-vmiddle">
             <i id="icon-{{index}}" style="font-size: 24px" class="iot-icon-script" data-value="1"></i>
         </label>
         <input type='text' class="text-left form-control w-percent-70" value={{_ "Command"}} readonly>

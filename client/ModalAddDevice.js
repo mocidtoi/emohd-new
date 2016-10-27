@@ -57,7 +57,7 @@ function onDeviceAdded(templtInstance, idx) {
     console.log("onDeviceAdded " + idx);
     console.dir(templtInstance.$('.nav-pills a[data-toggle="pill"]'));
     console.dir(templtInstance.$('.tab-pane button.addBtn'));
-    templtInstance.$('.nav-pills a[data-toggle="pill"]').eq(idx).append("<i style='margin-left: 0.5em;color:green;' class='rounded xsmall icon iot-icon-check-circle'></i>");
+    templtInstance.$('.nav-pills a[data-toggle="pill"]').eq(idx).append("<i style='margin-left: 0.5em;' class='rounded xsmall icon iot-icon-check-circle'></i>");
     // disable button in modal content
     templtInstance.$('.tab-pane button.addBtn').eq(idx).prop('disabled', true);
 }

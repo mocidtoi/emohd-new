@@ -103,7 +103,7 @@ Template.ModalCurtainControl.onRendered(function(){
             effectClass      :  'rippler-effect'
             ,effectSize      :  16      // Default size (width & height)
             ,addElement      :  'div'   // e.g. 'svg'(feature)
-            ,duration        :  600
+            ,duration        :  300
         });
     }, 100);
 });

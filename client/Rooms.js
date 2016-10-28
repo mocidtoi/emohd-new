@@ -58,7 +58,7 @@ Template.Rooms.helpers({
     itemClass: function(type, id) {
         switch(parseInt(type)) {
         case Constants.DEVTYPE_CURTAIN:
-            return "iot-color-llg";
+            return "iot-color-brand-2";
             break;
         case Constants.DEVTYPE_SCENE:
             return "iot-color-brand-2";

@@ -366,6 +366,10 @@ var Device = sequelize.define('device', {
     sceneId: {
         type: Sequelize.INTEGER,
         allowNull: true
+    },
+    icon: {
+        type: Sequelize.INTEGER,
+        allowNull: true
     }
 }, {
     hooks: {

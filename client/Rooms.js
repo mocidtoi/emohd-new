@@ -44,6 +44,7 @@ Template.Rooms.helpers(PageHelpers);
 Template.Rooms.helpers({
 	device: function(gid) {
         var cursor = Device.find({ groupId: gid }).fetch();
+        console.log(cursor);
         if( cursor.length > 0) return cursor;
 		return [{removable:true, roomId:gid}];
 	},
@@ -63,6 +64,20 @@ Template.Rooms.helpers({
             catch(err) {
                 return "iot-color-llg";
             }
+        }
+    },
+    itemIcon: function(type, icon) {
+        console.log("type-" + type);
+        console.log("icon-" + icon);
+        switch(parseInt(type)) {
+        case Constants.DEVTYPE_CURTAIN:
+            return CurtainIconList[icon].icon;
+            break;
+        case Constants.DEVTYPE_SCENE:
+            return SceneIconList[icon].icon;
+            break;
+        default:
+            return LampIconList[icon].icon;
         }
     },
     containerClass: function(type) {
@@ -94,10 +109,10 @@ Template.Rooms.helpers({
                 return "item-device";
             }
         }
-    },*/
+    },
     icon: function(typeId) {
         return IconList[typeId].icon;
-    },
+    },*/
 	group: function() {
 		return Group.find({ parentId: null }).fetch();
 	}

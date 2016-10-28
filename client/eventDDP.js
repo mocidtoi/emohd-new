@@ -16,7 +16,7 @@ configNotifier = function() {
         }, 
         {
             fields: {
-                idx:1, idx1:1, id: 1, type:1, groupId:1, name:1
+                idx:1, idx1:1, id: 1, type:1, groupId:1, name:1, icon:1
             }
         }).forEach(function(device){
             var idx = parseInt(String.fromCharCode(device.idx));

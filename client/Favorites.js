@@ -37,8 +37,19 @@ Template.Favorites.helpers({
     tileColor: function(devType) {
         return IconList[devType].color;
     },
-    icon: function(devType) {
-        return IconList[devType].icon;
+    itemIcon: function(type, icon) {
+        console.log("type-" + type);
+        console.log("icon-" + icon);
+        switch(parseInt(type)) {
+        case Constants.DEVTYPE_CURTAIN:
+            return CurtainIconList[icon].icon;
+            break;
+        case Constants.DEVTYPE_SCENE:
+            return SceneIconList[icon].icon;
+            break;
+        default:
+            return LampIconList[icon].icon;
+        }
     },
     favorites: function() {
         return Favorite.find({}).fetch();

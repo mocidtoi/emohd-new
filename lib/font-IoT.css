@@ -196,3 +196,12 @@
 .iot-icon-cw:before {
   content: "\30";
 }
+.iot-icon-angle-down:before {
+  content: "\31";
+}
+.iot-icon-angle-up:before {
+  content: "\32";
+}
+.iot-icon-control-stop:before {
+  content: "\33";
+}

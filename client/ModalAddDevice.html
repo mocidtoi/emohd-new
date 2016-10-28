@@ -58,7 +58,7 @@
         {{#if found}}
             <div class="form-group text-right">
                 <label style="width: 15%" class="text-right t-vmiddle">
-                    <i id="icon-{{index}}" style="font-size: 24px" class="iot-icon-script" data-value="0"></i>
+                    <i id="icon-{{index}}" class="" data-icon="{{foundIcon}}" data-value="0"></i>
                 </label>
                 <input type='text' class="text-left form-control w-percent-70" value="Light" readonly>
             </div>
@@ -74,7 +74,7 @@
         {{else}}
             <div class="form-group text-right">
                 <label style="width: 15%" class="text-right t-vmiddle">
-                    <i id="icon-{{index}}" style="font-size: 24px" class="iot-icon-script" data-value="0"></i>
+                    <i id="icon-{{index}}" class="" data-icon="0" data-value="0"></i>
                 </label>
                 <input type='text' class="text-left form-control w-percent-70" value={{_ "Light button"}} readonly>
             </div>
@@ -94,7 +94,7 @@
 <template name="FragmentAddCurtain">
     <div class="form-group text-right">
         <label style="width: 15%" class="text-right t-vmiddle">
-            <i id="icon-0" style="font-size: 24px" class="iot-icon-curtain" data-value="2"></i>
+            <i id="icon-0" class="" data-icon="0" data-value="2"></i>
         </label>
         <input type='text' class="text-left form-control w-percent-70" value={{_ "Curtain"}} readonly>
     </div>
@@ -112,7 +112,7 @@
 <template name="FragmentAddScene">
     <div class="form-group text-right">
         <label style="width: 15%" class="text-right t-vmiddle">
-            <i id="icon-{{index}}" style="font-size: 24px" class="iot-icon-script" data-value="1"></i>
+            <i id="icon-{{index}}" class="" data-icon="0" data-value="1"></i>
         </label>
         <input type='text' class="text-left form-control w-percent-70" value={{_ "Command"}} readonly>
     </div>

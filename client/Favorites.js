@@ -20,6 +20,15 @@ Template.Favorites.onRendered(function() {
                     columnWidth: '.grid-sizer'
                 });
             }, 800);
+            timeoutHandle = Meteor.setTimeout(function() {
+                self.$(".fav-list div a").rippler({
+                    effectClass      :  'rippler-effect'
+                    ,effectSize      :  16      // Default size (width & height)
+                    ,addElement      :  'div'   // e.g. 'svg'(feature)
+                    ,duration        :  500
+                });
+                timeoutHandle = null;
+            }, 100);
         }
     });
     console.dir(Favorite.find().fetch());

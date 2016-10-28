@@ -1,5 +1,21 @@
 Template.Scenes.onRendered(function() {
+    var self = this;
     Session.set('title', "Scenes");
+    var timeoutHandle = null;
+    handle = Scene.find().observe({
+        added: function(arg) {
+                timeoutHandle = Meteor.setTimeout(function() {
+                    self.$(".device-list li div a").rippler({
+                        effectClass      :  'rippler-effect'
+                        ,effectSize      :  16      // Default size (width & height)
+                        ,addElement      :  'div'   // e.g. 'svg'(feature)
+                        ,duration        :  400
+                    });
+                    timeoutHandle = null;
+                }, 100);
+        }
+    });
+
 });
 Template.Scenes.helpers(PageHelpers);
 Template.Scenes.helpers({

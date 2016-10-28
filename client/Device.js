@@ -77,6 +77,14 @@ function showSaveBtn(event, instance) {
 function hideSaveBtn(event, instance) {
     Session.set('show-save-btn', false);
 }
+
+function addZero(i) {
+    if (i < 10) {
+        i = "0" + i;
+    }
+    return i;
+}
+
 Template.Device.events({
     'input input.glass': showSaveBtn,
     'click #addTask': function(event, instance) {
@@ -84,10 +92,11 @@ Template.Device.events({
         var date = new Date();
         date.setTime(date.getTime() - 300000);
         var h = date.getHours();
+        var m = date.getMinutes();
         var ampm = ['AM', 'PM'];
         Meteor.apply('addTask', [{
 			action: false,
-			time: ((h + 11)%12 + 1) + ":" + date.getMinutes() + " " + ampm[Math.floor(h/12)],
+			time: addZero((h + 11)%12 + 1) + ":" + addZero(date.getMinutes()) + " " + ampm[Math.floor(h/12)],
 			deviceId: parseInt(Router.current().params.id)
 		}], {wait: false});
 

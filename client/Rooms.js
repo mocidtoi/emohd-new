@@ -5,7 +5,7 @@ Template.Rooms.onRendered(function() {
     var timeoutHandle = null;
     handle = Device.find().observe({
         added: function(arg) {
-            if(arg.type == Constants.DEVTYPE_SCENE) {
+            //if(arg.type == Constants.DEVTYPE_SCENE) {
                 if (timeoutHandle != null) {
                     Meteor.clearTimeout(timeoutHandle);
                 }
@@ -22,9 +22,15 @@ Template.Rooms.onRendered(function() {
                         ,addElement      :  'div'   // e.g. 'svg'(feature)
                         ,duration        :  400
                     });
+                    self.$(".device-item a").rippler({
+                        effectClass      :  'rippler-effect'
+                        ,effectSize      :  16      // Default size (width & height)
+                        ,addElement      :  'div'   // e.g. 'svg'(feature)
+                        ,duration        :  400
+                    });
                     timeoutHandle = null;
                 }, 100);
-            }
+            //}
         },
         /*
         changed: function(arg) {
@@ -72,6 +78,9 @@ Template.Rooms.helpers({
             break;
         case Constants.DEVTYPE_SCENE:
             return "scene-item";
+            break;
+        case Constants.DEVTYPE_DEVICE:
+            return "device-item";
             break;
         default:
             return "";
@@ -127,8 +136,9 @@ Template.Rooms.events({
 			act: isDevOn(devId)?'off':'on'
 		}], {wait: false});
     },
-    'click .list-group-item.item-curtain': function(event,instance) {
+    'click .curtain-item .button-style-1': function(event,instance) {
         Session.set('curtain-name', event.currentTarget.getAttribute('data-name'));
+        console.log(event.currentTarget.getAttribute('data-name'), event.currentTarget.getAttribute('data-id'));
         Session.set('curtain-id', event.currentTarget.getAttribute('data-id'));
         $('#curtain-control').modal();
     },

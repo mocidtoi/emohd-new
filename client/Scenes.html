@@ -2,14 +2,14 @@
     <div class="page">
         <ul class="room-list">
             <li><ul class="device-list">
-                <li><div>
+                <li class="scene-item"><div>
                     <a class="button-style-1" data-id="-1"><i class="icon icon-big iot-color-brand-2 iot-icon-power"></i><span>{{_ "TURN OFF ALL"}}</span></a>
                 </div></li>
-                <li><div>
+                <li class="scene-item"><div>
                     <a class="button-style-1" data-id="-2"><i class="icon icon-big iot-color-brand-2 iot-icon-nghe-nhac"></i><span>{{_ "MUSIC"}}</span></a>
                 </div></li>
                 {{#each scene}}
-                <li><div>
+                <li class="scene-item"><div>
                     <a class="button-style-1" data-id="{{id}}"><i class="icon icon-big iot-color-brand-2 iot-icon-script"></i><span>{{name}}</span></a>
                     <a class="button-style-2 align-right" href="/Scene/{{id}}"><i class="icon iot-color-brand iot-icon-settings align-right"></i></a>
                 </div></li>

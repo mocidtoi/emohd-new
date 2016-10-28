@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 Constants = {
     DEVTYPE_CURTAIN:2,
     DEVTYPE_SCENE:1,
+    DEVTYPE_DEVICE:0,
     SHUFFLE: 1,
     PREVIOUS: 2,
     PLAYPAUSE: 3,
@@ -265,6 +266,10 @@ reconfigServer = function(rootURL, serverKey) {
         }
     }
 }
+myLog = function (message) {
+    console.log(message);
+}
+
 if (Meteor.isClient) {
     TOKEN = window.localStorage.getItem("__token");
     Notifier = new EventDDP("emohd");
@@ -300,6 +305,7 @@ if (Meteor.isClient) {
         console.log(Template.ModalConfirm.title);
         $('#confirm').modal();
     };
+
     isDevOn = function(id) {
         return Device.findOne(id).status == 49;
     };

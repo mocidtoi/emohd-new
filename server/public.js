@@ -63,10 +63,6 @@ var byteDelimiter = function(emitter, buffer) {
         }
     }
 };
-function myLog(message) {
-    console.log(message);
-}
-
 function sendPermitJoin(validSec) {
     var buffer = new Buffer(8);
     buffer[0] = 0x44;
@@ -628,7 +624,6 @@ Meteor.startup(function() {
                 if (tsk[i] && tsk[i].active) {
                     var schedule = later.parse.text("at " + tsk[i].time)
                     var task = tsk[i];
-                    /*
                     taskPool[task.id] = later.setInterval(function() {
                         console.log("---- Do event --- " + task.time);
                         command({
@@ -638,7 +633,6 @@ Meteor.startup(function() {
                             myLog(res)
                         });
                     }, schedule);
-                    */
                     /*taskPool[tsk[i].id] = later.setInterval(function() {
                         command({
                             id: tsk[i].deviceId,

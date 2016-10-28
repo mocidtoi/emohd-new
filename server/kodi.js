@@ -394,7 +394,12 @@ Meteor.methods({
         kodiShuffle();
     }
 });
-Meteor.publish('music', function() {
+Meteor.publish('music', function(token) {
+    myLog('MUSIC: publish: token=' + token + " | " + process.env.TOKEN);
+    if (token != process.env.TOKEN) {
+        myLog("Wrong token: " + token + " | " + process.env.TOKEN);
+        return;
+    }
     var self = this;
     kodiPlaylistGetItems(0, function(song, index) {
         self.added('song', song.id, song);

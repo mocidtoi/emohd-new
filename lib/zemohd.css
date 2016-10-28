@@ -306,7 +306,7 @@ ul.device-list > li > div > a > span {
     font-size: 16px;
     margin-left: 1em;
 }
-.scene-item, .curtain-item {
+.scene-item, .curtain-item, .device-item {
     overflow: hidden;
 }
 .scene-item span {
@@ -462,7 +462,7 @@ h4.example-title {
     position: fixed;
     bottom: 55px;
     right: 0;
-    z-index: 1030;
+    z-index: 1001;
     width: 100%;
     transition: bottom 0.2s ease-in-out;
 }
@@ -577,3 +577,9 @@ h4.example-title {
 .noUi-handle:before {
     content: none;
 }
+
+/*--- ADMIN ---- */
+.navbar-search-overlap .form-control {
+    height: 55px!important;
+}
+

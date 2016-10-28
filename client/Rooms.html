@@ -12,9 +12,9 @@
                     <a class="removeAction iot-color-brand text-center" data-room-id="{{roomId}}">{{_ "delete"}}</a>
                     </div></li>
                     {{else}}
-                    <li><div class=" {{containerClass type}}">
+                    <li><div class="{{containerClass type}}">
                         <a class="button-style-1" data-id="{{id}}" data-name="{{name}}">
-                            <i class="icon icon-big {{itemClass type id}} iot-icon-dieu-hoa"></i>
+                            <i class="icon icon-big {{itemClass type id}} iot-icon-{{itemIcon type icon}}"></i>
                             <span>{{name}}</span>
                         </a>
                         <a class="button-style-2 align-right" href="/Device/{{groupId}}/{{id}}">

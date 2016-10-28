@@ -75,7 +75,7 @@ Template.ModalAddDevice.modalBodyEvents = {
     }
 };
 
-function addCurtain(buttonIdx, idx, instance) {
+function addCurtain(buttonIdx, idx, icon, instance) {
     var gangname = instance.$('input.gangname').eq(idx).val();
     if( gangname && gangname !== "" ) {
         Meteor.apply("addDevice", [{
@@ -86,7 +86,8 @@ function addCurtain(buttonIdx, idx, instance) {
                 idx1: "1".charCodeAt(0),
                 netadd: parseInt(Session.get("netaddr"), 16),
                 endpoint: parseInt(Session.get("endpoint")),
-                groupId: parseInt(Session.get('room-id'))
+                groupId: parseInt(Session.get('room-id')),
+                icon: icon
             }],{wait:false}, 
             function(err, res){
                 if(err) {
@@ -107,7 +108,7 @@ function addCurtain(buttonIdx, idx, instance) {
         }, 2000);
     }
 }
-function addSceneButton(buttonIdx, idx, sceneId, sceneName, instance) {
+function addSceneButton(buttonIdx, idx, sceneId, sceneName, icon, instance) {
     console.log("____ sceneId:" + sceneId);
     console.log("____ sceneName:" + sceneName);
     var gangname = sceneName;
@@ -120,7 +121,8 @@ function addSceneButton(buttonIdx, idx, sceneId, sceneName, instance) {
                 sceneId: sceneId,
                 netadd: parseInt(Session.get("netaddr"), 16),
                 endpoint: parseInt(Session.get("endpoint")),
-                groupId: parseInt(Session.get('room-id'))
+                groupId: parseInt(Session.get('room-id')),
+                icon: icon
             }],{wait:false}, 
             function(err, res){
                 if(err) {
@@ -141,7 +143,7 @@ function addSceneButton(buttonIdx, idx, sceneId, sceneName, instance) {
         }, 2000);
     }
 }
-function addButton(buttonIdx, idx, devType, instance) {
+function addButton(buttonIdx, idx, devType, icon, instance) {
     var gangname = instance.$('form#form-' + idx + ' input.gangname').val();
     if( devType > -1 && gangname && gangname !== "" ) {
         Meteor.apply("addDevice", [{
@@ -151,7 +153,8 @@ function addButton(buttonIdx, idx, devType, instance) {
                 idx: "0".charCodeAt(0) + buttonIdx,
                 netadd: parseInt(Session.get("netaddr"), 16), //data[4] * 256 + data[5],
                 endpoint: parseInt(Session.get("endpoint")),
-                groupId: parseInt(Session.get('room-id'))
+                groupId: parseInt(Session.get('room-id')),
+                icon: icon
             }], {wait:false}, function(err, res){
                 if(err) {
                     console.log(err);
@@ -198,14 +201,17 @@ Template.ModalAddDevice.events({
         var idx = event.currentTarget.getAttribute('data-idx');
         console.log('idx:' + idx);
         var devType = parseInt(instance.$('#icon-' + idx).attr("data-value"));
+        var icon = parseInt(instance.$('#icon-' + idx).attr('data-icon'));
+
         console.log(instance.$('#icon-' + idx).attr("data-value"));
+
         buttonIdx = parseInt(buttonIdx);
         idx = parseInt(idx);
         console.log("Add device: buttonIdx=" + buttonIdx + " idx=" + idx + " devType=" + devType);
         switch(devType) {
         case Constants.DEVTYPE_CURTAIN: // curtain
             console.log("add curtain");
-            addCurtain(buttonIdx, idx, instance);
+            addCurtain(buttonIdx, idx, icon, instance);
             break;
         case Constants.DEVTYPE_SCENE: // scene button
             var sceneId = parseInt(Session.get('scene-id'));
@@ -216,12 +222,12 @@ Template.ModalAddDevice.events({
                 $(parentElem).find('input.mbsc-control.sceneName').parent().addClass('has-error');
             }
             else {
-                addSceneButton(buttonIdx, idx, sceneId, sceneName, instance);
+                addSceneButton(buttonIdx, idx, sceneId, sceneName, icon, instance);
             }
             break;
         default:
             console.log("Add button: " + buttonIdx + " " + idx);
-            addButton(buttonIdx, idx, devType, instance);
+            addButton(buttonIdx, idx, devType, icon, instance);
             break;
         }
     },
@@ -299,6 +305,11 @@ Template.FragmentAdd.helpers({
         if(!this.found) return "";
         return this.found.name;
     },
+    foundIcon: function() {
+        if(!this.found) return "0";
+        if(!this.found.icon) return "0";
+        return this.found.icon;
+    },
     readonlyName: function() {
         (this.found == undefined)?"":"readonly";
     },
@@ -321,9 +332,23 @@ Template.FragmentAdd.helpers({
 });
 
 Template.FragmentAdd.events({
+    'click i[data-icon]': function(event, instance) {
+        var iconElem = $(event.currentTarget);
+        var icon = parseInt(iconElem.attr("data-icon"));
+        icon = (icon + 1) % LampIconList.length;
+        iconElem.attr("data-icon", "" + icon);
+        iconElem.removeClass();
+        iconElem.addClass("icon icon-big icon-fit iot-icon-" + LampIconList[icon].icon);
+    }
 });
 
 Template.FragmentAdd.onRendered(function() {
+    var self = this;
+    var idx = parseInt(self.$("button[data-idx]").attr("data-idx"));
+    var iconElem = self.$("#icon-" + idx);
+    var icon = parseInt(iconElem.attr("data-icon"));
+    iconElem.removeClass();
+    iconElem.addClass("icon icon-big icon-fit iot-icon-" + LampIconList[icon].icon);
 /*
     var self = this;
     if(self.data || !self.data.found){
@@ -465,6 +490,24 @@ Template.Header1Gang.helpers({
 });
 Template.Header1Gang.events(Template.ModalAddDevice.modalBodyEvents);
 
+Template.FragmentAddCurtain.onRendered(function() {
+    var self = this;
+    var idx = parseInt(self.$("button[data-idx]").attr("data-idx"));
+    var iconElem = self.$("#icon-" + idx);
+    var icon = parseInt(iconElem.attr("data-icon"));
+    iconElem.removeClass();
+    iconElem.addClass("icon icon-big icon-fit iot-icon-" + CurtainIconList[icon].icon);
+});
+Template.FragmentAddCurtain.events({
+    'click i[data-icon]': function(event, instance) {
+        var iconElem = $(event.currentTarget);
+        var icon = parseInt(iconElem.attr("data-icon"));
+        icon = (icon + 1) % CurtainIconList.length;
+        iconElem.attr("data-icon", "" + icon);
+        iconElem.removeClass();
+        iconElem.addClass("icon icon-big icon-fit iot-icon-" + CurtainIconList[icon].icon);
+    }
+});
 Template.FragmentAddCurtain.helpers({
     roomName: function() {
         var rId = Session.get("room-id");
@@ -499,8 +542,14 @@ Template.BodyCurtainSwitch.helpers({
 
 Template.FragmentAddScene.onRendered(function(){
     var self = this;
+
+    var idx = parseInt(self.$("button[data-idx]").attr("data-idx"));
+    var iconElem = self.$("#icon-" + idx);
+    var icon = parseInt(iconElem.attr("data-icon"));
+    iconElem.removeClass();
+    iconElem.addClass("icon icon-big icon-fit iot-icon-" + SceneIconList[icon].icon);
+
     Session.set('scene-id', -1);
-    console.log("Run 111");
     Meteor.setTimeout(function() {
         try {
             var listDown = self.$('.list-down');
@@ -526,6 +575,16 @@ Template.FragmentAddScene.onRendered(function(){
 });
 Template.FragmentAddScene.onDestroyed(function() {
     Session.set("scene-id", undefined);
+});
+Template.FragmentAddScene.events({
+    'click i[data-icon]': function(event, instance) {
+        var iconElem = $(event.currentTarget);
+        var icon = parseInt(iconElem.attr("data-icon"));
+        icon = (icon + 1) % SceneIconList.length;
+        iconElem.attr("data-icon", "" + icon);
+        iconElem.removeClass();
+        iconElem.addClass("icon icon-big icon-fit iot-icon-" + SceneIconList[icon].icon);
+    }
 });
 Template.FragmentAddScene.helpers({
     scenes: function() {

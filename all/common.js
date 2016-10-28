@@ -290,6 +290,40 @@ if (Meteor.isClient) {
         "bg-cyan-800", "bg-teal-800", "bg-indigo-800", 
         "bg-blue-800", "bg-green-800", "bg-pink-800"
     ];
+    LampIconList = [
+        {icon:"den-chung", title:"Light", color:"bg-cyan-800"}, 
+        {icon:"downlight", title: "Command", color: "bg-teal-800"},
+        {icon:"den-trang-tri", title: "Curtain", color: "bg-indigo-800"},
+        {icon:"den-tuong", title:"Fan", color:"bg-blue-800"}, 
+        {icon:"den-hat-khe", title: "Air conditioner", color: "bg-green-800"},
+        {icon:"den-chum", title: "Television", color: "bg-pink-800"} 
+    ];
+    CurtainIconList = [
+        {icon:"rem-chung", title:"Light", color:"bg-cyan-800"}, 
+        {icon:"rem-voan", title: "Command", color: "bg-teal-800"},
+        {icon:"rem-cuon", title: "Curtain", color: "bg-indigo-800"},
+        {icon:"rem-vai", title:"Fan", color:"bg-blue-800"}, 
+        {icon:"den-hat-khe", title: "Air conditioner", color: "bg-green-800"}
+        
+    ];
+    SceneIconList = [
+        {icon:"script", title:"Light", color:"bg-cyan-800"}, 
+        {icon:"power", title: "Command", color: "bg-teal-800"},
+        {icon:"doc-sach", title: "Curtain", color: "bg-indigo-800"},
+        {icon:"hang-ngay", title:"Fan", color:"bg-blue-800"}, 
+        {icon:"thao-luan", title: "Air conditioner", color: "bg-green-800"},
+        {icon:"thu-gian", title: "Air conditioner", color: "bg-green-800"},
+        {icon:"di-ngu", title: "Air conditioner", color: "bg-green-800"},
+        {icon:"hoc-bai", title: "Air conditioner", color: "bg-green-800"},
+        {icon:"nghe-nhac", title: "Air conditioner", color: "bg-green-800"},
+        {icon:"tiep-khach", title: "Air conditioner", color: "bg-green-800"},
+        {icon:"trinh-chieu", title: "Air conditioner", color: "bg-green-800"},
+        {icon:"ra-phong", title: "Air conditioner", color: "bg-green-800"},
+        {icon:"vao-phong", title: "Air conditioner", color: "bg-green-800"},
+        {icon:"an-toi", title: "Air conditioner", color: "bg-green-800"},
+        {icon:"diu-nhe", title: "Air conditioner", color: "bg-green-800"},
+        {icon:"xem-tivi", title: "Air conditioner", color: "bg-green-800"}
+    ];
     IconList = [
         {icon:"light", title:"Light", color:"bg-cyan-800"}, 
         {icon:"scene", title: "Command", color: "bg-teal-800"},

@@ -99,11 +99,11 @@ Template.ModalSettings.events({
 
 Template.ModalCurtainControl.onRendered(function(){
     Meteor.setTimeout(function() {
-        this.$("button.btn").rippler({
+        this.$("button.btn-curtain").rippler({
             effectClass      :  'rippler-effect'
             ,effectSize      :  16      // Default size (width & height)
             ,addElement      :  'div'   // e.g. 'svg'(feature)
-            ,duration        :  400
+            ,duration        :  600
         });
     }, 100);
 });

@@ -1,4 +1,20 @@
 var handle;
+function getIcon(type, icon) {
+    var iconList = null;
+    switch(type) {
+        case Constants.DEVTYPE_CURTAIN:
+            iconList = CurtainIconList;
+            break;
+        case Constants.DEVTYPE_SCENE:
+            iconList = SceneIconList;
+            break;
+        default:
+            iconList = LampIconList;
+            break;
+    }
+    var newIcon = icon % iconList.length;
+    return {iconName:iconList[icon % iconList.length].icon,iconIdx:newIcon};
+}
 
 Template.Device.onRendered(function() {
  /*   var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
@@ -11,6 +27,16 @@ Template.Device.onRendered(function() {
     });
 */
     var self = this;
+
+
+    var iconElem = self.$("li > div > i#icon");
+    var type = parseInt(iconElem.attr('data-type'));
+    var icon = parseInt(iconElem.attr('data-icon'));
+    var classes = "icon icon-big icon-fit iot-icon-" + getIcon(type, icon).iconName;
+    iconElem.removeClass();
+    console.log(classes);
+    iconElem.addClass(classes);
+
     CALLBACKS.saveBtn = function(){
         var devId = parseInt(Router.current().params.id);
         var timeObjs = self.$('input.time-select');
@@ -29,6 +55,7 @@ Template.Device.onRendered(function() {
         var ret = Meteor.apply('updateDevice', [{
             id: devId,
             name: self.$('#deviceName').val(),
+            icon: parseInt(self.$('li > div > i#icon').attr('data-icon'))
         }], {wait: false});
         console.log(ret);
     }
@@ -114,6 +141,17 @@ Template.Device.events({
             Meteor.apply('removeDevice', [devId], {wait:false});
             Router.go('/Rooms');
         });
+    },
+    'click i#icon': function(event) {
+        var iconElem = $(event.currentTarget);
+        var type = parseInt(iconElem.attr('data-type'));
+        var icon = parseInt(iconElem.attr('data-icon'));
+        icon = icon + 1;
+        var obj = getIcon(type, icon);
+        iconElem.attr("data-icon", obj.iconIdx);
+        iconElem.removeClass();
+        iconElem.addClass("icon icon-big iot-icon-" + obj.iconName);
+        showSaveBtn();
     }
 });
 

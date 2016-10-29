@@ -302,8 +302,7 @@ if (Meteor.isClient) {
         {icon:"rem-chung", title:"Light", color:"bg-cyan-800"}, 
         {icon:"rem-voan", title: "Command", color: "bg-teal-800"},
         {icon:"rem-cuon", title: "Curtain", color: "bg-indigo-800"},
-        {icon:"rem-vai", title:"Fan", color:"bg-blue-800"}, 
-        {icon:"den-hat-khe", title: "Air conditioner", color: "bg-green-800"}
+        {icon:"rem-vai", title:"Fan", color:"bg-blue-800"}
         
     ];
     SceneIconList = [

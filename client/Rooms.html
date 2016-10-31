@@ -4,9 +4,9 @@
             {{#each group}}
             <li>
                 <div>
-                <span>{{name}}</span>
+                <a style="width:auto;text-align: left;display: inline-block;" class="update-room" data-room-id="{{id}}">{{name}}</a>
                 <a href="#" data-toggle="modal" data-target="#add_device" data-room-id="{{id}}"><i class="icon iot-color-brand icon-fit iot-icon-plus align-right"></i></a></div>
-                <ul class="device-list">
+                <ul style="overflow:hidden;" class="device-list">
                     {{#each device id}}{{#if removable}}
                     <li><div style="text-align:center; border:none;">
                     <a class="removeAction iot-color-brand text-center" data-room-id="{{roomId}}">{{_ "delete"}}</a>

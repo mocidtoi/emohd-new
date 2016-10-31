@@ -127,7 +127,7 @@ Template.Rooms.helpers({
 	}
 });
 
-Template.Rooms.events({
+Template.Rooms.show = Template.Rooms.events({
     'click .removeAction': function(event) {
         var target = event.currentTarget;
         var id = parseInt(target.getAttribute('data-room-id'));
@@ -159,6 +159,21 @@ Template.Rooms.events({
     },
     'click .list-group-item a': function(event) {
         event.stopPropagation();
+    },
+    'click a.update-room': function(event) {
+        console.log("Update room");
+        event.stopPropagation();
+        var elem = $(event.currentTarget);
+        var roomId = elem.attr('data-room-id');
+        var roomName = elem.text();
+        $('#inputUpdateRoomName').val(roomName);
+        $('#inputUpdateRoomName').attr("data-room-id", roomId);
+        $('#modal-updateroom').modal();
+    },
+    'click .room-list > li > div': function(event) {
+        console.log("slideToggle");
+        $(event.currentTarget).siblings().slideToggle();
     }
+
 });
 

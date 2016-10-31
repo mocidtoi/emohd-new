@@ -11,6 +11,26 @@ Template.ModalAddRoom.helpers({
         return MODALS[0].id;
     }
 });
+Template.ModalUpdateRoom.events({
+    "click button#ok": function(event, instance) {
+        var elem = instance.$('#inputUpdateRoomName');
+        var roomId = elem.attr("data-room-id");
+        var roomName = elem.val();
+        roomId = parseInt(roomId);
+        console.log("Room:" + roomName + "(" + roomId + ")");
+    
+        Meteor.apply('updateGroup', [{
+            id: roomId,
+            name: roomName,
+            parentId: null
+        }], {wait: false});
+    }
+});
+Template.ModalUpdateRoom.helpers({
+    modalId: function() {
+        return MODALS[2].id;
+    }
+});
 Template.ModalAddScene.helpers({
     modalId: function() {
         return MODALS[1].id;

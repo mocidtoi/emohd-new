@@ -39,6 +39,7 @@ Router.route('/Rooms', {
     action: function() {
         this.render('Rooms');
         setupModalAddRoom(this);
+        setupModalUpdateRoom(this);
         this.render('ModalAddDevice', {to: "modal-adddev"});
         this.render('ModalCurtainControl', {to: "modal-curtain"});
         setActiveTab(2);
@@ -357,12 +358,16 @@ if (Meteor.isClient) {
     };
     MODALS = [
         {id: "modal-addroom"},
-        {id: "modal-addscene"}
+        {id: "modal-addscene"},
+        {id: "modal-updateroom"}
     ];
     setupModalAddRoom = function(router) {
         router.render('ModalAddRoom', {to: "modal-addroom"});
         Session.set('modal-top', MODALS[0].id);
         router.render('AddBtn', {to: "rightNav"});
+    };
+    setupModalUpdateRoom = function(router) {
+        router.render('ModalUpdateRoom', {to: "modal-updateroom"});
     };
     setupModalAddScene = function(router) {
         router.render('ModalAddScene', {to: "modal-addroom"});

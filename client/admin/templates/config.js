@@ -21,6 +21,10 @@ Template.config.events({
         Meteor.call('config', ssid, password, dhcp, ipaddress, netmask, gateway);
         Router.go('/');
     },
+    'click #cancel': function() {
+        console.log('Clicked on Cancel');
+        window.history.back();
+    },
     'change #profile': function(event, instance) {
         var idx = event.currentTarget.selectedIndex;
         var optionValue = parseInt(event.currentTarget.options[idx].value);

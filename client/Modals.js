@@ -147,3 +147,22 @@ Template.ModalCurtainControl.events({
         Meteor.apply('curtainStop', [id], {wait:false});
     },
 });
+
+Template.ModalIRConfig.helpers({
+    modalId: function() { return 'modal-settings';}
+});
+
+Template.ModalIRConfig.events({
+    'click #config': function(event, instance) {
+        var params = new Object();
+        params.IRHubName = instance.$('#inputName').val().trim(); 
+        params.IRHubId = instance.$('#inputSSID').val().trim();
+        params.IRHubKey = instance.$('#inputPassword').val().trim();         
+        console.log(params);
+        Meteor.apply('addIRHub', [{
+            deviceId: params.IRHubId,
+            name: params.IRHubName,
+            deviceKey: params.IRHubKey,
+            }], {wait: false});
+    }
+});

@@ -282,6 +282,7 @@ if (Meteor.isClient) {
     Task = new Mongo.Collection('task');
     Favorite = new Mongo.Collection('favorite');
     Scene = new Mongo.Collection('scene');
+    IRHub = new Mongo.Collection('irhub');
 
     Song = new Mongo.Collection('song');
     PlayingItem = new Mongo.Collection('playingItem');

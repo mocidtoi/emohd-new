@@ -1647,10 +1647,12 @@ Meteor.methods({
     },
     updateSceneDev: function(arg) {
         if(arg) {
+            myLog("Update SceneDev: " + arg.id);
             SceneDev.update(arg, {
                 where:{
                     id: parseInt(arg.id)
-                }
+                },
+                individualHooks: true
             }).then(function() {
                 myLog('updateSceneDev:Success');
             }).catch(function(err) {

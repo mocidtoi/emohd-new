@@ -110,7 +110,8 @@ if (process.env.MOCKUP == 'yes') {
                     // 0x31: COMMAND_ON, 
                     // 0x32: COMMAND_CHECK, 
                     // 0x33: COMMAND_TOA, 
-                    // 0x34: COMMAND_PERJOIN
+                    // 0x34: COMMAND_PERJOIN,
+                    // 0x35: COMMAND_TOGGLE
                     case 0x30: 
                     case 0x31:
                     case 0x32:
@@ -126,7 +127,7 @@ if (process.env.MOCKUP == 'yes') {
                     case 0x33:
                         console.log("TURN OFF ALLLLLLLLL");
                         break;
-                    case 0x34:
+                    case 0x34: // permit join
                         res[0] = 0x44;
                         res[1] = 0x33;
                         res[2] = 0x33;
@@ -137,6 +138,17 @@ if (process.env.MOCKUP == 'yes') {
                         //res[5] = 0x16;
                         res[6] = 0x10;
                         res[7] = data[7];
+                        break;
+                    case 0x35: // toggle
+                        myLog("Toggle button current status");
+                        res[0] = 0x44; // D
+                        res[1] = 0x33; // D3
+                        res[2] = 0x34; // D34 --> status IN
+                        res[3] = data[3]; // Button ID
+                        res[4] = data[4]; // NetAddr 
+                        res[5] = data[5]; // NetAddr
+                        res[6] = data[6]; // Endpoint
+                        res[7] = 0x31; // Always on
                         break;
                 }
                 serialPort.writeToComputer(res);

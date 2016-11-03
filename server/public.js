@@ -477,15 +477,31 @@ var Scene = sequelize.define('scene', {
 }, {
     hooks: {
         beforeDestroy: function(scene) {
-            Device.destroy({
+            myLog("Scene beforeDestroy: " + scene.id);
+            Device.findAll({
                 where: {
                     sceneId: scene.id
                 }
+            }).then(function(devs) {
+                devs.forEach(function(dev) {
+                    myLog("remove device iiii SUCCESS: " + dev);
+                    dev.destroy();
+                });
+            }).catch(function(err){
+                myLog("remove device kkkk Error: " + err);
             });
-            SceneDev.destroy({
-                where:{
+
+            SceneDev.findAll({
+                where: {
                     sceneId: scene.id
                 }
+            }).then(function(sds){
+                sds.forEach(function(sd){
+                    myLog("remove scenedev SUCCESS " + sd);
+                    sd.destroy();
+                });
+            }).catch(function(err){
+                myLog("remove scenedev vvvv Error: " + err);
             });
         }
     },
@@ -1058,7 +1074,7 @@ Meteor.publish('data', function(token) {
         self.changed('group', grp.id, grp.toJSON());
     });
     Group.addHook('afterDestroy', self._session.id, function(grp, option) {
-        self.removed('group', grp.id)
+        self.removed('group', grp.id);
     });
     Device.addHook('afterCreate', self._session.id, function(dev, option) {
         self.added('device', dev.id, dev.toJSON());
@@ -1075,6 +1091,7 @@ Meteor.publish('data', function(token) {
         });
     });
     Device.addHook('afterDestroy', self._session.id, function(dev, option) {
+        myLog("device (" + dev.id + ") removed");
         self.removed('device', dev.id);
     });
     Task.addHook('afterCreate', self._session.id, function(tsk, option) {
@@ -1102,6 +1119,7 @@ Meteor.publish('data', function(token) {
         self.changed('scene', scene.id, scene.toJSON());
     });
     Scene.addHook('afterDestroy', self._session.id, function(scene, option){
+        myLog("Sceneeeeee (" + scene.id +") removed");
         self.removed('scene', scene.id);
     });
     SceneDev.addHook('afterCreate', self._session.id, function(sceneDev, option){
@@ -1706,10 +1724,12 @@ Meteor.methods({
     },
     updateSceneDev: function(arg) {
         if(arg) {
+            myLog("Update SceneDev: " + arg.id);
             SceneDev.update(arg, {
                 where:{
                     id: parseInt(arg.id)
-                }
+                },
+                individualHooks: true
             }).then(function() {
                 myLog('updateSceneDev:Success');
             }).catch(function(err) {

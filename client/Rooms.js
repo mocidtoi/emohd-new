@@ -138,6 +138,8 @@ Template.Rooms.show = Template.Rooms.events({
     'click a[data-target="#add_device"]': function(event) {
         var roomId = event.currentTarget.getAttribute("data-room-id");
         Session.set("room-id", roomId);
+        event.stopPropagation();
+        $('#add_device').modal();
     },
     //'click .list-group-item.item-device,.list-group-item.item-scene': function(event) {
     'click .button-style-1': function(event) {

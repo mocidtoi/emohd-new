@@ -93,6 +93,9 @@ a, a:hover {
     color: rgba(118,118,118,1);
     text-decoration:none;
 }
+.icon-music:active {
+    color: #2196F3;
+}
 /*
 a:active, .scene-item a:active span, a:active * {
     color: lightgreen;
@@ -585,3 +588,6 @@ h4.example-title {
     height: 55px!important;
 }
 
+* {
+    outline: none!important;
+}

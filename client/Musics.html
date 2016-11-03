@@ -9,7 +9,7 @@
             </div></li>
             <li>
                 <ul style="padding-left:0; padding-right:0;" class="device-list stripped-list">
-                    <!-- Example List Divider -->
+                    <!-- Example List Divider
                     <li><div>
                         <a class="button-style-1 overflow-hidden">VO nguoi ta</a>
                         <a class="button-style-2 align-right">
@@ -27,8 +27,9 @@
                         <a class="button-style-2 align-right">
                             <i class="icon icon-fit iot-icon-control-play align-right" aria-hidden="true"></i>
                         </a>
-                    </div></li>
+                    </div></li> -->
                     {{#each songs}}
+<!--
                     <li><div>
                         <a class="list-group-item" data-songId="{{id}}" data-songIdx={{@index}}>
                             <span>{{title}}</span>
@@ -37,6 +38,14 @@
                             </a>
                         </a>
                     </div></li>
+-->
+                    <li><div>
+                        <a class="button-style-1 overflow-hidden" data-songIdx={{@index}}>{{title}}</a>
+                        <a class="button-style-2 align-right" data-songId="{{id}}">
+                            <i class="icon icon-fit {{isPlaying id}} align-right" aria-hidden="true"></i>
+                        </a>
+                    </div></li>
+
                     {{/each}}
                     <!-- End Example List Divider -->
                 </ul>

@@ -44,6 +44,12 @@ Template.More.events({
 });
 Template.More.helpers(PageHelpers);
 Template.More.helpers({
+    irhub: function() {
+        return IRHub.find({}).fetch();
+    }
+});
+
+Template.More.helpers({
     language: function() {
         var lang = window.localStorage.getItem("__lang");
         if (!lang) {

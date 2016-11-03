@@ -965,6 +965,43 @@ function updateDevice(arg, callback) {
         });
     }
 }
+
+function addIRHub(arg, callback) {
+    if (arg) {
+        console.log("Name: " + arg.deviceId + " ID: " + arg.name + " Key: "+ arg.deviceKey);
+        IRHub.findOne({
+            where: {
+                deviceId: arg.deviceId,
+                name: arg.name,
+                deviceKey: arg.deviceKey
+            }
+        }).then(function(dev) {
+            myLog("device:");
+            if (dev) {
+                console.log("Name: " + dev.deviceId + " ID: " + dev.name + " Key: "+ dev.deviceKey);
+                callback({
+                    success: false,
+                    message: 'IRHub Device bị trùng'
+                });
+            }
+            else {
+                myLog("new dev");
+                this.create(arg).then(function(tsk) {
+                    myLog("addIRHub: " + tsk.toJSON());
+                }).catch(function(err) {
+                    myLog("addIRHub: " + err);
+                });
+            }
+        });
+    }
+    else {
+        callback({
+            success: false,
+            message: 'Dữ liệu gửi lên không đúng định dạng.'
+        });
+    }
+}
+
 Meteor.publish('data', function(token) {
     var self = this;
     myLog('publish: token=' + token + " | " + process.env.TOKEN);
@@ -1000,6 +1037,11 @@ Meteor.publish('data', function(token) {
     }).then(function(grpp) {
         for (var i = 0; i < grpp.length; i++) {
             preOrder(grpp[i], self)
+        }
+    });
+    IRHub.findAll().then(function(irhub) {
+        for (var i = 0; i < irhub.length; i++) {
+            self.added('irhub', irhub[i].id, irhub[i].toJSON());
         }
     });
     Device.findAll().then(function(dev) {
@@ -1088,6 +1130,12 @@ Meteor.publish('data', function(token) {
     Group.addHook('afterDestroy', self._session.id, function(grp, option) {
         self.removed('group', grp.id);
     });
+    IRHub.addHook('afterCreate', self._session.id, function(irhub, option){
+        self.added('irhub', irhub.id, irhub.toJSON());
+    });
+    IRHub.addHook('afterDestroy', self._session.id, function(irhub, option){
+        self.removed('irhub', irhub.id);
+    });
     Device.addHook('afterCreate', self._session.id, function(dev, option) {
         self.added('device', dev.id, dev.toJSON());
     });
@@ -1154,6 +1202,8 @@ Meteor.publish('data', function(token) {
         Device.removeHook('afterUpdate', self._session.id);
         Device.removeHook('beforeDestroy', self._session.id);
         Device.removeHook('afterDestroy', self._session.id);
+        IRHub.removeHook('afterCreate', self._session.id);
+        IRHub.removeHook('afterDestroy', self._session.id);
         Group.removeHook('afterCreate', self._session.id);
         Group.removeHook('afterUpdate', self._session.id);
         Group.removeHook('afterDestroy', self._session.id);
@@ -1834,5 +1884,12 @@ Meteor.methods({
         var timeStr = currentTime.getHours() + ":" + currentTime.getMinutes() + ":" + currentTime.getSeconds();
         myLog(timeStr);
         return {timestamp:now, time:timeStr};
+    },
+    addIRHub: function(arg) {
+        myLog('addIRHub:' + arg);
+        addIRHub(arg, function(res) {
+            myLog('addIRHub result:');
+            myLog(res);
+        });
     }
 });

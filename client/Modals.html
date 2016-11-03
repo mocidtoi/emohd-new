@@ -146,3 +146,27 @@
         </div>
     </div>
 </template>
+<template name="ModalIRConfig">
+    <div class="modal fade" id="modal-ir-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-centering" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{_ "New IR Hub"}}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group text-right">
+                        <label class="sr-only t-vmiddle" for="inputSSID">SSID</label>
+                        <input type="text" class="form-control" id="inputSSID" placeholder={{_ "WiFi SSID"}}>
+                    </div>
+                    <div class="form-group text-right">
+                        <label class="sr-only t-vmiddle" for="inputPassword">Password</label>
+                        <input type="password" class="form-control" id="inputPassword" placeholder={{_ "Password"}}>
+                    </div>
+                </div>
+                <div class="modal-footer container">
+                    <button id="config" type="button" class="col-xs-12 btn btn-primary" data-dismiss="modal">{{_ "Configure"}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

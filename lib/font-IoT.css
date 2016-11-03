@@ -205,3 +205,6 @@
 .iot-icon-control-stop:before {
   content: "\33";
 }
+.iot-icon-remote-control-streamline:before {
+  content: "\34";
+}

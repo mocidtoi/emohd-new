@@ -366,6 +366,14 @@ var Device = sequelize.define('device', {
     icon: {
         type: Sequelize.INTEGER,
         allowNull: true
+    },
+    irModelId: {
+        type: Sequelize.INTEGER,
+        allowNull: true
+    },
+    irHubId: {
+        type: Sequelize.INTEGER,
+        allowNull: true
     }
 }, {
     hooks: {
@@ -544,6 +552,75 @@ var Config = sequelize.define( 'config', {
         allowNull: true
     }
 }, {
+    freezeTableName: true
+});
+
+var IRHub = sequelize.define('irhub', {
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+    },
+    deviceId: {
+        type: Sequelize.TEXT,
+        allowNull: false
+    },
+    name: {
+        type: Sequelize.TEXT, 
+        allowNull: false
+    },
+    deviceKey: {
+        type: Sequelize.TEXT,
+        allowNull: false
+    }
+}, {
+    freezeTableName: true
+});
+
+var IRDevModel = sequelize.define('irdevmodel', {
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+    },
+    name: {
+        type: Sequelize.TEXT,
+        allowNull: false
+    },
+    description: {
+        type: Sequelize.TEXT,
+        allowNull: true
+    }
+},{
+    freezeTableName: true
+});
+
+var IRCommand = sequelize.define('ircommand', {
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+    },
+    modelId: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    },
+    name: {
+        type: Sequelize.TEXT,
+        allowNull: false
+    },
+    irData: {
+        type: Sequelize.TEXT,
+        allowNull: false
+    },
+    icon: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    }
+},{
     freezeTableName: true
 });
 

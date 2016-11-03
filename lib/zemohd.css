@@ -588,3 +588,6 @@ h4.example-title {
     height: 55px!important;
 }
 
+* {
+    outline: none!important;
+}

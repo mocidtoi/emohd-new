@@ -58,11 +58,12 @@ Template.Rooms.helpers({
     itemClass: function(type, id) {
         switch(parseInt(type)) {
         case Constants.DEVTYPE_CURTAIN:
-            return "iot-color-brand-2";
-            break;
         case Constants.DEVTYPE_SCENE:
+        case Constants.DEVTYPE_IR:
             return "iot-color-brand-2";
             break;
+        /*    return "iot-color-brand-2";
+            break;*/
         default:
             try {
                 return Device.findOne(id).status == 49?"iot-color-brand":"iot-color-llg";
@@ -97,31 +98,13 @@ Template.Rooms.helpers({
         case Constants.DEVTYPE_DEVICE:
             return "device-item";
             break;
+        case Constants.DEVTYPE_IR:
+            return "device-ir";
+            break;
         default:
             return "";
         }
     },
-/*
-    statusClass: function(type, id) {
-        switch(parseInt(type)) {
-        case Constants.DEVTYPE_CURTAIN:
-            return "item-curtain rippler-default";
-            break;
-        case Constants.DEVTYPE_SCENE:
-            return "item-scene rippler-default";
-            break;
-        default:
-            try {
-                return Device.findOne(id).status == 49?"item-device":"item-device off";
-            }
-            catch(err) {
-                return "item-device";
-            }
-        }
-    },
-    icon: function(typeId) {
-        return IconList[typeId].icon;
-    },*/
 	group: function() {
 		return Group.find({ parentId: null }).fetch();
 	}
@@ -142,7 +125,7 @@ Template.Rooms.show = Template.Rooms.events({
         $('#add_device').modal();
     },
     //'click .list-group-item.item-device,.list-group-item.item-scene': function(event) {
-    'click .button-style-1': function(event) {
+    'click .device-item .button-style-1, click .scene-item .button-style-1': function(event) {
         var devId = parseInt(event.currentTarget.getAttribute('data-id'));
         console.log("Rooms, device toggle " + {
 			id: devId,
@@ -159,9 +142,9 @@ Template.Rooms.show = Template.Rooms.events({
         Session.set('curtain-id', event.currentTarget.getAttribute('data-id'));
         $('#curtain-control').modal();
     },
-    'click .list-group-item a': function(event) {
+    /*'click .list-group-item a': function(event) {
         event.stopPropagation();
-    },
+    },*/
     'click a.update-room': function(event) {
         console.log("Update room");
         event.stopPropagation();
@@ -176,6 +159,5 @@ Template.Rooms.show = Template.Rooms.events({
         console.log("slideToggle");
         $(event.currentTarget).siblings().slideToggle();
     }
-
 });
 

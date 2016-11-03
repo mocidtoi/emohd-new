@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 
 Constants = {
+    DEVTYPE_IR: 3,
     DEVTYPE_CURTAIN:2,
     DEVTYPE_SCENE:1,
     DEVTYPE_DEVICE:0,

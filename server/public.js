@@ -1568,36 +1568,21 @@ function curtainStop(curtainId) {
     }).then(function(dev) {
         if (dev) {
             limiter.removeTokens(1, function(error, remainingRequests) {
-                var upCmd = new Buffer(8);
-                upCmd[0] = 0x44;
-                upCmd[1] = 0x31;
-                upCmd[2] = 0x34;
-                upCmd[3] = dev.idx1; // Button 1 --> Up curtain
-                upCmd[4] = dev.netadd / 256;
-                upCmd[5] = dev.netadd % 256;
-                upCmd[6] = dev.endpoint;
-                upCmd[7] = 0x31; // "1" --> action "on"
+                var stopCmd = new Buffer(8);
+                stopCmd[0] = 0x44;
+                stopCmd[1] = 0x31;
+                stopCmd[2] = useBcast?0x32:0x34;
+                stopCmd[3] = 0x32; // "2" -> "stop"
+                stopCmd[4] = dev.netadd / 256;
+                stopCmd[5] = dev.netadd % 256;
+                stopCmd[6] = dev.endpoint;
+                stopCmd[7] = 0x31; // "1" --> action "on"
                 myLog('Write curtain up command');
-                serialPort.write(upCmd, function(err, results) {
-                    myLog('err ' + err);
-                    myLog('results ' + results);
-                    myLog(upCmd);
-                });
 
-                var downCmd = new Buffer(8);
-                downCmd[0] = 0x44;
-                downCmd[1] = 0x31;
-                downCmd[2] = 0x34;
-                downCmd[3] = dev.idx; // Button 0 --> Down curtain
-                downCmd[4] = dev.netadd / 256;
-                downCmd[5] = dev.netadd % 256;
-                downCmd[6] = dev.endpoint;
-                downCmd[7] = 0x31; // "1" --> action "on"
-                myLog('Write curtain down command');
-                serialPort.write(downCmd, function(err, results) {
+                serialPort.write(stopCmd, function(err, results) {
                     myLog('err ' + err);
                     myLog('results ' + results);
-                    myLog(downCmd);
+                    myLog(stopCmd);
                 });
             });
         }

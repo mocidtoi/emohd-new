@@ -179,7 +179,42 @@ function addButton(buttonIdx, idx, devType, icon, instance) {
 }
 Template.ModalAddDevice.events({
     "click button#configure": function(event, instance) {
-        if(Session.get('gang-type') && parseInt(Session.get('gang-type')) > -1) {
+        var gangtype = parseInt(Session.get('gang-type'));
+        if (isNaN(gangtype)) gangtype = -1;
+        switch(gangtype) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+                Meteor.apply('permit', [{
+                        name1: instance.$("#gang1 .gangname").val(),
+                        name2: instance.$("#gang2 .gangname").val(),
+                        name3: instance.$("#gang3 .gangname").val(),
+                        groupId: Session.get("room-id")
+                    }], {wait: false}, function(error, result) {
+                });
+                break;
+            case 9:
+                Router.current().render("HeaderIRDevice", {to:"modalHeader"});
+                Router.current().render("Blank", {to:"modalBody"});
+                Router.current().render("BodyIRDevice", {to: "modalBody"});
+                Router.current().render("Blank", {to:"modalFooter"});
+                Session.set("netaddr", -1);
+                break;
+            default:
+                instance.$('input.mbsc-control').parent().addClass('has-error');
+                setTimeout(function() {
+                    instance.$('input.mbsc-control').parent().removeClass('has-error');
+                }, 2000);
+                break;
+        }
+/*
+        if(gangtype > -1) {
             Meteor.apply('permit', [{
                     name1: instance.$("#gang1 .gangname").val(),
                     name2: instance.$("#gang2 .gangname").val(),
@@ -194,6 +229,7 @@ Template.ModalAddDevice.events({
                 instance.$('input.mbsc-control').parent().removeClass('has-error');
             }, 2000);
         }
+*/
     },
     "click button.addBtn": function(event, instance) {
         var buttonIdx = event.currentTarget.getAttribute('data-btnIdx');
@@ -243,6 +279,49 @@ Template.ModalAddDevice.events({
     "hide.bs.modal .modal": function(event, instance) {
         Router.current().render("Blank", {to: "modalHeader"});
         Router.current().render("Blank", {to: "modalBody"});
+    },
+    'click button#addIRDev': function(event, instance) {
+        var name = $(instance.$('input[type="text"]')[0]).val().trim();
+        if (name.length == 0) {
+            $(instance.$('input[type="text"]')[0]).parent().addClass("has-error").delay(1000).queue(function() {
+                $(this).removeClass("has-error").dequeue();
+            });
+            return;
+        }
+        var model = parseInt(instance.$('select[name="model"]').attr('data-val'));
+        if (isNaN(model) || model < 0) {
+            instance.$('select[name="model"]').parent().addClass("has-error").delay(1000).queue(function() {
+                $(this).removeClass("has-error");
+            });
+            return;
+        }
+        var irHub = parseInt(instance.$('select[name="ir-hub"]').attr('data-val'));
+        if (isNaN(irHub) || irHub < 0) {
+            instance.$('select[name="ir-hub"]').parent().addClass("has-error").delay(1000).queue(function() {
+                $(this).removeClass("has-error");
+            });
+            return;
+        }
+        var icon = parseInt(instance.$('i[data-icon]').attr('data-icon'));
+        Meteor.apply("addDevice", [{ // TUNG
+                name: name,
+                descrip: "IR Description",
+                type: Constants.DEVTYPE_IR,
+                idx: -1,
+                netadd: -1, //data[4] * 256 + data[5],
+                endpoint: -1,
+                groupId: parseInt(Session.get('room-id')),
+                icon: icon,
+                irModelId: model,
+                irHubId: irHub
+            }], {wait:false}, function(err, res){
+                if(err) {
+                    console.log(err);
+                    console.dir(err);
+                }
+                instance.$('#add_device').modal('hide');
+            }
+        );
     }
 });
 
@@ -264,6 +343,9 @@ Template.ModalAddDevice.helpers({
 
 Template.BodyStage1.onRendered(function() {
     var self = this;
+    $("#step1").show(100, function() {
+        $("#step1").removeClass("iot-color-llg").addClass("text-primary");
+    });
     Session.set('gang-type', undefined);
     Meteor.setTimeout(function() {
         try {
@@ -279,8 +361,20 @@ Template.BodyStage1.onRendered(function() {
                     $(window).off('focusin');
                 },
                 onSelect: function(valueText, inst) {
+                    var gangtype = inst.getVal();
                     console.log('gangtype:' + inst.getVal());
-                    Session.set('gang-type', inst.getVal());
+                    Session.set('gang-type', gangtype);
+                    var secondH4 = $('#step2');
+                    if( parseInt(gangtype) == 9 ) {
+                        secondH4.text("(2) " + TAPi18n.__("Press") + " " + TAPi18n.__("Next"));
+                    }
+                    else {
+                        secondH4.text("(2) " + TAPi18n.__("reset your Smart IO box") + " " + TAPi18n.__("then press") + " " + TAPi18n.__("Next"));
+                    }
+                    $('#step1').removeClass('text-primary').addClass('iot-color-llg');
+                    secondH4.show(400, function() {
+                        secondH4.removeClass('iot-color-llg').addClass('text-primary');
+                    });
                 }
             });
         }
@@ -604,5 +698,42 @@ Template.FragmentAddScene.helpers({
     },
     disabledButton: function() {
         return (this.found == undefined)?"":"disabled";
+    }
+});
+Template.BodyIRDevice.onRendered(function(){
+    var self = this;
+    var iconElem = self.$('i[data-icon]');
+    var icon = parseInt(iconElem.attr('data-icon'));
+    iconElem.removeClass();
+    iconElem.addClass("icon icon-big icon-fit iot-icon-" + IRIconList[icon].icon);
+    try {
+        console.log(self.$('select.list-down'));
+        self.$('select.list-down').mobiscroll().select({
+            theme: 'mobiscroll', 
+            lang: 'en', 
+            display: 'bottom', 
+            minWidth: 200,
+            inputClass: 'form-control gangtype',
+            // https://github.com/acidb/mobiscroll/issues/341
+            onShow: function () {
+                $(window).off('focusin');
+            },
+            onSelect: function(valueText, inst) {
+                $(this).attr("data-val", inst.getVal());
+            }
+        });
+    }
+    catch (err) {
+        console.log(err);
+    }
+});
+Template.BodyIRDevice.events({
+    'click i[data-icon]': function(event) {
+        var iconElem = $(event.currentTarget);
+        var icon = parseInt(iconElem.attr("data-icon"));
+        icon = (icon + 1) % IRIconList.length;
+        iconElem.attr("data-icon", "" + icon);
+        iconElem.removeClass();
+        iconElem.addClass("icon icon-big icon-fit iot-icon-" + IRIconList[icon].icon);
     }
 });

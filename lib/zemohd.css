@@ -591,3 +591,6 @@ h4.example-title {
 * {
     outline: none!important;
 }
+div#guide h4 {
+    transition: all 1s ease;
+}

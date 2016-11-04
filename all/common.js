@@ -326,6 +326,11 @@ if (Meteor.isClient) {
         {icon:"diu-nhe", title: "Air conditioner", color: "bg-green-800"},
         {icon:"xem-tivi", title: "Air conditioner", color: "bg-green-800"}
     ];
+    IRIconList = [
+        {icon:"ti-vi", title:"TV Set", color:"bg-cyan-800"},
+        {icon:"dieu-hoa", title:"AirCon", color:"bg-cyan-800"},
+        {icon:"quat", title:"AirCon", color:"bg-cyan-800"}
+    ];
     IconList = [
         {icon:"light", title:"Light", color:"bg-cyan-800"}, 
         {icon:"scene", title: "Command", color: "bg-teal-800"},

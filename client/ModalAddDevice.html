@@ -178,14 +178,13 @@
 </template>
 
 <template name="BodyStage1">
-    <div class="form-group">
-        <h4 class="text-left">(1) {{_ "Choose switch type"}},</h4>
-        <h4 class="text-left">(2) {{_ "reset your Smart IO box"}},</h4> 
-        <h4>(3) {{_ "then press"}} "{{_ "Next"}}"</h4>
+    <div id="guide" class="form-group">
+        <h4 id="step1" style="display:none" class='text-left'>(1) {{_ "Choose a switch"}} {{_ "or"}} {{_"device"}}</h4>
+        <h4 id="step2" style="display:none" class='text-left'></h4>
     </div>
     <div class="form-group"> <!-- Check eventDDP.js check "Notifier.addListener('joininfo', function(message) { ... } for correct order of gang-type -->
         <select name="gangtype" class="list_group list-down">
-            <option value="-1">{{_ "choose switch type"}} ...</option>
+            <option value="-1">{{_ "Add switch/device"}} ...</option>
             <option value="0">{{_ "2-light 2-scene switch"}}</option>
             <option value="1">{{_ "3-light 1-scene switch"}}</option>
             <option value="2">{{_ "4-scene switch"}}</option>
@@ -195,6 +194,7 @@
             <option value="6">{{_ "1-scene switch"}}</option>
             <option value="7">{{_ "2-way curtain switch"}}</option>
             <option value="8">{{_ "1-light 1-scene switch"}}</option>
+            <option value="9">{{_ "IR-controlled device"}}</option>
         </select>
     </div>
 </template>
@@ -230,5 +230,44 @@
         <div id="gang3" class="tab-pane fade">
             {{>yield "switch-4"}}
         </div>
+    </div>
+</template>
+
+<template name="HeaderIRDevice">
+    <h4>{{_ "Add"}} {{_ "IR-controlled device"}}</h4>
+</template>
+
+<template name="BodyIRDevice">
+    <div class="form-group text-right">
+        <label class="sr-only t-vmiddle">{{_ "Name"}}</label>
+        <input type="text" class="gangname form-control" placeholder={{_ "Device name"}}>
+    </div>
+    <div class="form-group text-right">
+        <label class="sr-only t-vmiddle">{{_ "Model"}}</label>
+        <select name="model" class="list_group list-down form-control">
+            <option value="-1">{{_ "Choose a model"}} ...</option>
+            <option value="0">{{_ "TV-Samsung-T3456"}}</option>
+            <option value="1">{{_ "TV-Samsung-M3456"}}</option>
+            <option value="2">{{_ "TV-Samsung-M764A"}}</option>
+            <option value="3">{{_ "TV-Samsung-MT345Y"}}</option>
+            <option value="4">{{_ "AirCon-Daikin-MT345Y"}}</option>
+        </select>
+    </div>
+    <div class="form-group text-right">
+        <label class="sr-only t-vmiddle">{{_ "IRHub"}}</label>
+        <select name="ir-hub" class="list_group list-down form-control">
+            <option value="-1">{{_ "Choose a IRHub"}} ...</option>
+            <option value="0">{{_ "Hub 1"}}</option>
+            <option value="1">{{_ "Hub phong khach"}}</option>
+            <option value="2">{{_ "Hub 2nd floor"}}</option>
+        </select>
+    </div>
+    <div class="form-group text-right">
+        <label style="width: 100%" class="text-center t-vmiddle">
+            <i class="" data-icon="0" data-value="0"></i>
+        </label>
+    </div>
+    <div class="form-group">
+        <button id="addIRDev" type="button" class="btn btn-block btn-primary">Add device</button>
     </div>
 </template>

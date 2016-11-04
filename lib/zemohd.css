@@ -315,10 +315,10 @@ ul.device-list > li > div > a > span {
     font-size: 16px;
     margin-left: 1em;
 }
-.scene-item, .curtain-item, .device-item {
+.scene-item, .curtain-item, .device-item, .ir-item {
     overflow: hidden;
 }
-.scene-item span {
+.scene-item span, .ir-item span {
     color: black;
 }
 

@@ -8,6 +8,9 @@ function getIcon(type, icon) {
         case Constants.DEVTYPE_SCENE:
             iconList = SceneIconList;
             break;
+        case Constants.DEVTYPE_IR:
+            iconList = IRIconList;
+            break;
         default:
             iconList = LampIconList;
             break;

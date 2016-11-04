@@ -10,6 +10,7 @@ Template.Rooms.onRendered(function() {
                     Meteor.clearTimeout(timeoutHandle);
                 }
                 timeoutHandle = Meteor.setTimeout(function() {
+/*
                     self.$(".scene-item a").rippler({
                         effectClass      :  'rippler-effect'
                         ,effectSize      :  16      // Default size (width & height)
@@ -27,6 +28,13 @@ Template.Rooms.onRendered(function() {
                         ,effectSize      :  16      // Default size (width & height)
                         ,addElement      :  'div'   // e.g. 'svg'(feature)
                         ,duration        :  400
+                    });
+*/
+                    self.$("ul.device-list > li > div a").rippler({
+                        effectClass      :  'rippler-effect',
+                        effectSize       :  16,      // Default size (width & height)
+                        addElement       :  'div',   // e.g. 'svg'(feature)
+                        duration         :  400
                     });
                     timeoutHandle = null;
                 }, 100);
@@ -83,6 +91,9 @@ Template.Rooms.helpers({
         case Constants.DEVTYPE_SCENE:
             return SceneIconList[icon].icon;
             break;
+        case Constants.DEVTYPE_IR:
+            return IRIconList[icon].icon;
+            break;
         default:
             return LampIconList[icon].icon;
         }
@@ -99,7 +110,7 @@ Template.Rooms.helpers({
             return "device-item";
             break;
         case Constants.DEVTYPE_IR:
-            return "device-ir";
+            return "ir-item";
             break;
         default:
             return "";
@@ -141,6 +152,8 @@ Template.Rooms.show = Template.Rooms.events({
         console.log(event.currentTarget.getAttribute('data-name'), event.currentTarget.getAttribute('data-id'));
         Session.set('curtain-id', event.currentTarget.getAttribute('data-id'));
         $('#curtain-control').modal();
+    },
+    'click .ir-item .button-style-1': function(event, instance) {
     },
     /*'click .list-group-item a': function(event) {
         event.stopPropagation();

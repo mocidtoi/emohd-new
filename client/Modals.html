@@ -156,7 +156,7 @@
                 <div class="modal-body">
                      <div class="form-group text-right">
                         <label class="sr-only t-vmiddle" for="inputSSID">Name</label>
-                        <input type="text" class="form-control" id="inputName" placeholder={{_ "WiFi Name"}}>
+                        <input type="text" class="form-control" id="inputName" placeholder={{_ "IRHub Name"}}>
                     </div>
                     <div class="form-group text-right">
                         <label class="sr-only t-vmiddle" for="inputSSID">SSID</label>
@@ -164,7 +164,7 @@
                     </div>
                     <div class="form-group text-right">
                         <label class="sr-only t-vmiddle" for="inputPassword">Password</label>
-                        <input type="password" class="form-control" id="inputPassword" placeholder={{_ "Password"}}>
+                        <input type="password" class="form-control" id="inputPassword" placeholder={{_ "WiFi Password"}}>
                     </div>
                 </div>
                 <div class="modal-footer container">
@@ -187,8 +187,12 @@
                             {{IRHubStatus}}
                         </label>
                     </div>
-                    <div class="form-group"><label id="irHubId">{{IRHubId}}</label></div>
-                    <div class="form-group"><label id="irHubKey">{{IRHubKey}}</label></div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="irHubId" value="{{IRHubId}}" text="aaa" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="irHubKey" value="{{IRHubKey}}" text="bbb" readonly>
+                    </div>
                 </div>
                 <div class="modal-footer container">
                     <button id="delete" type="button" class="btn btn-raised btn-danger btn-block" data-dismiss="modal">

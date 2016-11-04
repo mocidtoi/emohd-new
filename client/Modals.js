@@ -159,10 +159,65 @@ Template.ModalIRConfig.events({
         params.IRHubId = instance.$('#inputSSID').val().trim();
         params.IRHubKey = instance.$('#inputPassword').val().trim();         
         console.log(params);
-        Meteor.apply('addIRHub', [{
-            deviceId: params.IRHubId,
-            name: params.IRHubName,
-            deviceKey: params.IRHubKey,
-            }], {wait: false});
+
+        if (params.IRHubName.length == 0) {
+            console.log("empty name");
+            instance.$('#inputName').parent().addClass('has-error');
+            setTimeout(function(){
+                instance.$('#inputName').parent().removeClass('has-error');
+            }, 2000);
+        }
+        else if (params.IRHubId.length == 0) {
+            console.log("empty id");
+            instance.$('#inputSSID').parent().addClass('has-error');
+            setTimeout(function(){
+                instance.$('#inputSSID').parent().removeClass('has-error');
+            }, 2000);
+        }
+        else if (params.IRHubKey.length == 0) {
+            console.log("empty key");
+            instance.$('#inputPassword').parent().addClass('has-error');
+            setTimeout(function(){
+                instance.$('#inputPassword').parent().removeClass('has-error');
+            }, 2000);
+        }
+        else {
+            Meteor.apply('addIRHub', [{
+                deviceId: params.IRHubId,
+                name: params.IRHubName,
+                deviceKey: params.IRHubKey,
+                }], {wait: false});
+            instance.$('#modal-ir-config').modal('hide');
+        }
     }
+});
+Template.ModalIRHub.helpers({
+    IRHubName: function() {
+        return Session.get('ir-hub-name');;
+    },
+    IRHubStatus: function(instance) {
+        return "UNKNOWN";;
+    },
+    IRHubId: function() {
+        return Session.get('ir-hub-device-id');;
+    },
+    IRHubKey: function() {
+        return Session.get('ir-hub-key');;
+    },
+
+    irhub: function() {
+        var irHubId = Router.current().params.id;
+        irHubId = parseInt(irHubId);
+		return IRHub.find({ id: irHubId }).fetch()[0];
+    }
+});
+Template.ModalIRHub.events({
+    'click #delete': function(event, instance) {
+        var irHubId = Session.get('ir-hub-id');
+        irHubId = parseInt(irHubId);
+        myConfirm( TAPi18n.__("Are you sure?"), TAPi18n.__("Do you really want to remove this device?"), function() {
+            Meteor.apply('removeIRHub', [irHubId], {wait: false});
+        });
+    }
+
 });

@@ -40,11 +40,17 @@ Template.More.events({
         Meteor.apply('syncClock', [Date.now()], {wait:false}, function(err, res) {
             console.log(res);
         });
+    }, 
+    'click a#ir-hub': function(event, instance) {
+        Session.set('ir-hub-id', event.currentTarget.getAttribute('data-id'));
+        Session.set('ir-hub-name', event.currentTarget.getAttribute('data-name'));
+        Session.set('ir-hub-device-id', event.currentTarget.getAttribute('data-device-id'));
+        Session.set('ir-hub-key', event.currentTarget.getAttribute('data-key'));
     }
 });
 Template.More.helpers(PageHelpers);
 Template.More.helpers({
-    irhub: function() {
+    irhubs: function() {
         return IRHub.find({}).fetch();
     }
 });

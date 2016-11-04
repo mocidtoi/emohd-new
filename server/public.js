@@ -971,9 +971,12 @@ function addIRHub(arg, callback) {
         console.log("Name: " + arg.deviceId + " ID: " + arg.name + " Key: "+ arg.deviceKey);
         IRHub.findOne({
             where: {
-                deviceId: arg.deviceId,
-                name: arg.name,
-                deviceKey: arg.deviceKey
+                $or: [{
+                        deviceId: arg.deviceId
+                    },{
+                        name: arg.name
+                    }
+                    ]
             }
         }).then(function(dev) {
             myLog("device:");
@@ -1891,5 +1894,23 @@ Meteor.methods({
             myLog('addIRHub result:');
             myLog(res);
         });
+    },
+    removeIRHub: function(arg) {
+        myLog('removeIRHub: ' + arg);
+        if(arg) {
+            IRHub.destroy({
+                where: {
+                    id: arg},
+                individualHooks: true
+            }).then(function(){
+                myLog("Done then");
+            }).catch(function(err){
+                myLog("Done error")
+            });
+        }
+        else {
+            return {success:false, message:"Invalid data input"};
+        }
+
     }
 });

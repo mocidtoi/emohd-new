@@ -203,4 +203,30 @@
         </div>
     </div>
 </template>
+<template name="ModalIRControl">
+    <div class="modal fade" id="ir-control" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-centering" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel" style="text-align:center;">{{devName}}</h4>
+                </div>
+                <div class="modal-body container row">
+                    {{#each IRCmd}}
+                    <div class="col-xs-4 text-center">
+                        <a id="ir-cmd-item" class="icon_list text-center" data-irModelId="{{irModelId}}" data-irHubId="{{irHubId}}" data-command="{{irData}}">
+                        <div class="icondemo  border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
+                            <span class="icon-centering"><strong>{{name}}</strong></span>
+                        </div>
+                        </a>
+                    </div>
+                    {{/each}}
+                </div>
+                <div class="modal-footer" style="border-top:solid 1px #ccc; padding:10px; margin-top:20px">
+                    <span style="font-style:italic; color:#888">{{_ "Control your curtain"}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
 

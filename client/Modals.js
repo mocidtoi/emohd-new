@@ -221,3 +221,42 @@ Template.ModalIRHub.events({
     }
 
 });
+
+Template.ModalIRControl.onRendered(function(){
+    Meteor.setTimeout(function() {
+        self.$(".rippler").rippler({
+            effectClass      :  'rippler-effect'
+            ,effectSize      :  16      // Default size (width & height)
+            ,addElement      :  'div'   // e.g. 'svg'(feature)
+            ,duration        :  400
+        });
+    }, 100);
+});
+
+Template.ModalIRControl.helpers({
+    devName: function() {
+        return Session.get('ir-dev-name');
+    },
+    irModelId: function() {
+        return Session.get('ir-model-id');
+    },
+    irHubId: function() {
+        return Session.get('ir-hub-id');
+    },
+    IRCmd: function() {
+        var irModelId = Session.get('ir-model-id');
+        irModelId = parseInt(irModelId);
+        console.log(irModelId);
+        return IRCommand.find({modelId: irModelId}).fetch();
+    }
+});
+Template.ModalIRControl.events({
+    'click #ir-cmd-item': function(event, instance) {
+        var irDeviceId = event.currentTarget.getAttribute('data-irModelId');
+        var irHubId = event.currentTarget.getAttribute('data-irHubId');
+        var irCommand = event.currentTarget.getAttribute('data-command');
+
+        console.log('Clicked: DeviceId: ' + irDeviceId + ' - HubId: ' + irHubId + ' - Command: ' + irCommand);
+    }
+});
+

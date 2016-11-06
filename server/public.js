@@ -862,6 +862,7 @@ function addDevice(arg, callback) {
     if (arg) {
         Device.findOne({
             where: {
+                name: arg.name,
                 idx: arg.idx,
                 netadd: arg.netadd,
                 endpoint: arg.endpoint,
@@ -1042,9 +1043,19 @@ Meteor.publish('data', function(token) {
             preOrder(grpp[i], self)
         }
     });
+    IRDevModel.findAll().then(function(irdevmodel) {
+        for (var i = 0; i < irdevmodel.length; i++) {
+            self.added('irdevmodel', irdevmodel[i].id, irdevmodel[i].toJSON());
+        }
+    });
     IRHub.findAll().then(function(irhub) {
         for (var i = 0; i < irhub.length; i++) {
             self.added('irhub', irhub[i].id, irhub[i].toJSON());
+        }
+    });
+    IRCommand.findAll().then(function(ircmd) {
+        for (var i = 0; i < ircmd.length; i++) {
+            self.added('ircommand', ircmd[i].id, ircmd[i].toJSON());
         }
     });
     Device.findAll().then(function(dev) {

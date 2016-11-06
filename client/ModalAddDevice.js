@@ -302,6 +302,8 @@ Template.ModalAddDevice.events({
             });
             return;
         }
+
+        console.log("========" + name + " " + model + " " + irHub);
         var icon = parseInt(instance.$('i[data-icon]').attr('data-icon'));
         Meteor.apply("addDevice", [{ // TUNG
                 name: name,
@@ -735,5 +737,13 @@ Template.BodyIRDevice.events({
         iconElem.attr("data-icon", "" + icon);
         iconElem.removeClass();
         iconElem.addClass("icon icon-big icon-fit iot-icon-" + IRIconList[icon].icon);
+    }
+});
+Template.BodyIRDevice.helpers({
+    irdevmodel: function() {
+        return IRDevModel.find({}).fetch();
+    },
+    irhub: function() {
+        return IRHub.find({}).fetch();
     }
 });

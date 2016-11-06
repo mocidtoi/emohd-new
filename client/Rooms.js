@@ -154,6 +154,10 @@ Template.Rooms.show = Template.Rooms.events({
         $('#curtain-control').modal();
     },
     'click .ir-item .button-style-1': function(event, instance) {
+        Session.set('ir-dev-name', event.currentTarget.getAttribute('data-name'));  
+        Session.set('ir-model-id', event.currentTarget.getAttribute('data-irmodelid'));  
+        Session.set('ir-hub-id', event.currentTarget.getAttribute('data-irhubid'));  
+        $('#ir-control').modal();
     },
     /*'click .list-group-item a': function(event) {
         event.stopPropagation();

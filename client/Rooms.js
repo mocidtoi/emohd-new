@@ -118,7 +118,16 @@ Template.Rooms.helpers({
     },
 	group: function() {
 		return Group.find({ parentId: null }).fetch();
-	}
+	},
+    irHubKey: function(irHubId) {
+        var irhub = IRHub.find({id: irHubId}).fetch()[0];
+        if (irhub != null) {
+            return irhub.deviceKey;
+        }
+        else {
+            return "";
+        }
+    }
 });
 
 Template.Rooms.show = Template.Rooms.events({
@@ -157,6 +166,8 @@ Template.Rooms.show = Template.Rooms.events({
         Session.set('ir-dev-name', event.currentTarget.getAttribute('data-name'));  
         Session.set('ir-model-id', event.currentTarget.getAttribute('data-irmodelid'));  
         Session.set('ir-hub-id', event.currentTarget.getAttribute('data-irhubid'));  
+        Session.set('ir-hub-key', event.currentTarget.getAttribute('data-irhubkey'));  
+        Session.set('ir-hub-status', 'Unknown');  
         $('#ir-control').modal();
     },
     /*'click .list-group-item a': function(event) {

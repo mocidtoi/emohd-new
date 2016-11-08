@@ -155,16 +155,13 @@
                 </div>
                 <div class="modal-body">
                      <div class="form-group text-right">
-                        <label class="sr-only t-vmiddle" for="inputSSID">Name</label>
                         <input type="text" class="form-control" id="inputName" placeholder={{_ "IRHub Name"}}>
                     </div>
                     <div class="form-group text-right">
-                        <label class="sr-only t-vmiddle" for="inputSSID">SSID</label>
-                        <input type="text" class="form-control" id="inputSSID" placeholder={{_ "WiFi SSID"}}>
+                        <input type="text" class="form-control" id="inputDeviceId" placeholder={{_ "Device ID"}}>
                     </div>
                     <div class="form-group text-right">
-                        <label class="sr-only t-vmiddle" for="inputPassword">Password</label>
-                        <input type="password" class="form-control" id="inputPassword" placeholder={{_ "WiFi Password"}}>
+                        <input type="password" class="form-control" id="inputDeviceKey" placeholder={{_ "Device Key"}}>
                     </div>
                 </div>
                 <div class="modal-footer container">
@@ -208,17 +205,20 @@
         <div class="modal-dialog modal-centering" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel" style="text-align:center;">{{devName}}</h4>
+                    <label class="text-center text-success bg-success full-width" id="irHubStatus" style="padding: 0.4em 0">
+                        {{devName}}: {{irHubStatus}}
+                    </label>
+
                 </div>
                 <div class="modal-body container row">
                     {{#each IRCmd}}
                     <div class="col-xs-4 text-center">
-                        <a id="ir-cmd-item" class="icon_list text-center" data-irModelId="{{irModelId}}" data-irHubId="{{irHubId}}" data-command="{{irData}}">
-                        <div class="icondemo  border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
-                            <span class="icon-centering"><strong>{{name}}</strong></span>
+                        <a class="ir-cmd-item icon_list text-center" data-irModelId="{{irModelId}}" data-irHubId="{{irHubId}}" data-irHubKey="{{irHubKey}}" data-command="{{irData}}">
+                        <div class="icon-ir border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
+                            <i class="icon icon-fit icon-centering iot-icon-{{itemIcon icon}}" aria-hidden="true"></i>
                         </div>
                         </a>
+                        <span><strong>{{name}}</strong></span>
                     </div>
                     {{/each}}
                 </div>

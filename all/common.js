@@ -209,7 +209,6 @@ Router.route('/admin/Guide', {
 });
 
 /*=============== END ADMIN MODE ==================*/
-
 function isIPv4(str) {
     var blocks = str.split('.');
     if( blocks.length != 4 ) return false;
@@ -341,6 +340,14 @@ if (Meteor.isClient) {
         {icon:"aircon", title: "Air conditioner", color: "bg-green-800"},
         {icon:"tv", title: "Television", color: "bg-pink-800"} 
     ];
+    IRIconControlList = [
+        {icon:"triangle-up", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"triangle-down", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"triangle-left", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"triangle-right", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"power", title:"IR Command", color:"bg-cyan-800"}
+    ];
+
     myConfirm = function(title, content, callback) {
         Session.set('confirm-title',title);
         Session.set('confirm-content', content);
@@ -407,3 +414,4 @@ if (Meteor.isClient) {
         }
     };
 }
+

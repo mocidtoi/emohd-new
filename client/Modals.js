@@ -148,55 +148,126 @@ Template.ModalCurtainControl.events({
     },
 });
 
+var spinner;
+var spinnerHolder;
+Template.ModalIRConfig.onRendered(function() {
+    var opts = {
+          lines: 11 // The number of lines to draw
+        , length: 4 // The length of each line
+        , width: 2 // The line thickness
+        , radius: 4 // The radius of the inner circle
+        , scale: 1.0 // Scales overall size of the spinner
+        , corners: 0.7 // Corner roundness (0..1)
+        , color: '#fff' // #rgb or #rrggbb or array of colors
+        , opacity: 0.5 // Opacity of the lines
+        , rotate: 0 // The rotation offset
+        , direction: 1 // 1: clockwise, -1: counterclockwise
+        , speed: 0.5 // Rounds per second
+        , trail: 60 // Afterglow percentage
+        , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+        , zIndex: 2e9 // The z-index (defaults to 2000000000)
+        , className: 'spinner' // The CSS class to assign to the spinner
+        , top: '50%' // Top position relative to parent
+        , left: '51%' // Left position relative to parent
+        , shadow: false // Whether to render a shadow
+        , hwaccel: false // Whether to use hardware acceleration
+        , position: 'absolute' // Element positioning
+    }
+    spinnerHolder = this.$('#status')[0];
+    spinner = new Spinner(opts);
+    spinner.stop();
+});
 Template.ModalIRConfig.helpers({
     modalId: function() { return 'modal-settings';}
 });
 
 Template.ModalIRConfig.events({
+    'hide.bs.modal .modal': function(event, instance) {
+        spinner.stop();
+    },
     'click #config': function(event, instance) {
-        var params = new Object();
-        params.IRHubName = instance.$('#inputName').val().trim(); 
-        params.IRHubId = instance.$('#inputSSID').val().trim();
-        params.IRHubKey = instance.$('#inputPassword').val().trim();         
+        var IRHubName = instance.$('#inputName').val().trim(); 
+        var wifiSSID = instance.$('#inputSSID').val().trim();
+        var wifiKey = instance.$('#inputPassword').val().trim();         
         console.log(params);
 
-        if (params.IRHubName.length == 0) {
-            console.log("empty name");
+        if (IRHubName.length == 0) {
             instance.$('#inputName').parent().addClass('has-error');
             setTimeout(function(){
                 instance.$('#inputName').parent().removeClass('has-error');
             }, 2000);
         }
-        else if (params.IRHubId.length == 0) {
-            console.log("empty id");
+        else if (wifiSSID.length == 0) {
             instance.$('#inputSSID').parent().addClass('has-error');
             setTimeout(function(){
                 instance.$('#inputSSID').parent().removeClass('has-error');
             }, 2000);
         }
-        else if (params.IRHubKey.length == 0) {
-            console.log("empty key");
+        else if (wifiKey.length == 0) {
             instance.$('#inputPassword').parent().addClass('has-error');
             setTimeout(function(){
                 instance.$('#inputPassword').parent().removeClass('has-error');
             }, 2000);
         }
         else {
-            Meteor.apply('addIRHub', [{
-                deviceId: params.IRHubId,
-                name: params.IRHubName,
-                deviceKey: params.IRHubKey,
-                }], {wait: false});
-            instance.$('#modal-ir-config').modal('hide');
+            if( Meteor.isCordova ) {
+                spinner.spin(spinnerHolder);
+                RemoteIRLib.configure(function(res) {
+                    if(res && res.DEVICE_ID && res.DEVICE_KEY) {
+                        Meteor.apply('addIRHub', [{
+                            deviceId: res.DEVICE_ID,
+                            name: params.IRHubName,
+                            deviceKey: res.DEVICE_KEY,
+                        }], {wait: false});
+                    }
+                    else {
+                        alert('Configure error ' + res);
+                    }
+                    instance.$('#modal-ir-config').modal('hide');
+                }, function(err) {
+                    alert("Config failed " + err);
+                    instance.$('#modal-ir-config').modal('hide');
+                }, params.IRHubId, params.IRHubKey);
+            }
+            else {
+                alert("Not supported");
+            }
         }
     }
+});
+Template.ModalIRHub.onRendered(function(){
+    var opts = {
+          lines: 11 // The number of lines to draw
+        , length: 4 // The length of each line
+        , width: 2 // The line thickness
+        , radius: 4 // The radius of the inner circle
+        , scale: 1.0 // Scales overall size of the spinner
+        , corners: 0.7 // Corner roundness (0..1)
+        , color: '#fff' // #rgb or #rrggbb or array of colors
+        , opacity: 0.5 // Opacity of the lines
+        , rotate: 0 // The rotation offset
+        , direction: 1 // 1: clockwise, -1: counterclockwise
+        , speed: 0.5 // Rounds per second
+        , trail: 60 // Afterglow percentage
+        , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+        , zIndex: 2e9 // The z-index (defaults to 2000000000)
+        , className: 'spinner' // The CSS class to assign to the spinner
+        , top: '50%' // Top position relative to parent
+        , left: '51%' // Left position relative to parent
+        , shadow: false // Whether to render a shadow
+        , hwaccel: false // Whether to use hardware acceleration
+        , position: 'absolute' // Element positioning
+    }
+    spinnerHolder = this.$('#status')[0];
+    spinner = new Spinner(opts);
+    spinner.stop();
 });
 Template.ModalIRHub.helpers({
     IRHubName: function() {
         return Session.get('ir-hub-name');;
     },
     IRHubStatus: function(instance) {
-        return "UNKNOWN";;
+        return "UNKNOWN";
     },
     IRHubId: function() {
         return Session.get('ir-hub-device-id');;
@@ -218,8 +289,31 @@ Template.ModalIRHub.events({
         myConfirm( TAPi18n.__("Are you sure?"), TAPi18n.__("Do you really want to remove this device?"), function() {
             Meteor.apply('removeIRHub', [irHubId], {wait: false});
         });
+    },
+    'click #probe': function(event, instance) {
+        if(Meteor.isCordova) {
+            var irHubDeviceId = Session.get('ir-hub-device-id');
+            var irHubDeviceKey = Session.get('ir-hub-key');
+            spinner.spin(spinnerHolder);
+            RemoteIRLib.probe(function(res) {
+                    if( res ) {
+                        if(res.DEVICE_IP) {
+                        }
+                        if(res.DEVICE_SERVER_IP) {
+                        }
+                    }
+                    else {
+                        alert("Probe error");
+                    }
+                }, function(err) {
+                    alert("Probe failed");
+                }, irHubDeviceId, irHubKey
+            );
+        }
+        else {
+            alert('Not supported');
+        }
     }
-
 });
 
 Template.ModalIRControl.onRendered(function(){
@@ -243,6 +337,9 @@ Template.ModalIRControl.helpers({
     irHubId: function() {
         return Session.get('ir-hub-id');
     },
+    irHubKey: function() {
+        return Session.get('ir-hub-key');
+    },
     IRCmd: function() {
         var irModelId = Session.get('ir-model-id');
         irModelId = parseInt(irModelId);
@@ -257,6 +354,12 @@ Template.ModalIRControl.events({
         var irCommand = event.currentTarget.getAttribute('data-command');
 
         console.log('Clicked: DeviceId: ' + irDeviceId + ' - HubId: ' + irHubId + ' - Command: ' + irCommand);
+    },
+    'show.bs.modal .modal': function(event, instance) {
+        RemoteIRLib.probe(function(res) {
+            }, function(err) {
+            }, irDeviceId, ir
+        );
     }
 });
 

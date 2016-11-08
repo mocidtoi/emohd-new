@@ -168,7 +168,8 @@
                     </div>
                 </div>
                 <div class="modal-footer container">
-                    <button id="config" type="button" class="col-xs-12 btn btn-primary">{{_ "Configure"}}</button>
+                    <button style="position:relative;" id="config" type="button" class="col-xs-12 btn btn-primary">{{_ "Configure"}}<span id="status">&nbsp;</span></button><br/><br/>
+                    <button id="cancelConfig" type="button" class="col-xs-12 btn" data-dismiss="modal">{{_ "Cancel"}}</button>
                 </div>
             </div>
         </div>
@@ -198,6 +199,9 @@
                     <button id="delete" type="button" class="btn btn-raised btn-danger btn-block" data-dismiss="modal">
                         <h5 class="text-uppercase">Delete</h5>
                     </button>
+                    <button id="probe" type="button" class="btn btn-raised btn-block" data-dismiss="modal">
+                        {{_ "Probe"}}<span id="status">&nbsp;</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -215,9 +219,9 @@
                     {{#each IRCmd}}
                     <div class="col-xs-4 text-center">
                         <a id="ir-cmd-item" class="icon_list text-center" data-irModelId="{{irModelId}}" data-irHubId="{{irHubId}}" data-command="{{irData}}">
-                        <div class="icondemo  border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
-                            <span class="icon-centering"><strong>{{name}}</strong></span>
-                        </div>
+                            <div class="icondemo  border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
+                                <span class="icon-centering"><strong>{{name}}</strong></span>
+                            </div>
                         </a>
                     </div>
                     {{/each}}

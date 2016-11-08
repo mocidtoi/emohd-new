@@ -41,7 +41,7 @@ Template.More.events({
             console.log(res);
         });
     }, 
-    'click a#ir-hub': function(event, instance) {
+    'click a.ir-hub': function(event, instance) {
         Session.set('ir-hub-id', event.currentTarget.getAttribute('data-id'));
         Session.set('ir-hub-name', event.currentTarget.getAttribute('data-name'));
         Session.set('ir-hub-device-id', event.currentTarget.getAttribute('data-device-id'));

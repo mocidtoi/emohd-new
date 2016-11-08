@@ -248,11 +248,11 @@ Template.ModalIRHub.events({
 
 Template.ModalIRControl.onRendered(function(){
     Meteor.setTimeout(function() {
-        self.$(".rippler").rippler({
+        this.$("button").rippler({
             effectClass      :  'rippler-effect'
             ,effectSize      :  16      // Default size (width & height)
             ,addElement      :  'div'   // e.g. 'svg'(feature)
-            ,duration        :  900
+            ,duration        :  400
         });
     }, 100);
 });

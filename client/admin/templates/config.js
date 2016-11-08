@@ -1,3 +1,22 @@
+Template.config.onRendered(function(){
+    var self = this;
+    Meteor.setTimeout(function() {
+        self.$('.list-down').mobiscroll().select({
+            theme: 'mobiscroll', 
+            lang: 'en', 
+            display: 'bottom', 
+            minWidth: 200,
+            inputClass: 'form-control gangtype',
+            // https://github.com/acidb/mobiscroll/issues/341
+            onShow: function () {
+                $(window).off('focusin');
+            },
+            onSelect: function(valueText, inst) {
+                console.log("Get id: " + inst.getVal());
+            }
+        });
+    }, 300);
+});
 Template.config.events({
     'click #dhcp': function(event) {
         console.log(event.target.checked);

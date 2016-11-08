@@ -213,13 +213,12 @@
                 <div class="modal-body container row">
                     {{#each IRCmd}}
                     <div class="col-xs-4 text-center">
-                        <a class="ir-cmd-item icon_list text-center" data-irModelId="{{irModelId}}" data-irHubId="{{irHubId}}" data-irHubKey="{{irHubKey}}" data-command="{{irData}}">
-                        <div class="icon-ir border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
-                            <i class="icon icon-fit icon-centering iot-icon-{{itemIcon icon}}" aria-hidden="true"></i>
-                        </div>
-                        </a>
+                        <button style="overflow:hidden; position: relative" class="icon-ir border-glass btn rippler-inverse iot-bgcolor-llg iot-color-brand" data-irModelId="{{irModelId}}" data-irHubId="{{irHubId}}" data-irHubKey="{{irHubKey}}" data-command="{{irData}}">
+                            <span style="font-weight: bold;line-height: 1.05em;font-size: 30px;padding: 12px 5px;" class="icon icon-fit iot-color-brand iot-icon-{{itemIcon icon}}"></span>
+                        </button>
                         <span><strong>{{name}}</strong></span>
                     </div>
+
                     {{/each}}
                 </div>
                 <div class="modal-footer" style="border-top:solid 1px #ccc; padding:10px; margin-top:20px">

@@ -2,10 +2,10 @@
     <div>
     <div class="container">
         <h4 class="text-center" style="padding-top:3em;color:#337ab7">WIFI Configuration</h4>
-        <select id="profile" class="form-control">
-            <option value="-1">Select profile ...</option>
+        <select id="profile" class="list_group list-down">
+            <option value="-1">Select profile</option>
             {{#each configs}}
-            <option value="{{id}}">{{ssid}}-{{ipaddress}}</option>
+            <option value="{{id}}">{{ssid}} - {{ipaddress}}</option>
             {{/each}}
         </select>
         <p></p>

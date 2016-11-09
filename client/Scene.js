@@ -28,6 +28,10 @@ Template.Scene.onRendered(function() {
             }], {wait:false});
             console.log(ret);
         }
+        var ret = Meteor.apply('updateScene', [{
+            id: sceneId,
+            name: self.$('#sceneName').val()
+        }], {wait: false});
     }
     function initMobiscrolls() {
         timeoutHandle = null;
@@ -147,6 +151,9 @@ Template.Scene.helpers({
 });
 
 Template.Scene.events({
+    'input input#sceneName': function() {
+        Session.set('show-save-btn', true);
+    },
     'click button': function(event, instance) {
         var id = parseInt(Router.current().params.scid);
         myConfirm(TAPi18n.__("Are you sure?"), 

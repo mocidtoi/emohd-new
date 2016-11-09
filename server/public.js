@@ -1740,6 +1740,25 @@ Meteor.methods({
             return {success:false, message:"Invalid data input"};
         }
     },
+    updateScene: function(arg) {
+        if(arg) {
+            myLog("Update Scene: " + arg.id + "name: " + arg.name);
+            Scene.update(arg, {
+                where:{
+                    id: parseInt(arg.id)
+                },
+                individualHooks: true
+            }).then(function() {
+                myLog('updateScene: Success');
+            }).catch(function(err) {
+                myLog(err.toString());
+            });
+        }
+        else {
+            myLog('failure ' + arg);
+            return {success:false, message:"Invalid data input"};
+        }
+    },
     removeScene: function(arg) {
         if(arg) {
             Scene.destroy({

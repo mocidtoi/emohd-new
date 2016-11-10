@@ -32,6 +32,12 @@ Template.Scene.onRendered(function() {
             id: sceneId,
             name: self.$('#sceneName').val()
         }], {wait: false});
+
+        var _sceneId = sceneId;
+        var ret = Meteor.apply('updateDevice', [{
+            sceneId: _sceneId,
+            name: self.$('#sceneName').val()
+        }], {wait: false});
     }
     function initMobiscrolls() {
         timeoutHandle = null;

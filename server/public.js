@@ -936,10 +936,14 @@ function removeDevice(arg, callback) {
 }
 
 function updateDevice(arg, callback) {
-    if (arg && arg.id) {
+    if (arg && (arg.id || arg.sceneId)) {
         Device.update(arg, {
             where: {
-                id: arg.id
+                $or: [{
+                    id: arg.id
+                    },{
+                    sceneId: arg.sceneId
+                }]
             },
             individualHooks: true
         }).then(function(res) {

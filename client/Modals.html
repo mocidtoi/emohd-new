@@ -181,7 +181,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="text-center text-success bg-success full-width" id="irHubStatus" style="padding: 0.4em 0">
+                        <label class="text-center text-info bg-info full-width" id="irHubStatus" style="padding: 0.4em 0">
                             {{IRHubStatus}}
                         </label>
                     </div>
@@ -191,13 +191,32 @@
                     <div class="form-group">
                         <input type="text" class="form-control" id="irHubKey" value="{{IRHubKey}}" text="bbb" readonly>
                     </div>
+                    <div class="checkbox">
+                        <label>
+                            <input id="wifi-config" type="checkbox">Configure
+                        </label>
+                    </div>
+                    <div id="wifi-setting" style="display:none">
+                        <div class="form-group">
+                            <input type="text" id="inputName" class="form-control" placeholder="{{IRHubName}}" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="inputSSID" class="form-control" placeholder={{_ "WIFI SSID"}} required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="inputPassword" class="form-control" placeholder={{_ "WIFI Password"}} required>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer container">
-                    <button id="delete" type="button" class="btn btn-raised btn-danger btn-block" data-dismiss="modal">
-                        <h5 class="text-uppercase">Delete</h5>
+                    <button id="config" type="button" class="btn btn-raised btn-block" style="display:none">
+                        {{_ "Configure"}}
                     </button>
-                    <button id="probe" type="button" class="btn btn-raised btn-block">
+                    <button id="probe" type="button" class="btn btn-raised btn-block btn-primary">
                         {{_ "Probe"}}<span id="status">&nbsp;</span>
+                    </button>
+                    <button id="delete" type="button" class="btn btn-raised btn-block btn-danger" data-dismiss="modal">
+                        Delete
                     </button>
                 </div>
             </div>

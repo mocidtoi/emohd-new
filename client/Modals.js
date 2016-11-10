@@ -1,33 +1,3 @@
-/*
-function onSuccess(res) {
-    console.log(res);
-}
-function onFail(err) {
-    console.log(err);
-}
-function RemoteIRLib(irHubId, irHubKey) {
-    this.configure = function (onSuccess, onFail, irHubName, irHubId, irHubKey) {
-        if (irHubName.length != 0 && irHubId.length != 0 && irHubKey != 0) {
-            Meteor.apply('addIRHub', [{
-                irHubId: irHubId,
-                name: irHubName,
-                irHubKey: irHubKey,
-            }], {wait: false});
-            onSuccess("Success");
-        }
-        else {
-            onFail("Empty irHubId, irHubKey or irHubName");        
-        }
-    };
-    this.cancelConfigure = function(onSuccess, onFail) {
-    };
-    this.probe = function (onSuccess, onFail, irHubId, irHubKey) {
-    };
-    this.sendCommand = function(onSuccess, onFailed, irHubId, irHubKey, irDeviceId, irCommand) {
-        console.log('Clicked: DeviceId: ' + irDeviceId + ' - HubId: ' + irHubId + ' - HubKey: ' + irHubKey + ' - Command: ' + irCommand);
-    };
-}
-*/
 Template.ModalAddRoom.events({
     "click button#ok": function(event, instance) {
         Meteor.apply('addGroup', [{
@@ -210,6 +180,14 @@ Template.ModalIRConfig.helpers({
 Template.ModalIRConfig.events({
     'hide.bs.modal .modal': function(event, instance) {
         Template.ModalIRConfig.spinner.stop();
+        if(Meteor.isCordova) {
+            RemoteIRLib.cancelConfig(function (res){
+                alert(JSON.stringify(res));
+            },
+            function(err) {
+                alert(JSON.stringify(err));
+            });
+        }
     },
     'click #config': function(event, instance) {
         var IRHubName = instance.$('#inputName').val().trim(); 
@@ -291,16 +269,17 @@ Template.ModalIRHub.onRendered(function(){
 });
 Template.ModalIRHub.helpers({
     IRHubName: function() {
-        return Session.get('ir-hub-name');;
+        return Session.get('ir-hub-name');
     },
     IRHubStatus: function(instance) {
-        return "UNKNOWN";
+        var IRHubStt = Session.get('ir-hub-status');
+        return IRHubStt?IRHubStt:'UNKNOWN';
     },
     IRHubId: function() {
-        return Session.get('ir-hub-device-id');;
+        return Session.get('ir-hub-device-id');
     },
     IRHubKey: function() {
-        return Session.get('ir-hub-key');;
+        return Session.get('ir-hub-key');
     },
     irhub: function() {
         var irHubId = Router.current().params.id;
@@ -316,24 +295,91 @@ Template.ModalIRHub.events({
             Meteor.apply('removeIRHub', [irHubId], {wait: false});
         });
     },
+    'click #wifi-config': function() {
+        if(event.target.checked) {
+            Template.instance().$('#wifi-setting').show(500);
+            Template.instance().$('#config').show(500);
+        }
+        else {
+            Template.instance().$('#wifi-setting').hide(500);
+            Template.instance().$('#config').hide(500);
+        }
+    },
+    'click #config': function(event, instance) {
+        var IRHubName = instance.$('#inputName').val().trim(); 
+        var wifiSSID = instance.$('#inputSSID').val().trim();
+        var wifiKey = instance.$('#inputPassword').val().trim();         
+
+        if (IRHubName.length == 0) {
+            instance.$('#inputName').parent().addClass('has-error');
+            setTimeout(function(){
+                instance.$('#inputName').parent().removeClass('has-error');
+            }, 2000);
+        }
+        else if (wifiSSID.length == 0) {
+            instance.$('#inputSSID').parent().addClass('has-error');
+            setTimeout(function(){
+                instance.$('#inputSSID').parent().removeClass('has-error');
+            }, 2000);
+        }
+        else if (wifiKey.length == 0) {
+            instance.$('#inputPassword').parent().addClass('has-error');
+            setTimeout(function(){
+                instance.$('#inputPassword').parent().removeClass('has-error');
+            }, 2000);
+        }
+        else {
+            console.log(Template.ModalIRHub.spinner);
+            console.log(Template.ModalIRHub.spinnerHolder);
+            Template.ModalIRHub.spinner.spin(Template.ModalIRHub.spinnerHolder);
+            if( Meteor.isCordova ) {
+                RemoteIRLib.configure(function(res) {
+                    if(res && res.DEVICE_ID && res.DEVICE_KEY) {
+                        Meteor.apply('updateIRHub', [{
+                            deviceId: res.DEVICE_ID,
+                            name: IRHubName,
+                            deviceKey: res.DEVICE_KEY
+                        }], {wait: false});
+                    }
+                    else {
+                        alert('Configure error ' + res);
+                    }
+                    Template.ModalIRHub.spinner.stop();
+                    instance.$('#modal-ir-hub').modal('hide');
+                }, function(err) {
+                    alert("Config failed " + err);
+                    Template.ModalIRHub.spinner.stop();
+                    instance.$('#modal-ir-hub').modal('hide');
+                }, wifiSSID, wifiKey);
+            }
+            else {
+                alert("Not supported");
+            }
+        }
+    },
     'click #probe': function(event, instance) {
         if(Meteor.isCordova) {
             var irHubDeviceId = Session.get('ir-hub-device-id');
             var irHubDeviceKey = Session.get('ir-hub-key');
             Template.ModalIRHub.spinner.spin(Template.ModalIRHub.spinnerHolder);
             RemoteIRLib.probe(function(res) {
+                    instance.$('#irHubStatus').removeClass();
                     alert(JSON.stringify(res));
                     if( res ) {
+                        instance.$('#irHubStatus').addClass('text-center text-success bg-success full-width');
                         if(res.DEVICE_IP) {
+                            Session.set('ir-hub-status', 'ONLINE (' + res.DEVICE_IP + ')');
                         }
                         if(res.DEVICE_SERVER_IP) {
                         }
                     }
                     else {
                         alert("Probe error");
+                        instance.$('#irHubStatus').addClass('text-center text-danger bg-danger full-width');
                     }
                 }, function(err) {
                     alert("Probe failed");
+                    Session.set('ir-hub-status', 'OFFLINE');
                 }, irHubDeviceId, irHubKey
             );
         }
@@ -379,11 +425,24 @@ Template.ModalIRControl.helpers({
 Template.ModalIRControl.events({
     'click .ir-cmd-item': function(event, instance) {
         var irDeviceId = event.currentTarget.getAttribute('data-irModelId');
+        var deviceIP = Session.get('ir-hub-ip');
         var irHubId = event.currentTarget.getAttribute('data-irHubId');
         var irCommand = event.currentTarget.getAttribute('data-command');
         var irHubKey = event.currentTarget.getAttribute('data-irHubKey');
-
         console.log('Clicked: DeviceId: ' + irDeviceId + ' - HubId: ' + irHubId + ' - Command: ' + irCommand);
+
+        if(Meteor.isCordova) {
+            RemoteIRLib.sendCommand(function(res){
+                    alert(res);
+                },
+                function(err) {
+                    alert(err);
+                }, irDeviceId, deviceIP, "", irCommand
+            );
+        }
+        else {
+            alert("Not supported");
+        }
     },
     'show.bs.modal .modal': function(event, instance) {
         console.log(instance.$(".rippler"));
@@ -399,7 +458,7 @@ Template.ModalIRControl.events({
         var irHubKey = Session.get('ir-hub-key');
         if(Meteor.isCordova) {
             RemoteIRLib.probe(function(res) {
-                    alert("probe success " + JSON.stringify(res));
+                    //alert("probe success " + JSON.stringify(res));
                     if(res && res.DEVICE_IP) {
                         Session.set("ir-hub-ip", res.DEVICE_IP);
                     }

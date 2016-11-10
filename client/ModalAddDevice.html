@@ -256,7 +256,7 @@
         <select name="ir-hub" class="list_group list-down form-control">
             <option value="-1">{{_ "Choose a IRHub"}} ...</option>
             {{#each irhub}}
-                <option value={{id}}>{{name}}</option>
+                <option value={{id}} test-data={{deviceKey}}>{{name}}</option>
             {{/each}}
         </select>
     </div>

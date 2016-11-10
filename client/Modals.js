@@ -1,3 +1,33 @@
+/*
+function onSuccess(res) {
+    console.log(res);
+}
+function onFail(err) {
+    console.log(err);
+}
+function RemoteIRLib(irHubId, irHubKey) {
+    this.configure = function (onSuccess, onFail, irHubName, irHubId, irHubKey) {
+        if (irHubName.length != 0 && irHubId.length != 0 && irHubKey != 0) {
+            Meteor.apply('addIRHub', [{
+                irHubId: irHubId,
+                name: irHubName,
+                irHubKey: irHubKey,
+            }], {wait: false});
+            onSuccess("Success");
+        }
+        else {
+            onFail("Empty irHubId, irHubKey or irHubName");        
+        }
+    };
+    this.cancelConfigure = function(onSuccess, onFail) {
+    };
+    this.probe = function (onSuccess, onFail, irHubId, irHubKey) {
+    };
+    this.sendCommand = function(onSuccess, onFailed, irHubId, irHubKey, irDeviceId, irCommand) {
+        console.log('Clicked: DeviceId: ' + irDeviceId + ' - HubId: ' + irHubId + ' - HubKey: ' + irHubKey + ' - Command: ' + irCommand);
+    };
+}
+*/
 Template.ModalAddRoom.events({
     "click button#ok": function(event, instance) {
         Meteor.apply('addGroup', [{
@@ -78,7 +108,6 @@ Template.ModalSettings.helpers({
     modalId: function() { return 'modal-settings';}
 });
 
-
 Template.ModalSettings.events({
     'click button#settingsOk': function(event, instance) {
         var dHomeIP = instance.$('#dhomeIP').val().trim();
@@ -148,8 +177,6 @@ Template.ModalCurtainControl.events({
     },
 });
 
-var spinner;
-var spinnerHolder;
 Template.ModalIRConfig.onRendered(function() {
     var opts = {
           lines: 11 // The number of lines to draw
@@ -173,23 +200,21 @@ Template.ModalIRConfig.onRendered(function() {
         , hwaccel: false // Whether to use hardware acceleration
         , position: 'absolute' // Element positioning
     }
-    spinnerHolder = this.$('#status')[0];
-    spinner = new Spinner(opts);
-    spinner.stop();
+    Template.ModalIRConfig.spinnerHolder = this.$('#status')[0];
+    Template.ModalIRConfig.spinner = new Spinner(opts);
+    Template.ModalIRConfig.spinner.stop();
 });
 Template.ModalIRConfig.helpers({
     modalId: function() { return 'modal-settings';}
 });
-
 Template.ModalIRConfig.events({
     'hide.bs.modal .modal': function(event, instance) {
-        spinner.stop();
+        Template.ModalIRConfig.spinner.stop();
     },
     'click #config': function(event, instance) {
         var IRHubName = instance.$('#inputName').val().trim(); 
         var wifiSSID = instance.$('#inputSSID').val().trim();
         var wifiKey = instance.$('#inputPassword').val().trim();         
-        console.log(params);
 
         if (IRHubName.length == 0) {
             instance.$('#inputName').parent().addClass('has-error');
@@ -210,13 +235,15 @@ Template.ModalIRConfig.events({
             }, 2000);
         }
         else {
+            console.log(Template.ModalIRConfig.spinner);
+            console.log(Template.ModalIRConfig.spinnerHolder);
+            Template.ModalIRConfig.spinner.spin(Template.ModalIRConfig.spinnerHolder);
             if( Meteor.isCordova ) {
-                spinner.spin(spinnerHolder);
                 RemoteIRLib.configure(function(res) {
                     if(res && res.DEVICE_ID && res.DEVICE_KEY) {
                         Meteor.apply('addIRHub', [{
                             deviceId: res.DEVICE_ID,
-                            name: params.IRHubName,
+                            name: IRHubName,
                             deviceKey: res.DEVICE_KEY,
                         }], {wait: false});
                     }
@@ -227,7 +254,7 @@ Template.ModalIRConfig.events({
                 }, function(err) {
                     alert("Config failed " + err);
                     instance.$('#modal-ir-config').modal('hide');
-                }, params.IRHubId, params.IRHubKey);
+                }, wifiSSID, wifiKey);
             }
             else {
                 alert("Not supported");
@@ -258,9 +285,9 @@ Template.ModalIRHub.onRendered(function(){
         , hwaccel: false // Whether to use hardware acceleration
         , position: 'absolute' // Element positioning
     }
-    spinnerHolder = this.$('#status')[0];
-    spinner = new Spinner(opts);
-    spinner.stop();
+    Template.ModalIRHub.spinnerHolder = this.$('#status')[0];
+    Template.ModalIRHub.spinner = new Spinner(opts);
+    Template.ModalIRHub.spinner.stop();
 });
 Template.ModalIRHub.helpers({
     IRHubName: function() {
@@ -275,7 +302,6 @@ Template.ModalIRHub.helpers({
     IRHubKey: function() {
         return Session.get('ir-hub-key');;
     },
-
     irhub: function() {
         var irHubId = Router.current().params.id;
         irHubId = parseInt(irHubId);
@@ -294,8 +320,9 @@ Template.ModalIRHub.events({
         if(Meteor.isCordova) {
             var irHubDeviceId = Session.get('ir-hub-device-id');
             var irHubDeviceKey = Session.get('ir-hub-key');
-            spinner.spin(spinnerHolder);
+            Template.ModalIRHub.spinner.spin(Template.ModalIRHub.spinnerHolder);
             RemoteIRLib.probe(function(res) {
+                    alert(JSON.stringify(res));
                     if( res ) {
                         if(res.DEVICE_IP) {
                         }
@@ -317,14 +344,6 @@ Template.ModalIRHub.events({
 });
 
 Template.ModalIRControl.onRendered(function(){
-    Meteor.setTimeout(function() {
-        self.$(".rippler").rippler({
-            effectClass      :  'rippler-effect'
-            ,effectSize      :  16      // Default size (width & height)
-            ,addElement      :  'div'   // e.g. 'svg'(feature)
-            ,duration        :  400
-        });
-    }, 100);
 });
 
 Template.ModalIRControl.helpers({
@@ -340,26 +359,55 @@ Template.ModalIRControl.helpers({
     irHubKey: function() {
         return Session.get('ir-hub-key');
     },
+    irHubStatus: function() {
+        var hubIP = Session.get('ir-hub-ip');
+        return  hubIP == null ? "Offline":"Online (" + hubIP + ")";
+    },
+    irHubStatusStyle: function() {
+        return  Session.get('ir-hub-ip') == null ? "text-danger bg-danger":"text-success bg-success";
+    },
     IRCmd: function() {
         var irModelId = Session.get('ir-model-id');
         irModelId = parseInt(irModelId);
         console.log(irModelId);
         return IRCommand.find({modelId: irModelId}).fetch();
+    },
+    itemIcon: function(icon) {
+        return IRIconControlList[icon].icon;
     }
 });
 Template.ModalIRControl.events({
-    'click #ir-cmd-item': function(event, instance) {
+    'click .ir-cmd-item': function(event, instance) {
         var irDeviceId = event.currentTarget.getAttribute('data-irModelId');
         var irHubId = event.currentTarget.getAttribute('data-irHubId');
         var irCommand = event.currentTarget.getAttribute('data-command');
+        var irHubKey = event.currentTarget.getAttribute('data-irHubKey');
 
         console.log('Clicked: DeviceId: ' + irDeviceId + ' - HubId: ' + irHubId + ' - Command: ' + irCommand);
     },
     'show.bs.modal .modal': function(event, instance) {
-        RemoteIRLib.probe(function(res) {
-            }, function(err) {
-            }, irDeviceId, ir
-        );
+        console.log(instance.$(".rippler"));
+        Meteor.setTimeout(function() {
+            instance.$(".rippler").rippler({
+                effectClass      :  'rippler-effect'
+                ,effectSize      :  16      // Default size (width & height)
+                ,addElement      :  'div'   // e.g. 'svg'(feature)
+                ,duration        :  900
+            });
+        }, 100);
+        var irHubId = Session.get('ir-hub-id');
+        var irHubKey = Session.get('ir-hub-key');
+        if(Meteor.isCordova) {
+            RemoteIRLib.probe(function(res) {
+                    alert("probe success " + JSON.stringify(res));
+                    if(res && res.DEVICE_IP) {
+                        Session.set("ir-hub-ip", res.DEVICE_IP);
+                    }
+                }, function(err) {
+                    alert("probe failed " + JSON.stringify(err));
+                }, irHubId, irHubKey
+            );
+        }
     }
 });
 

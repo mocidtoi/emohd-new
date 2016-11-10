@@ -196,9 +196,6 @@
 .iot-icon-cw:before {
   content: "\30";
 }
-.iot-icon-angle-down:before {
-  content: "\31";
-}
 .iot-icon-angle-up:before {
   content: "\32";
 }
@@ -208,3 +205,40 @@
 .iot-icon-remote-control-streamline:before {
   content: "\34";
 }
+.iot-icon-fan:before {
+  content: "\35";
+}
+.iot-icon-angle-down:before {
+  content: "\31";
+}
+.iot-icon-triangle-left:before {
+  content: "\36";
+}
+.iot-icon-triangle-right:before {
+  content: "\37";
+}
+.iot-icon-triangle-up:before {
+  content: "\38";
+}
+.iot-icon-triangle-down:before {
+  content: "\39";
+}
+.iot-icon-power-1:before {
+  content: "\21";
+}
+.iot-icon-volume-down:before {
+  content: "\22";
+}
+.iot-icon-volume-off:before {
+  content: "\23";
+}
+.iot-icon-volume-up:before {
+  content: "\24";
+}
+.iot-icon-cool:before {
+  content: "\28";
+}
+.iot-icon-warm:before {
+  content: "\26";
+}
+

@@ -94,7 +94,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel" style="text-align:center;">{{curtainName}}</h4>
                 </div>
-                <div class="modal-body container">
+                <div class="modal-body row">
                     <div class="col-xs-12" style="padding:3px">
                         <button id="curtain-up" style="overflow:hidden" class="col-xs-offset-2 col-xs-8 btn rippler-inverse btn-curtain">
                             <span style="font-weight: bold;line-height: 1.05em;font-size: 30px;color: black;padding: 12px 5px;" class="iot-icon-angle-up"></span>
@@ -155,16 +155,13 @@
                 </div>
                 <div class="modal-body">
                      <div class="form-group text-right">
-                        <label class="sr-only t-vmiddle" for="inputSSID">Name</label>
                         <input type="text" class="form-control" id="inputName" placeholder={{_ "IRHub Name"}}>
                     </div>
                     <div class="form-group text-right">
-                        <label class="sr-only t-vmiddle" for="inputSSID">SSID</label>
-                        <input type="text" class="form-control" id="inputSSID" placeholder={{_ "WiFi SSID"}}>
+                        <input type="text" class="form-control" id="inputSSID" placeholder={{_ "WIFI SSID"}}>
                     </div>
                     <div class="form-group text-right">
-                        <label class="sr-only t-vmiddle" for="inputPassword">Password</label>
-                        <input type="password" class="form-control" id="inputPassword" placeholder={{_ "WiFi Password"}}>
+                        <input type="password" class="form-control" id="inputPassword" placeholder={{_ "WIFI Password"}}>
                     </div>
                 </div>
                 <div class="modal-footer container">
@@ -199,7 +196,7 @@
                     <button id="delete" type="button" class="btn btn-raised btn-danger btn-block" data-dismiss="modal">
                         <h5 class="text-uppercase">Delete</h5>
                     </button>
-                    <button id="probe" type="button" class="btn btn-raised btn-block" data-dismiss="modal">
+                    <button id="probe" type="button" class="btn btn-raised btn-block">
                         {{_ "Probe"}}<span id="status">&nbsp;</span>
                     </button>
                 </div>
@@ -212,17 +209,19 @@
         <div class="modal-dialog modal-centering" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel" style="text-align:center;">{{devName}}</h4>
+                    <label class="text-center {{irHubStatusStyle}} full-width" id="irHubStatus" style="padding: 0.4em 0">
+                        {{devName}}: {{irHubStatus}}
+                    </label>
+
                 </div>
-                <div class="modal-body container row">
+                <div style="padding:30px;" class="modal-body row">
                     {{#each IRCmd}}
-                    <div class="col-xs-4 text-center">
-                        <a id="ir-cmd-item" class="icon_list text-center" data-irModelId="{{irModelId}}" data-irHubId="{{irHubId}}" data-command="{{irData}}">
-                            <div class="icondemo  border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
-                                <span class="icon-centering"><strong>{{name}}</strong></span>
-                            </div>
+                    <div class="tile col-xs-4 padding-4">
+                        <a style="display:block;margin:15%;box-shadow:none;" class="ir-cmd-item content text-center icon-ir border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand" data-irModelId="{{irModelId}}" data-irHubId="{{irHubId}}" data-irHubKey="{{irHubKey}}" data-command="{{irData}}">
+                            <i class="icon icon-fit icon-centering iot-icon-{{itemIcon icon}}" aria-hidden="true"></i>
+                            <span class="ir-label"><strong>{{name}}</strong></span>
                         </a>
+                        
                     </div>
                     {{/each}}
                 </div>

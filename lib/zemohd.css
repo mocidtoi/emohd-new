@@ -42,6 +42,12 @@ body {
     .col-xs-4 {
         width: 33.33333333%;
     }
+    .col-xs-4-vw {
+        width: 33.33333333vw;
+    }
+    .row-xs-4-vw {
+        height: 23vw;
+    }
     .tile .content {
         font-size: 3vmin;
     }
@@ -52,6 +58,12 @@ body {
 @media (orientation:landscape) {
     .col-xs-4 {
         width: 16.66666667%;
+    }
+    .col-xs-4-vw {
+        width: 16.66666667vw;
+    }
+    .row-xs-4-vw {
+        height: 12vw;
     }
     .tile .content {
         font-size: 3vmin;
@@ -64,6 +76,9 @@ body {
     .col-sm-2 {
         width: 16.66666667%;
     }
+    .col-sm-2-vw {
+        width: 16.66666667vw;
+    }
     .tile .content {
         font-size: 1.5vmin;
     }
@@ -74,6 +89,9 @@ body {
 @media (min-width: 768px) and (orientation:landscape) {
     .col-sm-2 {
         width: 12%;
+    }
+    .col-sm-2-vw {
+        width: 12vw;
     }
     .tile .content {
         font-size: 1.5vmin;
@@ -440,6 +458,18 @@ ul.device-list > li > div > a > span {
 .icon_list .icondemo.border-glass {
     border: solid 1px rgba(0,141,208,0.2);
 }
+.icon-ir {
+    border-radius: 50%;
+    /*margin-top: 15px;*/
+    /*-webkit-box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.1);*/
+    /*transition: all 0.2s;*/
+}
+.icon-ir.border-glass {
+    border: solid 1px rgba(0,141,208,1);
+}
+
 
 .block-heading {
     position: relative;
@@ -604,4 +634,10 @@ span#status {
     font-size: 14px;
     width: 1em;
     height: 1em;
+}
+span.ir-label {
+    top: 65%;
+    left: 0;
+    right: 0;
+    position: absolute;
 }

@@ -121,10 +121,12 @@ Template.AddBtn.helpers({
 
 
 Template.LoadingScreen1.onRendered(function() {
+    Meteor.Spinner.options.length = 10;
     Session.set('loading-screen1', true);
 });
 
 Template.LoadingScreen1.onDestroyed(function() {
+    Meteor.Spinner.options.length = 10;
     Session.set('loading-screen1', false);
 });
 

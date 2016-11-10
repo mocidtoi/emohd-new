@@ -1,33 +1,3 @@
-/*
-function onSuccess(res) {
-    console.log(res);
-}
-function onFail(err) {
-    console.log(err);
-}
-function RemoteIRLib(irHubId, irHubKey) {
-    this.configure = function (onSuccess, onFail, irHubName, irHubId, irHubKey) {
-        if (irHubName.length != 0 && irHubId.length != 0 && irHubKey != 0) {
-            Meteor.apply('addIRHub', [{
-                irHubId: irHubId,
-                name: irHubName,
-                irHubKey: irHubKey,
-            }], {wait: false});
-            onSuccess("Success");
-        }
-        else {
-            onFail("Empty irHubId, irHubKey or irHubName");        
-        }
-    };
-    this.cancelConfigure = function(onSuccess, onFail) {
-    };
-    this.probe = function (onSuccess, onFail, irHubId, irHubKey) {
-    };
-    this.sendCommand = function(onSuccess, onFailed, irHubId, irHubKey, irDeviceId, irCommand) {
-        console.log('Clicked: DeviceId: ' + irDeviceId + ' - HubId: ' + irHubId + ' - HubKey: ' + irHubKey + ' - Command: ' + irCommand);
-    };
-}
-*/
 Template.ModalAddRoom.events({
     "click button#ok": function(event, instance) {
         Meteor.apply('addGroup', [{
@@ -361,10 +331,17 @@ Template.ModalIRControl.helpers({
     },
     irHubStatus: function() {
         var hubIP = Session.get('ir-hub-ip');
-        return  hubIP == null ? "Offline":"Online (" + hubIP + ")";
+        var hubServerIP = Session.get('ir-hub-server-ip');
+        return  (hubIP == null || hubServerIP == null) ? "Offline":"Online";
     },
     irHubStatusStyle: function() {
-        return  Session.get('ir-hub-ip') == null ? "text-danger bg-danger":"text-success bg-success";
+        return (Session.get('ir-hub-ip') == null || Session.get('ir-hub-server-ip') == null) ? "text-danger bg-danger":"text-success bg-success";
+    },
+    probeStatus: function() {
+        return Session.get('ir-hub-probe');
+    },
+    commandStatus: function() {
+        return Session.get('ir-command-status');
     },
     IRCmd: function() {
         var irModelId = Session.get('ir-model-id');
@@ -380,9 +357,35 @@ Template.ModalIRControl.events({
     'click .ir-cmd-item': function(event, instance) {
         var irDeviceId = event.currentTarget.getAttribute('data-irModelId');
         var irHubId = event.currentTarget.getAttribute('data-irHubId');
+        var irHubIP = Session.get("ir-hub-ip");
+        var irHubServerIP = Session.get('ir-hub-server-ip');
         var irCommand = event.currentTarget.getAttribute('data-command');
         var irHubKey = event.currentTarget.getAttribute('data-irHubKey');
 
+        if( Meteor.isCordova && irHubIP != null) {
+            /*RemoteIRLib.sendCommand(function(res) {
+                    alert(res);
+                }, function(err) {
+                    alert("Send command error");
+                    alert(err);
+                }, irHubId, irHubIP, "http://52.29.217.226:6001", irCommand
+            );*/
+            Session.set('ir-command-status', 'Sending command ...');
+            instance.$('#mask').css('display', 'block');
+            RemoteIRLib.sendCommand(function(res) {
+                    alert(res);
+                    Session.set('ir-command-status', 'Send command SUCCESS');
+                    instance.$('#mask').css('display', 'none');
+                }, function(err) {
+                    alert("Send command error " + err);
+                    Session.set('ir-command-status', 'Send command ERROR');
+                    instance.$('#mask').css('display', 'none');
+                }, irHubId, irHubIP, irHubServerIP, irCommand
+            );
+        }
+        else {
+            alert("Not supported");
+        }
         console.log('Clicked: DeviceId: ' + irDeviceId + ' - HubId: ' + irHubId + ' - Command: ' + irCommand);
     },
     'show.bs.modal .modal': function(event, instance) {
@@ -398,12 +401,20 @@ Template.ModalIRControl.events({
         var irHubId = Session.get('ir-hub-id');
         var irHubKey = Session.get('ir-hub-key');
         if(Meteor.isCordova) {
+            Session.set('ir-hub-probe', 'probing ...');
             RemoteIRLib.probe(function(res) {
-                    alert("probe success " + JSON.stringify(res));
-                    if(res && res.DEVICE_IP) {
-                        Session.set("ir-hub-ip", res.DEVICE_IP);
+                    if(res) {
+                        alert(JSON.stringify(res));
+                        if (res.DEVICE_IP) {
+                            Session.set("ir-hub-ip", res.DEVICE_IP);
+                        }
+                        if (res.DEVICE_SERVER_IP) {
+                            Session.set("ir-hub-server-ip", res.DEVICE_SERVER_IP);
+                        }
+                        Session.set('ir-hub-probe', '');
                     }
                 }, function(err) {
+                    Session.set('ir-hub-probe', '');
                     alert("probe failed " + JSON.stringify(err));
                 }, irHubId, irHubKey
             );

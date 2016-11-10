@@ -210,7 +210,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <label class="text-center {{irHubStatusStyle}} full-width" id="irHubStatus" style="padding: 0.4em 0">
-                        {{devName}}: {{irHubStatus}}
+                        {{devName}}: {{irHubStatus}} {{probeStatus}}
                     </label>
 
                 </div>
@@ -225,9 +225,10 @@
                     </div>
 
                     {{/each}}
+                    <div id="mask" style="background-color:rgba(255,255,255,0.8);position:absolute;top:0;bottom:0;left:0;right:0;display:none;margin:0 30px;"></div>
                 </div>
                 <div class="modal-footer" style="border-top:solid 1px #ccc; padding:10px; margin-top:20px">
-                    <span style="font-style:italic; color:#888">{{_ "Control your curtain"}}</span>
+                    <span id="commandStatus" style="font-style:italic; color:#888">{{_ commandStatus}}</span>
                 </div>
             </div>
         </div>

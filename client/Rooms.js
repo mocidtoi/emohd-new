@@ -177,6 +177,8 @@ Template.Rooms.show = Template.Rooms.events({
         Session.set('ir-hub-id', event.currentTarget.getAttribute('data-irhubid'));
         Session.set('ir-hub-key', event.currentTarget.getAttribute('data-irhubkey'));  
         Session.set('ir-hub-ip', null);  
+        Session.set('ir-hub-server-ip', null);  
+        Session.set('ir-hub-probe', "");  
         $('#ir-control').modal();
     },
     /*'click .list-group-item a': function(event) {

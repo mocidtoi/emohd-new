@@ -180,6 +180,14 @@ Template.ModalIRConfig.helpers({
 Template.ModalIRConfig.events({
     'hide.bs.modal .modal': function(event, instance) {
         Template.ModalIRConfig.spinner.stop();
+        if(Meteor.isCordova) {
+            RemoteIRLib.cancelConfig(function (res){
+                myAlert(JSON.stringify(res));
+            },
+            function(err) {
+                myAlert(JSON.stringify(err));
+            });
+        }
     },
     'click #config': function(event, instance) {
         var IRHubName = instance.$('#inputName').val().trim(); 
@@ -218,59 +226,55 @@ Template.ModalIRConfig.events({
                         }], {wait: false});
                     }
                     else {
-                        alert('Configure error ' + res);
+                        alert('Configure error ' + JSON.stringify(res));
                     }
                     instance.$('#modal-ir-config').modal('hide');
                 }, function(err) {
-                    alert("Config failed " + err);
+                    alert("Config failed " + JSON.stringify(err));
                     instance.$('#modal-ir-config').modal('hide');
                 }, wifiSSID, wifiKey);
             }
             else {
-                alert("Not supported");
+                alert(TAPi18n.__("Not supported for browser"));
             }
         }
     }
 });
-Template.ModalIRHub.onRendered(function(){
-    var opts = {
-          lines: 11 // The number of lines to draw
-        , length: 4 // The length of each line
-        , width: 2 // The line thickness
-        , radius: 4 // The radius of the inner circle
-        , scale: 1.0 // Scales overall size of the spinner
-        , corners: 0.7 // Corner roundness (0..1)
-        , color: '#fff' // #rgb or #rrggbb or array of colors
-        , opacity: 0.5 // Opacity of the lines
-        , rotate: 0 // The rotation offset
-        , direction: 1 // 1: clockwise, -1: counterclockwise
-        , speed: 0.5 // Rounds per second
-        , trail: 60 // Afterglow percentage
-        , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
-        , zIndex: 2e9 // The z-index (defaults to 2000000000)
-        , className: 'spinner' // The CSS class to assign to the spinner
-        , top: '50%' // Top position relative to parent
-        , left: '51%' // Left position relative to parent
-        , shadow: false // Whether to render a shadow
-        , hwaccel: false // Whether to use hardware acceleration
-        , position: 'absolute' // Element positioning
-    }
-    Template.ModalIRHub.spinnerHolder = this.$('#status')[0];
-    Template.ModalIRHub.spinner = new Spinner(opts);
-    Template.ModalIRHub.spinner.stop();
-});
+var opts = {
+      lines: 11 // The number of lines to draw
+    , length: 4 // The length of each line
+    , width: 2 // The line thickness
+    , radius: 4 // The radius of the inner circle
+    , scale: 1.0 // Scales overall size of the spinner
+    , corners: 0.7 // Corner roundness (0..1)
+    , color: '#fff' // #rgb or #rrggbb or array of colors
+    , opacity: 0.5 // Opacity of the lines
+    , rotate: 0 // The rotation offset
+    , direction: 1 // 1: clockwise, -1: counterclockwise
+    , speed: 0.5 // Rounds per second
+    , trail: 60 // Afterglow percentage
+    , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+    , zIndex: 2e9 // The z-index (defaults to 2000000000)
+    , className: 'spinner' // The CSS class to assign to the spinner
+    , top: '50%' // Top position relative to parent
+    , left: '51%' // Left position relative to parent
+    , shadow: false // Whether to render a shadow
+    , hwaccel: false // Whether to use hardware acceleration
+    , position: 'absolute' // Element positioning
+};
 Template.ModalIRHub.helpers({
     IRHubName: function() {
-        return Session.get('ir-hub-name');;
+        return Session.get('ir-hub-name');
     },
     IRHubStatus: function(instance) {
-        return "UNKNOWN";
+        var IRHubStt = Session.get('ir-hub-status');
+        return IRHubStt?IRHubStt:'UNKNOWN';
     },
     IRHubId: function() {
-        return Session.get('ir-hub-device-id');;
+        return Session.get('ir-hub-device-id');
     },
     IRHubKey: function() {
-        return Session.get('ir-hub-key');;
+        return Session.get('ir-hub-key');
     },
     irhub: function() {
         var irHubId = Router.current().params.id;
@@ -286,30 +290,115 @@ Template.ModalIRHub.events({
             Meteor.apply('removeIRHub', [irHubId], {wait: false});
         });
     },
+    'click #wifi-config': function() {
+        if(event.target.checked) {
+            Template.instance().$('#wifi-setting').show(500);
+            Template.instance().$('#config').show(500);
+        }
+        else {
+            Template.instance().$('#wifi-setting').hide(500);
+            Template.instance().$('#config').hide(500);
+        }
+    },
+    'click #config': function(event, instance) {
+        var IRHubName = instance.$('#inputName').val().trim(); 
+        var wifiSSID = instance.$('#inputSSID').val().trim();
+        var wifiKey = instance.$('#inputPassword').val().trim();         
+
+        if (IRHubName.length == 0) {
+            instance.$('#inputName').parent().addClass('has-error');
+            setTimeout(function(){
+                instance.$('#inputName').parent().removeClass('has-error');
+            }, 2000);
+        }
+        else if (wifiSSID.length == 0) {
+            instance.$('#inputSSID').parent().addClass('has-error');
+            setTimeout(function(){
+                instance.$('#inputSSID').parent().removeClass('has-error');
+            }, 2000);
+        }
+        else if (wifiKey.length == 0) {
+            instance.$('#inputPassword').parent().addClass('has-error');
+            setTimeout(function(){
+                instance.$('#inputPassword').parent().removeClass('has-error');
+            }, 2000);
+        }
+        else {
+            if( Template.ModalIRHub.spinner ) Template.ModalIRHub.spinner.stop();
+            Template.ModalIRHub.spinnerHolder = instance.$('#config span')[0];
+            Template.ModalIRHub.spinner = new Spinner(opts);
+            Template.ModalIRHub.spinner.spin(Template.ModalIRHub.spinnerHolder);
+
+            if( Meteor.isCordova ) {
+                RemoteIRLib.configure(function(res) {
+                    if(res && res.DEVICE_ID && res.DEVICE_KEY) {
+                        Meteor.apply('updateIRHub', [{
+                            deviceId: res.DEVICE_ID,
+                            name: IRHubName,
+                            deviceKey: res.DEVICE_KEY
+                        }], {wait: false});
+                    }
+                    else {
+                        alert('Configure error ' + JSON.stringify(res));
+                    }
+                    Template.ModalIRHub.spinner.stop();
+                    instance.$('#modal-ir-hub').modal('hide');
+                }, function(err) {
+                    alert("Config failed " + JSON.stringify(err));
+                    Template.ModalIRHub.spinner.stop();
+                    instance.$('#modal-ir-hub').modal('hide');
+                }, wifiSSID, wifiKey);
+            }
+            else {
+                alert(TAPi18n.__("Not supported for browser"));
+            }
+        }
+    },
     'click #probe': function(event, instance) {
         if(Meteor.isCordova) {
             var irHubDeviceId = Session.get('ir-hub-device-id');
             var irHubDeviceKey = Session.get('ir-hub-key');
+
+            if( Template.ModalIRHub.spinner ) Template.ModalIRHub.spinner.stop();
+            Template.ModalIRHub.spinnerHolder = instance.$('#probe span')[0];
+            Template.ModalIRHub.spinner = new Spinner(opts);
             Template.ModalIRHub.spinner.spin(Template.ModalIRHub.spinnerHolder);
+
             RemoteIRLib.probe(function(res) {
-                    alert(JSON.stringify(res));
+                    myAlert(JSON.stringify(res));
                     if( res ) {
-                        if(res.DEVICE_IP) {
+                        if(res.DEVICE_IP && res.DEVICE_SERVER_IP) {
+                            Session.set('ir-hub-status', 'ONLINE');
+                            instance.$('#irHubStatus').removeClass();
+                            instance.$('#irHubStatus').addClass('text-center text-success bg-success full-width');
                         }
-                        if(res.DEVICE_SERVER_IP) {
-                        }
+                        Template.ModalIRHub.spinner.stop();
                     }
                     else {
-                        alert("Probe error");
+                        myAlert("Probe error " + JSON.stringify(res));
+                        instance.$('#irHubStatus').removeClass();
+                        instance.$('#irHubStatus').addClass('text-center text-danger bg-danger full-width');
+                        Session.set('ir-hub-status', 'OFFLINE');
+                        Template.ModalIRHub.spinner.stop();
                     }
                 }, function(err) {
-                    alert("Probe failed");
-                }, irHubDeviceId, irHubKey
+                    myAlert("Probe failed " + JSON.stringify(err));
+                    instance.$('#irHubStatus').removeClass();
+                    instance.$('#irHubStatus').addClass('text-center text-danger bg-danger full-width');
+                    Session.set('ir-hub-status', 'OFFLINE');
+                    Template.ModalIRHub.spinner.stop();
+                }, irHubDeviceId, irHubDeviceKey
             );
         }
         else {
-            alert('Not supported');
+            alert(TAPi18n.__("Not supported for browser"));
         }
+    },
+    'show.bs.modal .modal': function(event, instance) {
+        instance.$('#wifi-config').attr('checked',false);
+        instance.$('#wifi-setting').hide();
+        instance.$('#config').hide();
+        
     }
 });
 
@@ -356,6 +445,7 @@ Template.ModalIRControl.helpers({
 Template.ModalIRControl.events({
     'click .ir-cmd-item': function(event, instance) {
         var irDeviceId = event.currentTarget.getAttribute('data-irModelId');
+        var deviceIP = Session.get('ir-hub-ip');
         var irHubId = event.currentTarget.getAttribute('data-irHubId');
         var irHubIP = Session.get("ir-hub-ip");
         var irHubServerIP = Session.get('ir-hub-server-ip');
@@ -363,30 +453,22 @@ Template.ModalIRControl.events({
         var irHubKey = event.currentTarget.getAttribute('data-irHubKey');
 
         if( Meteor.isCordova && irHubIP != null) {
-            /*RemoteIRLib.sendCommand(function(res) {
-                    alert(res);
-                }, function(err) {
-                    alert("Send command error");
-                    alert(err);
-                }, irHubId, irHubIP, "http://52.29.217.226:6001", irCommand
-            );*/
             Session.set('ir-command-status', 'Sending command ...');
             instance.$('#mask').css('display', 'block');
             RemoteIRLib.sendCommand(function(res) {
-                    alert(res);
+                    myAlert(res);
                     Session.set('ir-command-status', 'Send command SUCCESS');
                     instance.$('#mask').css('display', 'none');
                 }, function(err) {
-                    alert("Send command error " + err);
+                    myAlert("Send command error " + err);
                     Session.set('ir-command-status', 'Send command ERROR');
                     instance.$('#mask').css('display', 'none');
                 }, irHubId, irHubIP, irHubServerIP, irCommand
             );
         }
         else {
-            alert("Not supported");
+            alert(TAPi18n.__("Not supported for browser"));
         }
-        console.log('Clicked: DeviceId: ' + irDeviceId + ' - HubId: ' + irHubId + ' - Command: ' + irCommand);
     },
     'show.bs.modal .modal': function(event, instance) {
         console.log(instance.$(".rippler"));
@@ -402,9 +484,10 @@ Template.ModalIRControl.events({
         var irHubKey = Session.get('ir-hub-key');
         if(Meteor.isCordova) {
             Session.set('ir-hub-probe', 'probing ...');
-            RemoteIRLib.probe(function(res) {
+            RemoteIRLib.probe(
+                function(res) {
                     if(res) {
-                        alert(JSON.stringify(res));
+                        myAlert(JSON.stringify(res));
                         if (res.DEVICE_IP) {
                             Session.set("ir-hub-ip", res.DEVICE_IP);
                         }

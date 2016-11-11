@@ -348,6 +348,9 @@ if (Meteor.isClient) {
         {icon:"power", title:"IR Command", color:"bg-cyan-800"}
     ];
 
+    myAlert = function(message) {
+        //alert(message);
+    }
     myConfirm = function(title, content, callback) {
         Session.set('confirm-title',title);
         Session.set('confirm-content', content);

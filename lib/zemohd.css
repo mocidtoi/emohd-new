@@ -628,7 +628,7 @@ h4.example-title {
 div#guide h4 {
     transition: all 1s ease;
 }
-span#status {
+span#status, #config span, #probe span {
     position: relative;
     left: 1em;
     font-size: 14px;

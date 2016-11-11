@@ -936,10 +936,14 @@ function removeDevice(arg, callback) {
 }
 
 function updateDevice(arg, callback) {
-    if (arg && arg.id) {
+    if (arg && (arg.id || arg.sceneId)) {
         Device.update(arg, {
             where: {
-                id: arg.id
+                $or: [{
+                    id: arg.id
+                    },{
+                    sceneId: arg.sceneId
+                }]
             },
             individualHooks: true
         }).then(function(res) {
@@ -1147,6 +1151,10 @@ Meteor.publish('data', function(token) {
     IRHub.addHook('afterCreate', self._session.id, function(irhub, option){
         self.added('irhub', irhub.id, irhub.toJSON());
     });
+    IRHub.addHook('afterUpdate', self._session.id, function(irhub, option) {
+        self.changed('irhub', irhub.id, irhub.toJSON());
+        myLog('IRHub updated');
+    });
     IRHub.addHook('afterDestroy', self._session.id, function(irhub, option){
         self.removed('irhub', irhub.id);
     });
@@ -1217,6 +1225,7 @@ Meteor.publish('data', function(token) {
         Device.removeHook('beforeDestroy', self._session.id);
         Device.removeHook('afterDestroy', self._session.id);
         IRHub.removeHook('afterCreate', self._session.id);
+        IRHub.removeHook('afterUpdate', self._session.id);
         IRHub.removeHook('afterDestroy', self._session.id);
         Group.removeHook('afterCreate', self._session.id);
         Group.removeHook('afterUpdate', self._session.id);
@@ -1909,6 +1918,25 @@ Meteor.methods({
             myLog('addIRHub result:');
             myLog(res);
         });
+    },
+    updateIRHub: function(arg) {
+        if(arg) {
+            myLog('addIRHub:' + arg);
+            IRHub.update(arg, {
+                where:{
+                    deviceId: arg.deviceId
+                },
+                individualHooks: true
+            }).then(function() {
+                myLog('update IRHub: Success');
+            }).catch(function(err) {
+                myLog(err.toString());
+            });
+        }
+        else{
+            myLog('failure ' + arg);
+            return {success:false, message:"Invalid data input"};
+        }
     },
     removeIRHub: function(arg) {
         myLog('removeIRHub: ' + arg);

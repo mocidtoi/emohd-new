@@ -17,6 +17,7 @@
                     {{/with}}
                 </ul>
             </li>
+            {{#if doSchedule}}
             <li>
                 <div>
                     <span>{{_ "schedule"}}</span>
@@ -24,7 +25,6 @@
                         <i class="icon icon-fit iot-color-brand iot-icon-plus align-right" aria-hidden="true"></i>
                     </a>
                 </div>
-
                 <ul class="device-list" style="padding-left:0;padding-right:0;">
                     {{#each tasks}}
                     <li><div class="glass">
@@ -42,6 +42,7 @@
                     {{/each}}
                 </ul>
             </li>
+            {{/if}}
             <li style="padding:1em;">
                 <button id="removeDevice" type="button" class="btn btn-raised btn-danger btn-block"><h5 class="text-uppercase">{{_ "delete"}}</h5></button>
             </li>

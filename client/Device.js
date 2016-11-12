@@ -181,4 +181,10 @@ Template.Device.helpers({
     notSelected: function(action) {
         return action?"":"selected";
     },
+    doSchedule: function() {
+        var devId = Router.current().params.id;
+        devId = parseInt(devId);
+        var device = Device.find({ id: devId }).fetch()[0];
+		return (device.type == 0 || device.type == 1);
+    }
 });

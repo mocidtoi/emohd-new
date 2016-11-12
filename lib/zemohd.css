@@ -34,7 +34,7 @@ body {
     vertical-align: middle;
 }
 .icon-small {
-    font-size: 6vw;
+    font-size: 6vmin;
     vertical-align: middle;
 }
 
@@ -323,7 +323,7 @@ ul.device-list > li > div {
 }
 ul.notif-list > li > div {
     padding-top: 0.2em;
-    font-size:3.5vmin;
+    font-size:16px;
     font-style:italic;
 }
 ul.room-list > li > div > span {

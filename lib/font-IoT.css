@@ -11,6 +11,7 @@
   font-style: normal;
 
 }
+
 [data-icon]:before {
   font-family: "iot" !important;
   content: attr(data-icon);
@@ -241,4 +242,6 @@
 .iot-icon-warm:before {
   content: "\26";
 }
-
+.iot-icon-smartirw809ii:before {
+  content: "\25";
+}

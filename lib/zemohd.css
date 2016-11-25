@@ -5,6 +5,12 @@ body {
     font-size: 14px;
     line-height: 1.57142857;
 }
+
+body.modal-open {
+    overflow: hidden;
+    position: fixed;
+}
+
 .icon {
     position: relative;
     display: inline-block;

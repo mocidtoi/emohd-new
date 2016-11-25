@@ -189,27 +189,27 @@ Template.ModalIRConfig.events({
             });
         }
     },
-    'click #config': function(event, instance) {
-        var IRHubName = instance.$('#inputName').val().trim(); 
-        var wifiSSID = instance.$('#inputSSID').val().trim();
-        var wifiKey = instance.$('#inputPassword').val().trim();         
+    'click #IRConfig': function(event, instance) {
+        var IRHubName = instance.$('#inputNameConfig').val().trim(); 
+        var wifiSSID = instance.$('#inputSSIDConfig').val().trim();
+        var wifiKey = instance.$('#inputPasswordConfig').val().trim();         
 
         if (IRHubName.length == 0) {
-            instance.$('#inputName').parent().addClass('has-error');
+            instance.$('#inputNameConfig').parent().addClass('has-error');
             setTimeout(function(){
-                instance.$('#inputName').parent().removeClass('has-error');
+                instance.$('#inputNameConfig').parent().removeClass('has-error');
             }, 2000);
         }
         else if (wifiSSID.length == 0) {
-            instance.$('#inputSSID').parent().addClass('has-error');
+            instance.$('#inputSSIDConfig').parent().addClass('has-error');
             setTimeout(function(){
-                instance.$('#inputSSID').parent().removeClass('has-error');
+                instance.$('#inputSSIDConfig').parent().removeClass('has-error');
             }, 2000);
         }
         else if (wifiKey.length == 0) {
-            instance.$('#inputPassword').parent().addClass('has-error');
+            instance.$('#inputPasswordConfig').parent().addClass('has-error');
             setTimeout(function(){
-                instance.$('#inputPassword').parent().removeClass('has-error');
+                instance.$('#inputPasswordConfig').parent().removeClass('has-error');
             }, 2000);
         }
         else {
@@ -294,11 +294,16 @@ Template.ModalIRHub.events({
         if(event.target.checked) {
             Template.instance().$('#wifi-setting').show(500);
             Template.instance().$('#config').show(500);
+            Template.instance().$('#cancel').show(500);
         }
         else {
             Template.instance().$('#wifi-setting').hide(500);
             Template.instance().$('#config').hide(500);
+            Template.instance().$('#cancel').hide(500);
         }
+    },
+    'click #cancel': function(event, instance) {
+        Template.instance().$('#cancel').hide(500);
     },
     'click #config': function(event, instance) {
         var IRHubName = instance.$('#inputName').val().trim(); 
@@ -367,7 +372,8 @@ Template.ModalIRHub.events({
             RemoteIRLib.probe(function(res) {
                     myAlert(JSON.stringify(res));
                     if( res ) {
-                        if(res.DEVICE_IP && res.DEVICE_SERVER_IP) {
+                        //if(res.DEVICE_IP && res.DEVICE_SERVER_IP) {
+                        if(res.DEVICE_IP) {
                             Session.set('ir-hub-status', 'ONLINE');
                             instance.$('#irHubStatus').removeClass();
                             instance.$('#irHubStatus').addClass('text-center text-success bg-success full-width');
@@ -421,10 +427,12 @@ Template.ModalIRControl.helpers({
     irHubStatus: function() {
         var hubIP = Session.get('ir-hub-ip');
         var hubServerIP = Session.get('ir-hub-server-ip');
-        return  (hubIP == null || hubServerIP == null) ? "Offline":"Online";
+        //return  (hubIP == null || hubServerIP == null) ? "Offline":"Online";
+        return  (hubIP == null) ? "Offline":"Online";
     },
     irHubStatusStyle: function() {
-        return (Session.get('ir-hub-ip') == null || Session.get('ir-hub-server-ip') == null) ? "text-danger bg-danger":"text-success bg-success";
+        //return (Session.get('ir-hub-ip') == null || Session.get('ir-hub-server-ip') == null) ? "text-danger bg-danger":"text-success bg-success";
+        return (Session.get('ir-hub-ip') == null) ? "text-danger bg-danger":"text-success bg-success";
     },
     probeStatus: function() {
         return Session.get('ir-hub-probe');

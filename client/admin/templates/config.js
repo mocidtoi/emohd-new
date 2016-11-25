@@ -36,7 +36,7 @@ Template.config.events({
         ipaddress = instance.$('#inputIP').val();
         netmask = instance.$('#inputMask').val();
         gateway = instance.$('#inputGW').val();
-        console.log('config ' + ssid + password + dhcp + ipaddress + netmask);
+        console.log('config ' + ssid + " " + password + " " + dhcp + " " + ipaddress + " " + netmask);
         Meteor.call('config', ssid, password, dhcp, ipaddress, netmask, gateway);
         Router.go('/');
     },

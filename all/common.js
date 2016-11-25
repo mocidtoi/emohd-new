@@ -345,7 +345,20 @@ if (Meteor.isClient) {
         {icon:"triangle-down", title:"IR Command", color:"bg-cyan-800"},
         {icon:"triangle-left", title:"IR Command", color:"bg-cyan-800"},
         {icon:"triangle-right", title:"IR Command", color:"bg-cyan-800"},
-        {icon:"power", title:"IR Command", color:"bg-cyan-800"}
+        {icon:"power", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"channel-up", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"channel-down", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"volume-up", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"volume-off", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"volume-down", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"control-forward", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"control-backward", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"cool", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"tachometer", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"air", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"doc-text-inv", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"ming", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"check-circle", title:"IR Command", color:"bg-cyan-800"}
     ];
 
     myAlert = function(message) {

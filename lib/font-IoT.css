@@ -245,3 +245,16 @@
 .iot-icon-smartirw809ii:before {
   content: "\25";
 }
+.iot-icon-air:before {
+  content: "\27";
+}
+.iot-icon-ming:before {
+  content: "\29";
+}
+.iot-icon-tachometer:before {
+  content: "\2a";
+}
+.iot-icon-doc-text-inv:before {
+  content: "\2b";
+}
+

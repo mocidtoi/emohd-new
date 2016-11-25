@@ -66,7 +66,7 @@ Meteor.methods({
         check(dhcp, Boolean);
         var configProcess;
         if( dhcp ) {
-            console.log(CONFIG.wifi_config + " " + ssid + " " + password);
+            console.log(CONFIG.wifi_config + "-" + ssid + "-" + password);
             configProcess=spawn(CONFIG.wifi_config, [ssid, password] );
         } 
         else {

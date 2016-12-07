@@ -63,6 +63,7 @@
     "Settings":"Cài đặt",
     "Air quality":"Chất lượng không khí",
     "Languages": "Ngôn ngữ",
+    "Preferences": "Cấu hình",
     "basicInfo":"Thông tin cơ bản",
     "description":"Mô tả ...",
     "schedule":"Hẹn giờ",
@@ -89,5 +90,6 @@
     "humidity":"độ ẩm",
     "WiFi configuration done": "Đã cấu hình WiFi thành công",
     "IR-controlled device": "Thiết bị điều khiển qua hồng ngoại",
+    "normalMode":"Chế độ thông thường",
     "_":""
 }

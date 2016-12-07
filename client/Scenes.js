@@ -1,5 +1,6 @@
 Template.Scenes.onRendered(function() {
     var self = this;
+
     Session.set('title', "Scenes");
     var timeoutHandle = null;
     handle = Scene.find().observe({

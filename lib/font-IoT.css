@@ -257,4 +257,9 @@
 .iot-icon-doc-text-inv:before {
   content: "\2b";
 }
-
+.iot-icon-account:before {
+  content: "\2c";
+}
+.iot-icon-reload-1:before {
+  content: "\2d";
+}

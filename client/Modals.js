@@ -512,4 +512,3 @@ Template.ModalIRControl.events({
         }
     }
 });
-

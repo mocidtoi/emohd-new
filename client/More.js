@@ -1,5 +1,6 @@
 Template.More.onRendered(function(){
     var self = this;
+
     Meteor.setTimeout(function(){
         self.$(".rippler").rippler({
             effectClass      :  'rippler-effect'

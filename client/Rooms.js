@@ -1,6 +1,7 @@
 var handle;
 Template.Rooms.onRendered(function() {
     var self = this;
+
     Session.set("title", "Rooms");
     var timeoutHandle = null;
     handle = Device.find().observe({

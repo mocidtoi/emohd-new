@@ -358,7 +358,8 @@ if (Meteor.isClient) {
         {icon:"air", title:"IR Command", color:"bg-cyan-800"},
         {icon:"doc-text-inv", title:"IR Command", color:"bg-cyan-800"},
         {icon:"ming", title:"IR Command", color:"bg-cyan-800"},
-        {icon:"check-circle", title:"IR Command", color:"bg-cyan-800"}
+        {icon:"check-circle", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"reload-1", title:"IR Command", color:"bg-cyan-800"}
     ];
 
     myAlert = function(message) {
@@ -391,7 +392,8 @@ if (Meteor.isClient) {
     MODALS = [
         {id: "modal-addroom"},
         {id: "modal-addscene"},
-        {id: "modal-updateroom"}
+        {id: "modal-updateroom"},
+        {id: "modal-preferences"}
     ];
     setupModalAddRoom = function(router) {
         router.render('ModalAddRoom', {to: "modal-addroom"});

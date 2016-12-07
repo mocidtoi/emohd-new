@@ -112,6 +112,11 @@ Template.CancelBtn.helpers({
     }
 });
 
+Template.AddBtn.onRendered(function(){
+    var self = this;
+    var mode = window.localStorage.getItem("__mode");
+});
+
 Template.AddBtn.helpers({
     modal: function(){
         var md =Session.get('modal-top');

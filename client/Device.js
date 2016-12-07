@@ -31,7 +31,6 @@ Template.Device.onRendered(function() {
 */
     var self = this;
 
-
     var iconElem = self.$("li > div > i#icon");
     var type = parseInt(iconElem.attr('data-type'));
     var icon = parseInt(iconElem.attr('data-icon'));

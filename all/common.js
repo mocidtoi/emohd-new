@@ -1,6 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 
 Constants = {
+    DEVTYPE_AC: 5,
+    DEVTYPE_TV: 4,
     DEVTYPE_IR: 3,
     DEVTYPE_CURTAIN:2,
     DEVTYPE_SCENE:1,
@@ -346,8 +348,8 @@ if (Meteor.isClient) {
         {icon:"triangle-left", title:"IR Command", color:"bg-cyan-800"},
         {icon:"triangle-right", title:"IR Command", color:"bg-cyan-800"},
         {icon:"power", title:"IR Command", color:"bg-cyan-800"},
-        {icon:"channel-up", title:"IR Command", color:"bg-cyan-800"},
-        {icon:"channel-down", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"angle-up", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"angle-down", title:"IR Command", color:"bg-cyan-800"},
         {icon:"volume-up", title:"IR Command", color:"bg-cyan-800"},
         {icon:"volume-off", title:"IR Command", color:"bg-cyan-800"},
         {icon:"volume-down", title:"IR Command", color:"bg-cyan-800"},
@@ -359,7 +361,14 @@ if (Meteor.isClient) {
         {icon:"doc-text-inv", title:"IR Command", color:"bg-cyan-800"},
         {icon:"ming", title:"IR Command", color:"bg-cyan-800"},
         {icon:"check-circle", title:"IR Command", color:"bg-cyan-800"},
-        {icon:"reload-1", title:"IR Command", color:"bg-cyan-800"}
+        {icon:"reload-1", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"plus", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"control-stop", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"quat", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"fan", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"vao-phong", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"trinh-chieu", title:"IR Command", color:"bg-cyan-800"},
+        {icon:"xem-tivi", title:"IR Command", color:"bg-cyan-800"}
     ];
 
     myAlert = function(message) {

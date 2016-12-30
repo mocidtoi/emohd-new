@@ -139,7 +139,10 @@
                 <div class="modal-footer">
                     <div class="col-xs-12 btn-group">
                         <button id="discover" type="button" class="col-xs-5 btn btn-default">{{_ "Search"}}</button>
-                        <button id="settingsOk" type="button" class="col-xs-5 btn btn-primary pull-right">Ok</button>
+                        <button id="discoverGlobal" type="button" class="col-xs-5 btn btn-default pull-right">{{_ "Search Global"}}</button>
+                    </div>
+                    <div class="col-xs-12 btn-group" style="padding-top: 1em;">
+                        <button id="settingsOk" type="button" class="col-xs-12 btn btn-primary">Ok</button>
                     </div>
                 </div>
             </div>
@@ -237,6 +240,62 @@
 
                 </div>
                 <div style="padding:30px; max-height: 54vh; overflow-y: auto;" class="modal-body row">
+                    {{#each IRCmd}}
+                    <div class="tile col-xs-4 padding-4">
+                        <a style="display:block;margin:15%;box-shadow:none;" class="ir-cmd-item content text-center icon-ir border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand" data-irModelId="{{irModelId}}" data-irHubId="{{irHubId}}" data-irHubKey="{{irHubKey}}" data-command="{{irData}}">
+                            <i class="icon icon-fit icon-centering iot-icon-{{itemIcon icon}}" aria-hidden="true"></i>
+                            <span class="ir-label"><strong>{{name}}</strong></span>
+                        </a>
+                        
+                    </div>
+
+                    {{/each}}
+                    <div id="mask" style="background-color:rgba(255,255,255,0.8);position:absolute;top:0;bottom:0;left:0;right:0;display:none;margin:0 30px;"></div>
+                </div>
+                <div class="modal-footer" style="border-top:solid 1px #ccc; padding:10px; margin-top:20px">
+                    <span id="commandStatus" style="font-style:italic; color:#888">{{_ commandStatus}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="ModalIRControlAC">
+    <div class="modal fade" id="ir-control-ac" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-centering" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <label class="text-center {{irHubStatusStyle}} full-width" id="irHubStatus" style="padding: 0.4em 0">
+                        {{devName}}: {{irHubStatus}} {{probeStatus}}
+                    </label>
+
+                </div>
+                <div style="padding:30px; max-height: 54vh; overflow-y: auto;" class="modal-body row">
+                    <div class="full-width" style="text-align: center;">
+                        <label class="text-center text-info bg-info full-width text-digital" id="tempInfo" style="font-size: 3em">
+                        {{tempInfo}}
+                        </label>
+                    </div>
+
+                    <div id="power-btn" class="tile col-xs-4 padding-4">
+                        <a style="display:block;margin:15%;box-shadow:none;" class="content text-center icon-ir border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
+                            <i class="icon icon-fit icon-centering iot-icon-power" aria-hidden="true"></i>
+                            <span class="ir-label"><strong>{{_"Power"}}</strong></span>
+                        </a>
+                    </div>
+                    <div id="up-btn" class="tile col-xs-4 padding-4">
+                        <a style="display:block;margin:15%;box-shadow:none;" class="content text-center icon-ir border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
+                            <i class="icon icon-fit icon-centering iot-icon-triangle-up" aria-hidden="true"></i>
+                            <span class="ir-label"><strong>{{_"Temp +"}}</strong></span>
+                        </a>
+                    </div>
+                    <div id="down-btn" class="tile col-xs-4 padding-4">
+                        <a style="display:block;margin:15%;box-shadow:none;" class="content text-center icon-ir border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
+                            <i class="icon icon-fit icon-centering iot-icon-triangle-down" aria-hidden="true"></i>
+                            <span class="ir-label"><strong>{{_"Temp -"}}</strong></span>
+                        </a>
+                    </div>
+
                     {{#each IRCmd}}
                     <div class="tile col-xs-4 padding-4">
                         <a style="display:block;margin:15%;box-shadow:none;" class="ir-cmd-item content text-center icon-ir border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand" data-irModelId="{{irModelId}}" data-irHubId="{{irHubId}}" data-irHubKey="{{irHubKey}}" data-command="{{irData}}">

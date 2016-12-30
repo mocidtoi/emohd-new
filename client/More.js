@@ -40,6 +40,9 @@ Template.More.events({
     'click a#clock-syn': function(event, instance) {
         Meteor.apply('syncClock', [Date.now()], {wait:false}, function(err, res) {
             console.log(res);
+            if (res) {
+                Session.set("time",res);
+            }
         });
     }, 
     'click a.ir-hub': function(event, instance) {
@@ -64,5 +67,10 @@ Template.More.helpers({
             window.localStorage.setItem("__lang", lang);
         }
         return lang.toUpperCase();
+    },
+    time :function() {
+        var time = Session.get("time");
+        console.log(time);
+        return time;
     }
 });

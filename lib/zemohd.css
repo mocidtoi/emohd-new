@@ -647,3 +647,7 @@ span.ir-label {
     right: 0;
     position: absolute;
 }
+
+.text-digital {
+    font-family:'digital-7';
+}

@@ -4,7 +4,8 @@ App.info({
   author: 'Dicom Technology',
   email: 'tunghx@dicom.com.vn',
   website: 'http://dicom.com.vn',
-  version: '0.0.1'
+  version: '1.0.8',
+  buildNumber: '1080093'
 });
 
 App.setPreference('StatusBarOverlaysWebView', 'false');
@@ -17,4 +18,8 @@ App.setPreference('FadeSplashScreenDuration', "250");
 App.setPreference('ShowSplashScreenSpinner', "false");
 App.setPreference('StatusBarOverlaysWebView', "false");
 App.setPreference('StatusBarStyle', "default");
+App.accessRule('http://dicom.vn');
+App.accessRule('dicom.vn');
 App.accessRule('*');
+App.accessRule('http://*');
+App.accessRule('https://*');

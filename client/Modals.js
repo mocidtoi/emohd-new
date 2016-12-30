@@ -113,6 +113,32 @@ Template.ModalSettings.events({
         else {
             alert(TAPi18n.__("Not supported for browser"));
         }
+    },
+    'click button#discoverGlobal': function(event, instance) {
+        var dHomeKey = window.localStorage.getItem("__token");
+        if (!dHomeKey) {
+            dHomeKey = instance.$('#dhomeKey').val().trim();
+        }
+
+        if (dHomeKey) {
+            HTTP.call( 'GET', 'http://dicom.vn/get-public-ip.php?key=' + dHomeKey, {}, function(err, res){
+                if (err) {
+                    console.log(err);
+                }   
+                else if (res) {
+                    console.log(res);
+                }
+                instance.$('#dhomeIP').val(res.content);
+                instance.$('#dhomePort').val('7777');
+                instance.$('#dhomeKey').val(dHomeKey);
+            });
+        }
+        else {
+            if( !dHomeKey || dHomeKey.length <= 0) {
+                instance.$('#dhomeKey').parent().addClass('has-error');
+                return;
+            }
+        }
     }
 });
 
@@ -404,7 +430,6 @@ Template.ModalIRHub.events({
         instance.$('#wifi-config').attr('checked',false);
         instance.$('#wifi-setting').hide();
         instance.$('#config').hide();
-        
     }
 });
 
@@ -480,6 +505,329 @@ Template.ModalIRControl.events({
     },
     'show.bs.modal .modal': function(event, instance) {
         console.log(instance.$(".rippler"));
+        Meteor.setTimeout(function() {
+            instance.$(".rippler").rippler({
+                effectClass      :  'rippler-effect'
+                ,effectSize      :  16      // Default size (width & height)
+                ,addElement      :  'div'   // e.g. 'svg'(feature)
+                ,duration        :  900
+            });
+        }, 100);
+        var irHubId = Session.get('ir-hub-id');
+        var irHubKey = Session.get('ir-hub-key');
+        if(Meteor.isCordova) {
+            Session.set('ir-hub-probe', 'probing ...');
+            RemoteIRLib.probe(
+                function(res) {
+                    if(res) {
+                        myAlert(JSON.stringify(res));
+                        if (res.DEVICE_IP) {
+                            Session.set("ir-hub-ip", res.DEVICE_IP);
+                        }
+                        if (res.DEVICE_SERVER_IP) {
+                            Session.set("ir-hub-server-ip", res.DEVICE_SERVER_IP);
+                        }
+                        Session.set('ir-hub-probe', '');
+                    }
+                }, function(err) {
+                    Session.set('ir-hub-probe', '');
+                    alert("probe failed " + JSON.stringify(err));
+                }, irHubId, irHubKey
+            );
+        }
+    }
+});
+
+Template.ModalIRControlAC.onRendered(function(){
+});
+
+Template.ModalIRControlAC.helpers({
+    devName: function() {
+        return Session.get('ir-dev-name');
+    },
+    irModelId: function() {
+        return Session.get('ir-model-id');
+    },
+    irHubId: function() {
+        return Session.get('ir-hub-id');
+    },
+    irHubKey: function() {
+        return Session.get('ir-hub-key');
+    },
+    irHubStatus: function() {
+        var hubIP = Session.get('ir-hub-ip');
+        var hubServerIP = Session.get('ir-hub-server-ip');
+        //return  (hubIP == null || hubServerIP == null) ? "Offline":"Online";
+        return  (hubIP == null) ? "Offline":"Online";
+    },
+    irHubStatusStyle: function() {
+        //return (Session.get('ir-hub-ip') == null || Session.get('ir-hub-server-ip') == null) ? "text-danger bg-danger":"text-success bg-success";
+        return (Session.get('ir-hub-ip') == null) ? "text-danger bg-danger":"text-success bg-success";
+    },
+    probeStatus: function() {
+        return Session.get('ir-hub-probe');
+    },
+    commandStatus: function() {
+        return Session.get('ir-command-status');
+    },
+    IRCmd: function() {
+        var irModelId = Session.get('ir-model-id');
+        irModelId = parseInt(irModelId);
+        console.log(irModelId);
+        return IRCommand.find({
+            $and: [
+                {modelId: irModelId},
+                {name:  {"$nin": ['17','18','19','20','21','22','23','24','25','26','27', '28','29','30','31','32', 'On', 'Off']}}
+            ]
+        }).fetch();
+    },
+    itemIcon: function(icon) {
+        return IRIconControlList[icon].icon;
+    },
+    tempInfo: function() {
+        var devId = Session.get('ir-dev-id');
+        var tempId = "__temp" + devId;
+        var temp = Session.get(tempId);
+
+        if (!temp) {
+            console.log(tempId);
+            temp = parseInt(window.localStorage.getItem(tempId));
+        }
+        return temp?temp:23;
+    },
+    fanInfo: function() {
+        var fan = Session.get('fan-info');
+        if (!fan) {
+            fan = parseInt(window.localStorage.getItem("__fan"));
+        }
+        return fan?fan:"NA";
+    },
+    modeInfo: function() {
+        var mode = Session.get('mode-info');
+        if (!mode) {
+            mode = parseInt(window.localStorage.getItem("__mode"));
+        }
+        return mode?mode:"NA";
+    }
+});
+
+function doCommand(irDeviceId,deviceIP,irHubId,irHubIP,irHubServerIP,irCommand,irHubKey) {
+    if( Meteor.isCordova && irHubIP != null) {
+        Session.set('ir-command-status', 'Sending command ...');
+        instance.$('#mask').css('display', 'block');
+        RemoteIRLib.sendCommand(function(res) {
+                myAlert(res);
+                Session.set('ir-command-status', 'Send command SUCCESS');
+                instance.$('#mask').css('display', 'none');
+            }, function(err) {
+                myAlert("Send command error " + err);
+                Session.set('ir-command-status', 'Send command ERROR');
+                instance.$('#mask').css('display', 'none');
+            }, irHubId, irHubIP, irHubServerIP, irCommand
+        );
+    }
+    else {
+        alert(TAPi18n.__("Not supported for browser"));
+    }    
+}
+
+Template.ModalIRControlAC.events({
+    'click #power-btn': function(event, instance) {
+        var devId = Session.get('ir-dev-id');
+        var powerId = "__power" + devId;
+        var irDeviceId = parseInt(Session.get('ir-model-id'));
+        var deviceIP = Session.get('ir-hub-ip');
+        var irHubId = Session.get('ir-hub-id');
+        var irHubIP = Session.get("ir-hub-ip");
+        var irHubServerIP = Session.get('ir-hub-server-ip');
+
+        var powerStatus = window.localStorage.getItem(powerId);
+
+        if (!powerStatus || powerStatus === 'off') {
+            var irCmd = IRCommand.find({
+                $and: [
+                    {modelId: irDeviceId},
+                    {name: 'On'}
+                ]
+            }).fetch()[0];
+            window.localStorage.setItem(powerId, 'on');
+        }
+        else {
+             var irCmd = IRCommand.find({
+                $and: [
+                    {modelId: irDeviceId},
+                    {name: 'Off'}
+                ]
+            }).fetch()[0];
+            window.localStorage.setItem(powerId, 'off');
+        }
+
+        if (irCmd) {
+            var irCommand = irCmd.irData;
+        }
+        var irHubKey = Session.get('ir-hub-key');
+
+        console.log(irDeviceId+"-"+deviceIP +"-"+irHubId+"-"+ irHubIP+"-"+ irHubServerIP+"-"+ irCommand+"-"+ irHubKey);
+
+        if( Meteor.isCordova && irHubIP != null) {
+            Session.set('ir-command-status', 'Sending command ...');
+            instance.$('#mask').css('display', 'block');
+            RemoteIRLib.sendCommand(function(res) {
+                    myAlert(res);
+                    Session.set('ir-command-status', 'Send command SUCCESS');
+                    instance.$('#mask').css('display', 'none');
+                }, function(err) {
+                    myAlert("Send command error " + err);
+                    Session.set('ir-command-status', 'Send command ERROR');
+                    instance.$('#mask').css('display', 'none');
+                }, irHubId, irHubIP, irHubServerIP, irCommand
+            );
+        }
+        else {
+            alert(TAPi18n.__("Not supported for browser"));
+        }    
+    },
+    'click #up-btn': function(event, instance) {
+        var devId = Session.get('ir-dev-id');
+        var tempId = "__temp" + devId;
+        var irDeviceId = parseInt(Session.get('ir-model-id'));
+        var deviceIP = Session.get('ir-hub-ip');
+        var irHubId = Session.get('ir-hub-id');
+        var irHubIP = Session.get("ir-hub-ip");
+        var irHubServerIP = Session.get('ir-hub-server-ip');
+
+        var temp = parseInt(window.localStorage.getItem(tempId));
+        if (!temp) {
+            temp = 23;
+        }
+        else if (temp < 28) {
+            temp = temp + 1;
+        }
+        else if (temp === 28) {
+            return;
+        }
+        temp = temp.toString();
+
+        var irCmd = IRCommand.find({
+                $and: [
+                    {modelId: irDeviceId},
+                    {name: temp}
+                ]
+                }).fetch()[0];
+        window.localStorage.setItem(tempId, temp);
+        Session.set(tempId, temp);
+
+        if (irCmd) {
+            var irCommand = irCmd.irData;
+        }
+        var irHubKey = irHubKey = Session.get('ir-hub-key');
+
+        console.log(irDeviceId+"-"+deviceIP +"-"+irHubId+"-"+ irHubIP+"-"+ irHubServerIP+"-"+ irCommand+"-"+ irHubKey+"-"+temp);
+
+        if( Meteor.isCordova && irHubIP != null) {
+            Session.set('ir-command-status', 'Sending command ...');
+            instance.$('#mask').css('display', 'block');
+            RemoteIRLib.sendCommand(function(res) {
+                    myAlert(res);
+                    Session.set('ir-command-status', 'Send command SUCCESS');
+                    instance.$('#mask').css('display', 'none');
+                }, function(err) {
+                    myAlert("Send command error " + err);
+                    Session.set('ir-command-status', 'Send command ERROR');
+                    instance.$('#mask').css('display', 'none');
+                }, irHubId, irHubIP, irHubServerIP, irCommand
+            );
+        }
+        else {
+            alert(TAPi18n.__("Not supported for browser"));
+        }    
+    },
+    'click #down-btn': function(event, instance) {
+        var devId = Session.get('ir-dev-id');
+        var tempId = "__temp" + devId;
+        var irDeviceId = parseInt(Session.get('ir-model-id'));
+        var deviceIP = Session.get('ir-hub-ip');
+        var irHubId = Session.get('ir-hub-id');
+        var irHubIP = Session.get("ir-hub-ip");
+        var irHubServerIP = Session.get('ir-hub-server-ip');
+
+        var temp = parseInt(window.localStorage.getItem(tempId));
+        if (!temp) {
+            temp = 23;
+        }
+        else if (temp > 17) {
+            temp = temp - 1;
+        }
+        else if (temp === 17) {
+            return;
+        }
+
+       temp = temp.toString();
+
+        var irCmd = IRCommand.find({
+                $and: [
+                    {modelId: irDeviceId},
+                    {name: temp}
+                ]
+                }).fetch()[0];
+
+        window.localStorage.setItem(tempId, temp);
+        Session.set(tempId, temp);
+
+        if (irCmd) {
+            var irCommand = irCmd.irData;
+        }
+        var irHubKey = irHubKey = Session.get('ir-hub-key');
+
+        console.log(irDeviceId+"-"+deviceIP +"-"+irHubId+"-"+ irHubIP+"-"+ irHubServerIP+"-"+ irCommand+"-"+ irHubKey+"-"+temp);
+
+        if( Meteor.isCordova && irHubIP != null) {
+            Session.set('ir-command-status', 'Sending command ...');
+            instance.$('#mask').css('display', 'block');
+            RemoteIRLib.sendCommand(function(res) {
+                    myAlert(res);
+                    Session.set('ir-command-status', 'Send command SUCCESS');
+                    instance.$('#mask').css('display', 'none');
+                }, function(err) {
+                    myAlert("Send command error " + err);
+                    Session.set('ir-command-status', 'Send command ERROR');
+                    instance.$('#mask').css('display', 'none');
+                }, irHubId, irHubIP, irHubServerIP, irCommand
+            );
+        }
+        else {
+            alert(TAPi18n.__("Not supported for browser"));
+        }    
+    },
+    'click .ir-cmd-item': function(event, instance) {
+        var irDeviceId = event.currentTarget.getAttribute('data-irModelId');
+        var deviceIP = Session.get('ir-hub-ip');
+        var irHubId = event.currentTarget.getAttribute('data-irHubId');
+        var irHubIP = Session.get("ir-hub-ip");
+        var irHubServerIP = Session.get('ir-hub-server-ip');
+        var irCommand = event.currentTarget.getAttribute('data-command');
+        var irHubKey = event.currentTarget.getAttribute('data-irHubKey');
+
+        if( Meteor.isCordova && irHubIP != null) {
+            Session.set('ir-command-status', 'Sending command ...');
+            instance.$('#mask').css('display', 'block');
+            RemoteIRLib.sendCommand(function(res) {
+                    myAlert(res);
+                    Session.set('ir-command-status', 'Send command SUCCESS');
+                    instance.$('#mask').css('display', 'none');
+                }, function(err) {
+                    myAlert("Send command error " + err);
+                    Session.set('ir-command-status', 'Send command ERROR');
+                    instance.$('#mask').css('display', 'none');
+                }, irHubId, irHubIP, irHubServerIP, irCommand
+            );
+        }
+        else {
+            alert(TAPi18n.__("Not supported for browser"));
+        }
+    },
+    'show.bs.modal .modal': function(event, instance) {
+        //console.log(instance.$(".rippler"));
         Meteor.setTimeout(function() {
             instance.$(".rippler").rippler({
                 effectClass      :  'rippler-effect'

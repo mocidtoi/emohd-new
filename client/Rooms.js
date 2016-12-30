@@ -173,6 +173,7 @@ Template.Rooms.show = Template.Rooms.events({
         $('#curtain-control').modal();
     },
     'click .ir-item .button-style-1': function(event, instance) {
+        Session.set('ir-dev-id', event.currentTarget.getAttribute('data-id'));  
         Session.set('ir-dev-name', event.currentTarget.getAttribute('data-name'));  
         Session.set('ir-model-id', event.currentTarget.getAttribute('data-irmodelid'));  
         Session.set('ir-hub-id', event.currentTarget.getAttribute('data-irhubid'));
@@ -180,7 +181,16 @@ Template.Rooms.show = Template.Rooms.events({
         Session.set('ir-hub-ip', null);  
         Session.set('ir-hub-server-ip', null);  
         Session.set('ir-hub-probe', "");  
-        $('#ir-control').modal();
+
+        var irModelId = parseInt(event.currentTarget.getAttribute('data-irmodelid'));
+        var model = IRDevModel.find({id: irModelId}).fetch()[0];
+
+        if (model && model.deviceType === Constants.DEVTYPE_AC) {
+            $('#ir-control-ac').modal();
+        }
+        else {
+            $('#ir-control').modal();
+        }
     },
     /*'click .list-group-item a': function(event) {
         event.stopPropagation();

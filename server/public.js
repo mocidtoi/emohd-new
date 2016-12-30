@@ -13,16 +13,19 @@ var SerialPort;
 
 var reqPerSec = 2;
 if (process.env.MRATE) {
-    reqPerSec = parseInt(process.env.MRATE);
-    if( reqPerSec < 2 ) reqPerSec = 2;
+    reqPerSec = parseFloat(process.env.MRATE);
+    if( reqPerSec < 0 ) reqPerSec = 1;
 }
 var nCheck = 2;
 if (process.env.NCHECK) {
     nCheck = parseInt(process.env.NCHECK);
-    if( nCheck < 1 ) nCheck = 2;
+    if( nCheck < 0 ) nCheck = 2;
 }
 var RateLimiter = Npm.require('limiter').RateLimiter;
-var limiter = new RateLimiter(reqPerSec/2, 500); // (reqPerSec/2) message per 500ms at maximum
+var limit = parseFloat(1000/reqPerSec);
+myLog("========== reqPerSec: "+ reqPerSec+" - "+"timeout: "+limit);
+var limiter = new RateLimiter(1, limit); // (reqPerSec/2) message per 500ms at maximum, 1st message will only need 500ms to be sent, it's better than (reqPerSec, 1000ms)
+//var limiter = new RateLimiter(reqPerSec/2, 500);
 
 Notifier = new EventDDP("emohd");
 kodiIP = null, kodiUser = null, kodiPassword=null, netatmoURL=null, netatmoUser=null, netatmoPassword=null;
@@ -615,6 +618,10 @@ var IRDevModel = sequelize.define('irdevmodel', {
     },
     name: {
         type: Sequelize.TEXT,
+        allowNull: false
+    },
+    deviceType: {
+        type: Sequelize.INTEGER,
         allowNull: false
     },
     description: {
@@ -1399,6 +1406,19 @@ function doScene(sceneId) {
             myLog("Error: " + err.toString());
         });*/
         // SEND Command broadcast
+
+        // For No-check version
+        Device.update( {
+               status: 48
+            }, {
+            where: {
+                type: {"$in": [0]}
+            },
+            individualHooks: true
+        }).then(function(res) {
+                }).catch(function(err) {
+        });
+
         sendTurnOffAll();
         emitSceneAction(-1);
         scheduleCheck(nCheck, checkAll);
@@ -1414,17 +1434,35 @@ function doScene(sceneId) {
             }
         }).then(function(sds) {
             for( var i = 0; i < sds.length; i++ ) {
-                var actVals = ['off','on','toggle'];
+                console.log("ZZZ: " + sds.length);
+                var devId = sds[i].devId;
                 var sdAction = parseInt(sds[i].action);
-                if (sdAction < 0 || sdAction >= actVals.length) sdAction = 0;
-                command({
-                    id:sds[i].devId,
-                    act: actVals[sdAction]
-                }, function(res) {
-                    myLog(res);
-                });
+
+                switch(sdAction) {
+                    case 0:
+                    case 1:
+                    case 2:
+                        var actVals = ['off','on','toggle'];
+                        if (sdAction < 0 || sdAction >= actVals.length) sdAction = 0;
+                            command({
+                            id: devId,
+                            act: actVals[sdAction]
+                        }, function(res) {
+                            myLog(res);
+                        });
+                        emitSceneAction(sceneId);
+                        break;
+                    case 3:
+                        curtainUp(devId);
+                        break;
+                    case 4:
+                        curtainStop(devId);
+                        break;
+                    case 5:
+                        curtainDown(devId);
+                        break;
+                }
             }
-            emitSceneAction(sceneId);
         }).catch(function(err){
             myLog("Error: " + err.toString());
         });
@@ -1597,7 +1635,7 @@ function curtainStop(curtainId) {
                 stopCmd[5] = dev.netadd % 256;
                 stopCmd[6] = dev.endpoint;
                 stopCmd[7] = 0x31; // "1" --> action "on"
-                myLog('Write curtain up command');
+                myLog('Write curtain stop command');
 
                 serialPort.write(stopCmd, function(err, results) {
                     myLog('err ' + err);
@@ -1616,344 +1654,377 @@ function curtainStop(curtainId) {
         myLog(err.stack);
     });
 }
-Meteor.methods({
-    com: function(input) {
-        command(input, function(res) {
-            myLog(res);
-        });
-    },
-    com2: function(input) {
-        Device.findOne({
-            where: {
-                id: input.id
-            }
-        }).then(function(dev) {
-            if (dev) {
-                var devCtrl = new Buffer(8);
-                devCtrl[0] = 0x44;
-                devCtrl[1] = 0x31;
-                devCtrl[2] = 0x34;
-                devCtrl[3] = dev.idx;
-                devCtrl[4] = dev.netadd / 256;
-                devCtrl[5] = dev.netadd % 256;
-                devCtrl[6] = dev.endpoint;
-                devCtrl[7] = input.act == 'on' ? 0x31 : input.act == 'off' ? 0x30 : input.act == 'status' ? 0x32 : 0x0;
-                if (input.act == 'on' || input.act == 'off' || input.act == 'status') {
-                    writeToSerialPort(devCtrl, function(err, results) {
-                        myLog(devCtrl);
-                        myLog('err ' + err);
-                        myLog('results ' + results);
-                    });
-                }
-            }
-        });
-        return true;
-    },
-    permit: function(info) {
-        permitjoin(info, function(res) {
-            myLog("permit:" + res);
-        });
-    },
-    stopPermit: function() {
-        var messper = new Buffer(8);
-        messper[0] = 0x44;
-        messper[1] = 0x31;
-        messper[2] = 0x32;
-        messper[3] = 0x00;
-        writeToSerialPort(messper);
-    },
-    addDevice: function(arg) {
-        myLog('addDevice:' + arg);
-        addDevice(arg, function(res) {
-            myLog('addDevice result:');
-            myLog(res);
-        });
-    },
-    updateDevice: function(arg) {
-        updateDevice(arg, function(res) { });
-    },
-    removeDevice: function(arg) {
-        removeDevice(arg, function(res) { 
-            myLog('removeDevice result:');
-            myLog(res);
-        })
-    },
-    addGroup: function(arg) {
-        addGroup(arg, function(res) {
-            myLog('addGroup result:');
-            myLog(res);
-        })
-    },
-    updateGroup: function(arg) {
-        updateGroup(arg, function(res) {
-            myLog('updateGroup result:');
-            myLog(res);
-        })
-    },
-    removeGroup: function(arg) {
-        removeGroup(arg, function(res) {
-            myLog('removeGroup result:');
-            myLog(res);
-        })
-    },
-    addTask: function(arg) {
-        if (arg) {
-            arg.active = true;
-            Task.create(arg).then(function(tsk) {
-                myLog("addTask: " + tsk.toJSON());
-            }).catch(function(err) {
-                myLog("addTask: " + err);
-            });
-        }
-        else {
-            myLog("Invalid input parameters");
-            return {success:false, message:"Invalid data input"};
-        }
-    },
-    updateTask: function(arg) {
-        if (arg) {
-            Task.findById(arg.id).then(function(tsk) {
-                if (tsk)
-                    tsk.update(arg).then(function(res) {
-                        myLog('updateTask: ' + res.toJSON());
-                    });
-            });
-        }
-        else {
-            myLog("Invalid input parameters");
-            return {success:false, message:"Invalid data input"};
-        }
-    },
-    removeTask: function(arg) {
-        if (arg) {
-            Task.findById(arg).then(function(tsk) {
-                if (tsk) tsk.destroy();
-            });
-        }
-        else {
-            myLog("Invalid input parameters " + arg);
-            return {success:false, message:"Invalid data input"};
-        }
-    },
-    addScene: function(arg) {
-        if(arg) {
-            arg.active = true;
-            Scene.create(arg).then(function(scene) {
-                myLog("addScene: success");
-            }).catch(function(err) {
-                myLog("addScene: error " + err);
-            });
-        }
-        else {
-            myLog('failure ' + arg);
-            return {success:false, message:"Invalid data input"};
-        }
-    },
-    updateScene: function(arg) {
-        if(arg) {
-            myLog("Update Scene: " + arg.id + "name: " + arg.name);
-            Scene.update(arg, {
-                where:{
-                    id: parseInt(arg.id)
-                },
-                individualHooks: true
-            }).then(function() {
-                myLog('updateScene: Success');
-            }).catch(function(err) {
-                myLog(err.toString());
-            });
-        }
-        else {
-            myLog('failure ' + arg);
-            return {success:false, message:"Invalid data input"};
-        }
-    },
-    removeScene: function(arg) {
-        if(arg) {
-            Scene.destroy({
-                where: {
-                    id: parseInt(arg)
-                },
-                individualHooks: true
-            }).then(function(){
-                myLog('removeScene: success');
-            }).catch(function(err){
-                myLog('removeScene: error ' + err);
-            });
-        }
-        else {
-            myLog('failure ' + arg);
-            return {success:false, message:"Invalid data input"};
-        }
-    },
-    sceneAction: function(arg) {
-        if(!isNaN(arg)) {
-            doScene(parseInt(arg));
-        }
-        else {
-            myLog('failure ' + arg);
-            return {success:false, message:"Invalid data input"};
-        }
-    },
-    addSceneDev: function(arg) {
-        if(!isNaN(arg)) {
-            SceneDev.create({
-                sceneId: parseInt(arg),
-                action: true
-            }).then(function() {
-                myLog('Success');
-            }).catch(function(err){
-                myLog(err.toString());
-            });
-        }
-        else {
-            myLog('failure ' + arg);
-            return {success:false, message:"Invalid data input"};
-        }
-    },
-    updateSceneDev: function(arg) {
-        if(arg) {
-            myLog("Update SceneDev: " + arg.id);
-            SceneDev.update(arg, {
-                where:{
-                    id: parseInt(arg.id)
-                },
-                individualHooks: true
-            }).then(function() {
-                myLog('updateSceneDev:Success');
-            }).catch(function(err) {
-                myLog(err.toString());
-            });
-        }
-        else {
-            myLog('failure ' + arg);
-            return {success:false, message:"Invalid data input"};
-        }
-    },
-    removeSceneDev: function(arg) {
-        if(arg) {
-            SceneDev.destroy({
-                where: {id: parseInt(arg)},
-                individualHooks: true
-            }).then(function(){
-                myLog("Done then");
-            }).catch(function(err){
-                myLog("Done error")
-            });
-        }
-        else {
-            return {success:false, message:"Invalid data input"};
-        }
-    },
-    configKodi: function(arg) {
-        if(arg) {
-            if( !setParam('kodiIP', arg.kodiIP) ) 
-                return {success:false, message: "Cannot set kodiIP"};
-            if( !setParam('kodiUser', arg.kodiUser) ) 
-                return {success:false, message: "Cannot set kodiUser"};
-            if( !setParam('kodiPassword', arg.kodiPassword) ) 
-                return {success:false, message: "Cannot set kodiPassword"};
-            loadKodiParams();
-            return {success:true};
-        }
-        else {
-            return {success:false, message:"Invalid data input"};
-        }
-    },
-    configNetatmo: function(arg) {
-        myLog("configNetatmo");
-        console.dir(arg)
-        if(arg) {
-            if( !setParam('netatmoURL', arg.netatmoURL) ) 
-                return {success:false, message: "Cannot set netatmoURL"};
-            if( !setParam('netatmoUser', arg.netatmoUser) ) 
-                return {success:false, message: "Cannot set netatmoUser"};
-            if( !setParam('netatmoPassword', arg.netatmoPassword) ) 
-                return {success:false, message: "Cannot set netatmoPassword"};
-            loadNetatmoParams();
-            return {success:true};
-        }
-        else {
-            return {success:false, message:"Invalid data input"};
-        }
-    },
-    curtainUp: curtainUp,
-    curtainDown: curtainDown,
-    curtainStop: curtainStop,
-    syncClock: function(timestamp) {
-        var offset = Math.abs(Date.now() - timestamp);
-        myLog("offset:" + offset);
-        function pad(n) {
-            return (n < 10) ? ("0" + n) : n;
-        }
-        if(offset > 3*1000) {
-            var currentTime = new Date(timestamp);
-            var timeStr = currentTime.getFullYear() + "-" + pad(currentTime.getMonth() + 1)
-                        + "-" + currentTime.getDate() + " " + currentTime.getHours()
-                        + ":" + pad(currentTime.getMinutes()) + ":" + pad(currentTime.getSeconds());
-            myLog(timeStr);
-            var timeSyncProcess = spawn(process.env.TIME_SYNC, [timeStr]);
-            timeSyncProcess.on('error', function(err){
-                myLog('timeSync:Error:' + err);
-            });
-            timeSyncProcess.stdout.on('data', function(data) {
-                myLog('timeSync:output:' + data);
-            });
-        }
-        else {
-            myLog("No need to sync time");
-        }
-    },
-    getDHomeClock: function() {
-        var now = Date.now();
-        var currentTime = new Date(now);
-        myLog(now + " =? " + currentTime);
-        var timeStr = currentTime.getHours() + ":" + currentTime.getMinutes() + ":" + currentTime.getSeconds();
-        myLog(timeStr);
-        return {timestamp:now, time:timeStr};
-    },
-    addIRHub: function(arg) {
-        myLog('addIRHub:' + arg);
-        addIRHub(arg, function(res) {
-            myLog('addIRHub result:');
-            myLog(res);
-        });
-    },
-    updateIRHub: function(arg) {
-        if(arg) {
-            myLog('addIRHub:' + arg);
-            IRHub.update(arg, {
-                where:{
-                    deviceId: arg.deviceId
-                },
-                individualHooks: true
-            }).then(function() {
-                myLog('update IRHub: Success');
-            }).catch(function(err) {
-                myLog(err.toString());
-            });
-        }
-        else{
-            myLog('failure ' + arg);
-            return {success:false, message:"Invalid data input"};
-        }
-    },
-    removeIRHub: function(arg) {
-        myLog('removeIRHub: ' + arg);
-        if(arg) {
-            IRHub.destroy({
-                where: {
-                    id: arg},
-                individualHooks: true
-            }).then(function(){
-                myLog("Done then");
-            }).catch(function(err){
-                myLog("Done error")
-            });
-        }
-        else {
-            return {success:false, message:"Invalid data input"};
-        }
 
+function addZero(i) {
+    if (i < 10) {
+        i = "0" + i;
     }
-});
+    return i;
+}
+
+if (Meteor.isServer) {
+    Meteor.methods({
+        com: function(input) {
+            command(input, function(res) {
+                myLog(res);
+            });
+        },
+        com2: function(input) {
+            Device.findOne({
+                where: {
+                    id: input.id
+                }
+            }).then(function(dev) {
+                if (dev) {
+                    var devCtrl = new Buffer(8);
+                    devCtrl[0] = 0x44;
+                    devCtrl[1] = 0x31;
+                    devCtrl[2] = 0x34;
+                    devCtrl[3] = dev.idx;
+                    devCtrl[4] = dev.netadd / 256;
+                    devCtrl[5] = dev.netadd % 256;
+                    devCtrl[6] = dev.endpoint;
+                    devCtrl[7] = input.act == 'on' ? 0x31 : input.act == 'off' ? 0x30 : input.act == 'status' ? 0x32 : 0x0;
+                    if (input.act == 'on' || input.act == 'off' || input.act == 'status') {
+                        writeToSerialPort(devCtrl, function(err, results) {
+                            myLog(devCtrl);
+                            myLog('err ' + err);
+                            myLog('results ' + results);
+                        });
+                    }
+                }
+            });
+            return true;
+        },
+        permit: function(info) {
+            permitjoin(info, function(res) {
+                myLog("permit:" + res);
+            });
+        },
+        stopPermit: function() {
+            var messper = new Buffer(8);
+            messper[0] = 0x44;
+            messper[1] = 0x31;
+            messper[2] = 0x32;
+            messper[3] = 0x00;
+            writeToSerialPort(messper);
+        },
+        addDevice: function(arg) {
+            myLog('addDevice:' + arg);
+            addDevice(arg, function(res) {
+                myLog('addDevice result:');
+                myLog(res);
+            });
+        },
+        updateDevice: function(arg) {
+            updateDevice(arg, function(res) { });
+        },
+        removeDevice: function(arg) {
+            removeDevice(arg, function(res) { 
+                myLog('removeDevice result:');
+                myLog(res);
+            })
+        },
+        addGroup: function(arg) {
+            addGroup(arg, function(res) {
+                myLog('addGroup result:');
+                myLog(res);
+            })
+        },
+        updateGroup: function(arg) {
+            updateGroup(arg, function(res) {
+                myLog('updateGroup result:');
+                myLog(res);
+            })
+        },
+        removeGroup: function(arg) {
+            removeGroup(arg, function(res) {
+                myLog('removeGroup result:');
+                myLog(res);
+            })
+        },
+        addTask: function(arg) {
+            if (arg) {
+                arg.active = true;
+                Task.create(arg).then(function(tsk) {
+                    myLog("addTask: " + tsk.toJSON());
+                }).catch(function(err) {
+                    myLog("addTask: " + err);
+                });
+            }
+            else {
+                myLog("Invalid input parameters");
+                return {success:false, message:"Invalid data input"};
+            }
+        },
+        updateTask: function(arg) {
+            if (arg) {
+                Task.findById(arg.id).then(function(tsk) {
+                    if (tsk)
+                        tsk.update(arg).then(function(res) {
+                            myLog('updateTask: ' + res.toJSON());
+                        });
+                });
+            }
+            else {
+                myLog("Invalid input parameters");
+                return {success:false, message:"Invalid data input"};
+            }
+        },
+        removeTask: function(arg) {
+            if (arg) {
+                Task.findById(arg).then(function(tsk) {
+                    if (tsk) tsk.destroy();
+                });
+            }
+            else {
+                myLog("Invalid input parameters " + arg);
+                return {success:false, message:"Invalid data input"};
+            }
+        },
+        addScene: function(arg) {
+            if(arg) {
+                arg.active = true;
+                Scene.create(arg).then(function(scene) {
+                    myLog("addScene: success");
+                }).catch(function(err) {
+                    myLog("addScene: error " + err);
+                });
+            }
+            else {
+                myLog('failure ' + arg);
+                return {success:false, message:"Invalid data input"};
+            }
+        },
+        updateScene: function(arg) {
+            if(arg) {
+                myLog("Update Scene: " + arg.id + "name: " + arg.name);
+                Scene.update(arg, {
+                    where:{
+                        id: parseInt(arg.id)
+                    },
+                    individualHooks: true
+                }).then(function() {
+                    myLog('updateScene: Success');
+                }).catch(function(err) {
+                    myLog(err.toString());
+                });
+            }
+            else {
+                myLog('failure ' + arg);
+                return {success:false, message:"Invalid data input"};
+            }
+        },
+        removeScene: function(arg) {
+            if(arg) {
+                Scene.destroy({
+                    where: {
+                        id: parseInt(arg)
+                    },
+                    individualHooks: true
+                }).then(function(){
+                    myLog('removeScene: success');
+                }).catch(function(err){
+                    myLog('removeScene: error ' + err);
+                });
+            }
+            else {
+                myLog('failure ' + arg);
+                return {success:false, message:"Invalid data input"};
+            }
+        },
+        sceneAction: function(arg) {
+            if(!isNaN(arg)) {
+                doScene(parseInt(arg));
+            }
+            else {
+                myLog('failure ' + arg);
+                return {success:false, message:"Invalid data input"};
+            }
+        },
+        addSceneDev: function(arg) {
+            if(!isNaN(arg)) {
+                SceneDev.create({
+                    sceneId: parseInt(arg),
+                    action: true
+                }).then(function() {
+                    myLog('Success');
+                }).catch(function(err){
+                    myLog(err.toString());
+                });
+            }
+            else {
+                myLog('failure ' + arg);
+                return {success:false, message:"Invalid data input"};
+            }
+        },
+        updateSceneDev: function(arg) {
+            if(arg) {
+                myLog("Update SceneDev: " + arg.id);
+                SceneDev.update(arg, {
+                    where:{
+                        id: parseInt(arg.id)
+                    },
+                    individualHooks: true
+                }).then(function() {
+                    myLog('updateSceneDev:Success');
+                }).catch(function(err) {
+                    myLog(err.toString());
+                });
+            }
+            else {
+                myLog('failure ' + arg);
+                return {success:false, message:"Invalid data input"};
+            }
+        },
+        removeSceneDev: function(arg) {
+            if(arg) {
+                SceneDev.destroy({
+                    where: {id: parseInt(arg)},
+                    individualHooks: true
+                }).then(function(){
+                    myLog("Done then");
+                }).catch(function(err){
+                    myLog("Done error")
+                });
+            }
+            else {
+                return {success:false, message:"Invalid data input"};
+            }
+        },
+        configKodi: function(arg) {
+            if(arg) {
+                if( !setParam('kodiIP', arg.kodiIP) ) 
+                    return {success:false, message: "Cannot set kodiIP"};
+                if( !setParam('kodiUser', arg.kodiUser) ) 
+                    return {success:false, message: "Cannot set kodiUser"};
+                if( !setParam('kodiPassword', arg.kodiPassword) ) 
+                    return {success:false, message: "Cannot set kodiPassword"};
+                loadKodiParams();
+                return {success:true};
+            }
+            else {
+                return {success:false, message:"Invalid data input"};
+            }
+        },
+        configNetatmo: function(arg) {
+            myLog("configNetatmo");
+            console.dir(arg)
+            if(arg) {
+                if( !setParam('netatmoURL', arg.netatmoURL) ) 
+                    return {success:false, message: "Cannot set netatmoURL"};
+                if( !setParam('netatmoUser', arg.netatmoUser) ) 
+                    return {success:false, message: "Cannot set netatmoUser"};
+                if( !setParam('netatmoPassword', arg.netatmoPassword) ) 
+                    return {success:false, message: "Cannot set netatmoPassword"};
+                loadNetatmoParams();
+                return {success:true};
+            }
+            else {
+                return {success:false, message:"Invalid data input"};
+            }
+        },
+        curtainUp: curtainUp,
+        curtainDown: curtainDown,
+        curtainStop: curtainStop,
+        syncClock: function(timestamp) {
+            var now = Date.now();
+            console.log(Date(now));
+            console.log(Date(timestamp));
+
+
+            var offset = Math.abs(Date.now() - timestamp);
+            myLog("offset:" + offset);
+            function pad(n) {
+                return (n < 10) ? ("0" + n) : n;
+            }
+            if(offset > 3*1000) {
+                var currentTime = new Date(timestamp);
+                var timeStr = currentTime.getFullYear() + "-" + pad(currentTime.getMonth() + 1)
+                            + "-" + currentTime.getDate() + " " + currentTime.getHours()
+                            + ":" + pad(currentTime.getMinutes()) + ":" + pad(currentTime.getSeconds());
+                myLog(timeStr);
+                var timeSyncProcess = spawn(process.env.TIME_SYNC, [timeStr]);
+                timeSyncProcess.on('error', function(err){
+                    myLog('timeSync:Error:' + err);
+                });
+                timeSyncProcess.stdout.on('data', function(data) {
+                    myLog('timeSync:output:' + data);
+                });
+            }
+            else {
+                myLog("No need to sync time");
+            }
+            var time = new Date(timestamp);
+            var _time = addZero(time.getHours()) + ":" + addZero(time.getMinutes());
+            return _time;
+        },
+        getDHomeClock: function() {
+            var now = Date.now();
+            var currentTime = new Date(now);
+            myLog(now + " =? " + currentTime);
+            var timeStr = currentTime.getHours() + ":" + currentTime.getMinutes() + ":" + currentTime.getSeconds();
+            myLog(timeStr);
+            return {timestamp:now, time:timeStr};
+        },
+        addIRHub: function(arg) {
+            myLog('addIRHub:' + arg);
+            addIRHub(arg, function(res) {
+                myLog('addIRHub result:');
+                myLog(res);
+            });
+        },
+        updateIRHub: function(arg) {
+            if(arg) {
+                myLog('addIRHub:' + arg);
+                IRHub.update(arg, {
+                    where:{
+                        deviceId: arg.deviceId
+                    },
+                    individualHooks: true
+                }).then(function() {
+                    myLog('update IRHub: Success');
+                }).catch(function(err) {
+                    myLog(err.toString());
+                });
+            }
+            else{
+                myLog('failure ' + arg);
+                return {success:false, message:"Invalid data input"};
+            }
+        },
+        removeIRHub: function(arg) {
+            myLog('removeIRHub: ' + arg);
+            if(arg) {
+                IRHub.destroy({
+                    where: {
+                        id: arg},
+                    individualHooks: true
+                }).then(function(){
+                    myLog("Done then");
+                }).catch(function(err){
+                    myLog("Done error")
+                });
+            }
+            else {
+                return {success:false, message:"Invalid data input"};
+            }
+
+        },
+        getPublicIp: function(arg){   
+            try {
+                var result = HTTP.post('http://dicom.vn/get-public-ip.php?key='+arg);
+            } catch(err) {
+                console.log(err);
+                return err;
+            }
+                return result   
+        },
+        getServerTime: function () {
+            var now = Date.now();
+            var time = new Date(now);
+            var _time = addZero(time.getHours()) + ":" + addZero(time.getMinutes());
+            return _time;
+        }
+    });
+}

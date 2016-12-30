@@ -4,6 +4,12 @@ import { Meteor } from 'meteor/meteor';
 
 import './main.html';
 
+function getServerTime() {
+    Meteor.call("getServerTime", function (error, result) {
+        Session.set("time", result);
+    });
+}
+
 Meteor.startup(function(){
     var language = window.localStorage.getItem("__lang");
     if(!language) {
@@ -22,10 +28,20 @@ Meteor.startup(function(){
         });
     }
 
+    getServerTime();
+    setInterval(function () {
+        getServerTime();
+    }, 60*1000);
+
+/*
     Meteor.apply('syncClock', [Date.now()], {wait:false}, function(err, res) {
         console.log(err);
         console.log(res);
+        if (res) {
+            Session.set("time", res);
+        }
     });
+*/
 });
 
 configNotifier();

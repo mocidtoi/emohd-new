@@ -16,9 +16,31 @@ Template.Scene.onRendered(function() {
             var devId = parseInt(roomObj.attr('data-devId'));
             
             var actionVal = 0;
+            switch(actionObj.val()) {
+                case "turn ON":
+                    actionVal = 1;
+                    break;
+                case "turn OFF":
+                    actionVal = 0;
+                    break;
+                case "TOGGLE":
+                    actionVal = 2;
+                    break;
+                case "UP":
+                    actionVal = 3;
+                    break;
+                case "STOP":
+                    actionVal = 4;
+                    break;
+                case "DOWN":
+                    actionVal = 5;
+                    break;
+            }
+/*
             if(actionObj.val() == "turn ON") actionVal = 1;
             else if(actionObj.val() == "turn OFF") actionVal = 0;
             else if(actionObj.val() == "TOGGLE") actionVal = 2;            
+*/
 
             var ret = Meteor.apply('updateSceneDev', [{
                 id: sdId,
@@ -154,6 +176,17 @@ Template.Scene.helpers({
         console.log(roomId1 + " - " + roomId2);
         return (roomId1 == roomId2)?"selected":"";
     }
+/*,
+    isCurtain: function(id) {
+        var dev = Device.find({id:id}).fetch()[0];
+        if (dev && dev.type === 2) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+*/
 });
 
 Template.Scene.events({

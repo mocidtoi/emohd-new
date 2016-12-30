@@ -18,8 +18,4 @@ App.setPreference('FadeSplashScreenDuration', "250");
 App.setPreference('ShowSplashScreenSpinner', "false");
 App.setPreference('StatusBarOverlaysWebView', "false");
 App.setPreference('StatusBarStyle', "default");
-App.accessRule('http://dicom.vn');
-App.accessRule('dicom.vn');
 App.accessRule('*');
-App.accessRule('http://*');
-App.accessRule('https://*');

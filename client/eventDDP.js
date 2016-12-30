@@ -45,7 +45,8 @@ configNotifier = function() {
                 {name:"Header1Gang", modules:Template.ModalAddDevice.singleLight}, 
                 {name:"Header1Gang", modules:Template.ModalAddDevice.singleScene}, 
                 {name:"HeaderCurtain", modules:Template.ModalAddDevice.curtain2},
-                {name:"Header2Gang", modules:Template.ModalAddDevice.singleLightSingleScene}
+                {name:"Header2Gang", modules:Template.ModalAddDevice.singleLightSingleScene},
+                {name:"Header4Gang", modules: Template.ModalAddDevice.singleLightTripleScene} 
             ];
             gangtype = parseInt(gangtype);
             console.log(gangtype);
@@ -79,6 +80,9 @@ configNotifier = function() {
             }
             else if( gangtype == 8 ) { // 1-light, 1-scene
                 Router.current().render("Body2Gang", {to: "modalBody", data: {foundGangs: foundGangs}});
+            }
+            else if( gangtype == 9 ) { // 1-light, 3-scene
+                Router.current().render("Body4Gang", {to: "modalBody", data: {foundGangs: foundGangs}});
             }
             break;
             

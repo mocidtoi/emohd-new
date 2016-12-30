@@ -50,6 +50,13 @@ Template.ModalAddDevice.singleLightSingleScene = [
     {index: 1, region:"switch-2", active:"", in:"", pos:"col-xs-6 pos-rt", template:"FragmentAddScene"}
 ];
 
+Template.ModalAddDevice.singleLightTripleScene = [
+    {index: 0, region:"switch-1", active:"active", in:"in", pos:"col-xs-6 pos-lt", template:"FragmentAdd"},
+    {index: 1, region:"switch-2", active:"", in:"", pos:"col-xs-6 pos-rt", template:"FragmentAddScene"},
+    {index: 2, region:"switch-3", active:"", in:"", pos:"col-xs-6 pos-lb", template:"FragmentAddScene"},
+    {index: 3, region:"switch-4", active:"", in:"", pos:"col-xs-6 pos-rb", template:"FragmentAddScene"}
+];
+
 Template.ModalAddDevice.renderDoneCallback = null;
 
 function onDeviceAdded(templtInstance, idx) {
@@ -191,6 +198,7 @@ Template.ModalAddDevice.events({
             case 6:
             case 7:
             case 8:
+            case 9:
                 Meteor.apply('permit', [{
                         name1: instance.$("#gang1 .gangname").val(),
                         name2: instance.$("#gang2 .gangname").val(),
@@ -199,7 +207,7 @@ Template.ModalAddDevice.events({
                     }], {wait: false}, function(error, result) {
                 });
                 break;
-            case 9:
+            case 10:
                 Router.current().render("HeaderIRDevice", {to:"modalHeader"});
                 Router.current().render("Blank", {to:"modalBody"});
                 Router.current().render("BodyIRDevice", {to: "modalBody"});
@@ -367,7 +375,7 @@ Template.BodyStage1.onRendered(function() {
                     console.log('gangtype:' + inst.getVal());
                     Session.set('gang-type', gangtype);
                     var secondH4 = $('#step2');
-                    if( parseInt(gangtype) == 9 ) {
+                    if( parseInt(gangtype) == 10 ) {
                         secondH4.text("(2) " + TAPi18n.__("Press") + " " + TAPi18n.__("Next"));
                     }
                     else {

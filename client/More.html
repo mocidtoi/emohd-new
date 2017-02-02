@@ -10,7 +10,8 @@
                     </a>
                     <span>{{_ "Settings"}}</span>
                 </div>
-                <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4 text-center">                           
+                {{#if version1}}
+                <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4 text-center">
                     <a class="icon_list text-center" data-href='/admin/config'>
                         <div class="icondemo  border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
                             <i class="icon icon-fit icon-centering iot-icon-signal" aria-hidden="true"></i>
@@ -18,6 +19,7 @@
                     </a>
                     <span>{{_ "WiFi"}}</span>
                 </div>
+                {{/if}}
                 <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4 text-center" style="display:none">
                     <a class="icon_list text-center" data-href='/Musics'>
                         <div class="icondemo border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
@@ -32,7 +34,7 @@
                             <span class="icon-centering text-digital" style="font-size: larger"><strong>{{time}}</strong></span>
                         </div>
                     </a>
-                    <span>Clock-syn.</span>
+                    <span>{{_ "clock"}}</span>
                 </div>
                 <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4 text-center">                           
                     <a class="icon_list text-center" id="language">
@@ -42,6 +44,33 @@
                     </a>
                     <span>{{_ "Languages"}}</span>
                 </div>
+                <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4 text-center">                           
+                    <a id="KBSound" class="icon_list text-center">
+                        <div class="icondemo  border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
+                            <i class="icon icon-fit icon-centering iot-icon-sound" aria-hidden="true"></i>
+                        </div>
+                    </a>
+                    <span>KBSound</span>
+                </div>
+                {{#unless version1}}
+                <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4 text-center">                           
+                    <a class="icon_list text-center" data-toggle="modal" data-target="#modal-network">
+                        <div class="icondemo  border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
+                            <i class="icon icon-fit icon-centering iot-icon-network" aria-hidden="true"></i>
+                        </div>
+                    </a>
+                    <span>{{_ "Network"}}</span>
+                </div>
+                {{/unless}}
+                <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4 text-center">                           
+                    <a class="icon_list text-center" data-toggle="modal" data-target="#modal-about">
+                        <div class="icondemo  border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
+                            <i class="icon icon-fit icon-centering iot-icon-home" aria-hidden="true"></i>
+                        </div>
+                    </a>
+                    <span>{{_ "About"}}</span>
+                </div>
+
                 <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4 text-center">                           
                     <a id="configIRCon" class="icon_list text-center" data-toggle="modal" data-target="#modal-ir-config">
                         <div class="icondemo  border-glass rippler rippler-default iot-bgcolor-llg iot-color-brand">
@@ -64,4 +93,6 @@
         </div>
     </div>
     {{>ModalIRHub}}
+    {{>ModalAbout}}
+    {{>ModalNetwork}}
 </template>

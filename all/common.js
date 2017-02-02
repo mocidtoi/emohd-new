@@ -12,6 +12,8 @@ Constants = {
     PLAYPAUSE: 3,
     NEXT: 4,
     LED_FILE: '/sys/class/leds/beaglebone:green:usr2',
+    DHOME_V1: 'DHomev1',
+    DHOME_V2: 'DHomev2',
 //    LED_FILE: '/Users/remurd/workspace/meteor/emohd/beaglebone:green:usr2',
     ADMIN_URL:"http://169.254.10.1:8090/"
     //ADMIN_URL:"http://localhost:5000/"

@@ -92,5 +92,13 @@
     "WiFi configuration done": "Đã cấu hình WiFi thành công",
     "IR-controlled device": "Thiết bị điều khiển qua hồng ngoại",
     "normalMode":"Chế độ thông thường",
+    "Update room":"Đổi tên phòng",
+    "About": "Hệ thống",
+    "clock":"Đồng hồ",
+    "Infomations": "Thông tin hệ thống",
+    "serial": "Mã Serial", 
+    "IP Address": "Địa chỉ mạng",
+    "version": "Phiên bản",
+    "dhcp": "Tự nhận địa chỉ IP",
     "_":""
 }

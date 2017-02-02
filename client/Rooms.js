@@ -1,6 +1,9 @@
 var handle;
 Template.Rooms.onRendered(function() {
     var self = this;
+        var scrollPos = window.localStorage.getItem("__scroll");
+        console.log(scrollPos);
+        $(window).scrollTop(scrollPos);
 
     Session.set("title", "Rooms");
     var timeoutHandle = null;
@@ -140,7 +143,13 @@ Template.Rooms.helpers({
     }
 });
 
+var timeoutId = 0;
+
 Template.Rooms.show = Template.Rooms.events({
+    'click .button-style-1, click .button-style-2, a.update-room': function() {
+        var scrollPos = $(window).scrollTop();
+        window.localStorage.setItem("__scroll", scrollPos);
+    },
     'click .removeAction': function(event) {
         var target = event.currentTarget;
         var id = parseInt(target.getAttribute('data-room-id'));
@@ -195,6 +204,7 @@ Template.Rooms.show = Template.Rooms.events({
     /*'click .list-group-item a': function(event) {
         event.stopPropagation();
     },*/
+/*
     'click a.update-room': function(event) {
         console.log("Update room");
         event.stopPropagation();
@@ -205,9 +215,34 @@ Template.Rooms.show = Template.Rooms.events({
         $('#inputUpdateRoomName').attr("data-room-id", roomId);
         $('#modal-updateroom').modal();
     },
-    'click .room-list > li > div': function(event) {
+*/
+    'mousedown .room-item': function(event, instance) {
+        timeoutId = setTimeout(function() {
+            console.log("Update room");
+            event.stopPropagation();
+            var elem = $(event.currentTarget);
+            var roomId = elem.attr('data-room-id');
+            var roomName = elem.attr('data-room-name');
+            console.log(roomId +"-" + roomName);
+            $('#inputUpdateRoomName').val(roomName);
+            $('#inputUpdateRoomName').attr("data-room-id", roomId);
+            $('#modal-updateroom').modal();
+        }, 500);
+    },
+    'mouseup .room-item': function(event) {
+        clearTimeout(timeoutId);
+    },
+    'click .room-item': function(event) {
         console.log("slideToggle");
-        $(event.currentTarget).siblings().slideToggle();
+        var elem = $(event.currentTarget);
+        var roomId = elem.attr('data-room-id');
+        var prevRoomId = Session.get('room-toggle')
+        var prevRoom = "#room-item-" + prevRoomId;
+        if (roomId !== prevRoomId) {
+            $(prevRoom).slideUp();
+        }
+        elem.siblings().slideToggle();
+        Session.set('room-toggle', roomId);
     }
 });
 

@@ -4,8 +4,8 @@ App.info({
   author: 'Dicom Technology',
   email: 'tunghx@dicom.com.vn',
   website: 'http://dicom.com.vn',
-  version: '1.0.8',
-  buildNumber: '1080093'
+  version: '1.1.4',
+  buildNumber: '10800957'
 });
 
 App.setPreference('StatusBarOverlaysWebView', 'false');

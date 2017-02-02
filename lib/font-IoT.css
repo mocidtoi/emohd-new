@@ -16,7 +16,6 @@
     src:url("../font/digital-7.ttf");
 }
 
-
 [data-icon]:before {
   font-family: "iot" !important;
   content: attr(data-icon);
@@ -267,4 +266,22 @@
 }
 .iot-icon-reload-1:before {
   content: "\2d";
+}
+.iot-icon-chevron-circle-down:before {
+  content: "\2e";
+}
+.iot-icon-chevron-circle-left:before {
+  content: "\2f";
+}
+.iot-icon-chevron-circle-right:before {
+  content: "\3a";
+}
+.iot-icon-chevron-circle-up:before {
+  content: "\3b";
+}
+.iot-icon-home:before {
+  content: "\3c";
+}
+.iot-icon-network:before {
+  content: "\3d";
 }

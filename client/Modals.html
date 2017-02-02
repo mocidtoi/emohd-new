@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="ok" type="button" class="col-xs-12 btn btn-primary" data-dismiss="modal">{{_ "Add"}}</button>
+                    <button id="ok" type="button" class="col-xs-12 btn btn-primary" data-dismiss="modal">{{_ "save"}}</button>
                 </div>
             </div>
         </div>
@@ -139,10 +139,7 @@
                 <div class="modal-footer">
                     <div class="col-xs-12 btn-group">
                         <button id="discover" type="button" class="col-xs-5 btn btn-default">{{_ "Search"}}</button>
-                        <button id="discoverGlobal" type="button" class="col-xs-5 btn btn-default pull-right">{{_ "Search Global"}}</button>
-                    </div>
-                    <div class="col-xs-12 btn-group" style="padding-top: 1em;">
-                        <button id="settingsOk" type="button" class="col-xs-12 btn btn-primary">Ok</button>
+                        <button id="settingsOk" type="button" class="col-xs-5 btn btn-primary pull-right">Ok</button>
                     </div>
                 </div>
             </div>
@@ -315,3 +312,68 @@
         </div>
     </div>
 </template>
+<template name="ModalAbout">
+    <div class="modal fade" id="modal-about" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-centering" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{_ "Infomations"}}</h4>
+                </div>
+                <div class="modal-body">
+                    <div>{{_ "version"}}</div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="dhomeVersion" readonly>
+                    </div>
+                    <div>{{_ "serial"}}</div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="dhomeSerial" readonly>
+                    </div>
+                    <div>{{_ "IP Address"}}</div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="dhomeIP" readonly>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="ModalNetwork">
+    <div class="modal fade" id="modal-network" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-centering" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{_ "IP Address"}}</h4>
+                </div>
+                <div class="modal-body">
+                    <div>{{_ "IP address"}}</div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="dhomeIpNetwork">
+                    </div>
+                    <div>{{_ "Subnet mask"}}</div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="dhomeNetmask">
+                    </div>
+                    <div>{{_ "Default gateway"}}</div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="dhomeGateway">
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input id="dhcp" type="checkbox">{{_ "dhcp"}}
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-xs-12 btn-group">
+                        <button id="cancel" type="button" class="col-xs-5 btn btn-default">{{_ "Cancel"}}</button>
+                        <button id="ok" type="button" class="col-xs-5 btn btn-primary pull-right">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+

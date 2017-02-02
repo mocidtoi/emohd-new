@@ -21,5 +21,9 @@
     "or": "or ",
     "settingServer":"Setting server manually",
     "normalMode":"Normal Mode",
+    "clock":"Clock-syn.",
+    "serial":"Serial No.",
+    "version":"System version",
+    "dhcp":"Automatic assign IP",
     "_":""
 }

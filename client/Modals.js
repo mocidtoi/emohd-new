@@ -74,6 +74,16 @@ Template.ModalConfig.events({
     }
 });
 
+function isIPv4(str) {
+    var blocks = str.split('.');
+    if( blocks.length != 4 ) return false;
+    for( var i = 0; i < 4; i++ ) {
+        var bNum = parseInt(blocks[i]);
+        if(bNum < 0 || bNum > 256 ) return false;
+    }
+    return true;
+}
+
 Template.ModalSettings.helpers({
     modalId: function() { return 'modal-settings';}
 });
@@ -102,42 +112,46 @@ Template.ModalSettings.events({
         instance.$('#modal-settings').modal('hide');;
     },
     'click button#discover': function(event, instance) {
-        if(Meteor.isCordova) {
-            zeroconf_discover(function(error, res) {
-                if(!error) {
-                    instance.$('#dhomeIP').val(res.ip);
-                    instance.$('#dhomePort').val('7777');
-                }
-            });
-        }
-        else {
-            alert(TAPi18n.__("Not supported for browser"));
-        }
-    },
-    'click button#discoverGlobal': function(event, instance) {
-        var dHomeKey = window.localStorage.getItem("__token");
+        $('#discover').prop('disabled', true);
+        instance.$('#dhomeIP').val('');
+        instance.$('#dhomePort').val('');
+
+        var dHomeKey = instance.$('#dhomeKey').val().trim();
         if (!dHomeKey) {
-            dHomeKey = instance.$('#dhomeKey').val().trim();
+            dHomeKey = window.localStorage.getItem("__token");
         }
 
-        if (dHomeKey) {
-            HTTP.call( 'GET', 'http://dicom.vn/get-public-ip.php?key=' + dHomeKey, {}, function(err, res){
-                if (err) {
-                    console.log(err);
-                }   
-                else if (res) {
-                    console.log(res);
-                }
-                instance.$('#dhomeIP').val(res.content);
-                instance.$('#dhomePort').val('7777');
-                instance.$('#dhomeKey').val(dHomeKey);
-            });
+        if ( !dHomeKey || dHomeKey.length <= 0) {
+            instance.$('#dhomeKey').parent().addClass('has-error');
+            setTimeout(function(){
+                instance.$('#dhomeKey').parent().removeClass('has-error');
+            }, 2000);
+            $('#discover').prop('disabled', false);
+            return;
         }
         else {
-            if( !dHomeKey || dHomeKey.length <= 0) {
-                instance.$('#dhomeKey').parent().addClass('has-error');
-                return;
-            }
+            HTTP.call( 'GET', 'http://dicom.vn/get-public-ip.php?key=' + dHomeKey, {}, function(err, res){
+                $('#discover').prop('disabled', false);
+                if (err || res.content === "Not available") {
+                    if(Meteor.isCordova) {
+                        zeroconf_discover(function(error, res) {
+                            if(!error) {
+                                instance.$('#dhomeIP').val(res.ip);
+                                instance.$('#dhomePort').val('7777');
+                                instance.$('#dhomeKey').val(dHomeKey);
+                            }
+                        });
+                    }
+                    else {
+                        alert(TAPi18n.__("Not supported for browser"));
+                    }
+                }   
+                else {
+                    instance.$('#dhomeIP').val(res.content);
+                    instance.$('#dhomePort').val('7777');
+                    instance.$('#dhomeKey').val(dHomeKey);
+                }
+            });
         }
     }
 });
@@ -504,7 +518,7 @@ Template.ModalIRControl.events({
         }
     },
     'show.bs.modal .modal': function(event, instance) {
-        console.log(instance.$(".rippler"));
+        //console.log(instance.$(".rippler"));
         Meteor.setTimeout(function() {
             instance.$(".rippler").rippler({
                 effectClass      :  'rippler-effect'
@@ -590,7 +604,6 @@ Template.ModalIRControlAC.helpers({
         var temp = Session.get(tempId);
 
         if (!temp) {
-            console.log(tempId);
             temp = parseInt(window.localStorage.getItem(tempId));
         }
         return temp?temp:23;
@@ -858,5 +871,52 @@ Template.ModalIRControlAC.events({
                 }, irHubId, irHubKey
             );
         }
+    }
+});
+
+Template.ModalAbout.helpers({
+});
+
+Template.ModalAbout.events({
+    'show.bs.modal .modal': function(event, instance) {
+        Meteor.call("getServerInfo", function (error, result) {
+            console.log(result);
+            if (result.version === "1") {
+                instance.$('#dhomeVersion').val(Constants.DHOME_V1);
+            }
+            else if (result.version === "2") {
+                instance.$('#dhomeVersion').val(Constants.DHOME_V2);
+            }
+
+            instance.$('#dhomeSerial').val(result.serial);
+            instance.$('#dhomeIP').val(result.ip);
+        });
+    }
+});
+
+
+Template.ModalNetwork.helpers({
+});
+
+Template.ModalNetwork.events({
+    'click #dhcp': function(event, instance) {
+        var dhcp = instance.$('#dhcp').prop('checked');
+        instance.$('#dhomeIpNetwork').prop('readonly', dhcp);
+        instance.$('#dhomeNetmask').prop('readonly', dhcp);
+        instance.$('#dhomeGateway').prop('readonly', dhcp);
+    },
+    'click #ok': function(event, instance) {
+       var dhcp = instance.$('#dhcp').prop('checked');
+       var ip = instance.$('#dhomeIpNetwork').val();
+       var netmask = instance.$('#dhomeNetmask').val();
+       var gw = instance.$('#dhomeGateway').val();
+       console.log('config ' + dhcp + " " + ip + " " + netmask + " " + gw);
+       Meteor.call('configNetwork', dhcp, ip, netmask, gw);
+    },
+    'show.bs.modal .modal': function(event, instance) {
+        Meteor.call("getServerInfo", function (error, result) {
+            instance.$('#dhomeIpNetwork').val(result.ip);
+            instance.$('#dhomeNetmask').val("255.255.255.0");
+        });
     }
 });

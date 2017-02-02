@@ -141,6 +141,9 @@ a:active, .scene-item a:active span, a:active * {
 .iot-color-g {
     color: rgba(64,64,64,1);
 }
+.iot-bgcolor-brand-3 {
+    background: #42b72a;
+}
 .iot-bgcolor-brand {
     background-color: #008dd0;
 }
@@ -296,7 +299,7 @@ a:active, .scene-item a:active span, a:active * {
     font-size: 18px;
     min-height:110vh;
 }
-ul.room-list, ul.device-list, ul.notif-list {
+ul.room-list, ul.device-list, ul.notif-list, ul.user-list {
     padding: 0.5em;
 }
 ul.device-list {
@@ -320,9 +323,6 @@ ul.notif-list > li > div {
     padding-left: 0.5em;
     padding-right: 0.5em;
     position: relative;
-}
-ul.room-list > li > div {
-    /*border-bottom: solid 1px rgba(210, 210, 210, 1);*/
 }
 ul.device-list > li > div {
     padding-top: 0.2em;
@@ -650,4 +650,11 @@ span.ir-label {
 
 .text-digital {
     font-family:'digital-7';
+}
+
+.main-item {
+    background-color: #f2f2f2; 
+}
+.text-black {
+    color: black;
 }

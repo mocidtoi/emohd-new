@@ -1,6 +1,10 @@
 Template.More.onRendered(function(){
     var self = this;
 
+    Meteor.call("getServerInfo", function (error, result) {
+        window.localStorage.setItem("__version", result.version);
+    });
+
     Meteor.setTimeout(function(){
         self.$(".rippler").rippler({
             effectClass      :  'rippler-effect'
@@ -45,6 +49,18 @@ Template.More.events({
             }
         });
     }, 
+    'click a#KBSound': function(event, instance) {
+        console.log("Clicked KBSound");
+        if(Meteor.isCordova) { 
+            startApp.set({ /* params */
+                "component": ["com.xpg.iselect","com.xpg.iselect.StartActivity"],
+                "flags": ["FLAG_ACTIVITY_NEW_TASK"]
+            }).start();
+        }
+        else {
+            alert(TAPi18n.__("Not supported for browser"));
+        }
+    },
     'click a.ir-hub': function(event, instance) {
         Session.set('ir-hub-id', event.currentTarget.getAttribute('data-id'));
         Session.set('ir-hub-name', event.currentTarget.getAttribute('data-name'));
@@ -56,6 +72,16 @@ Template.More.helpers(PageHelpers);
 Template.More.helpers({
     irhubs: function() {
         return IRHub.find({}).fetch();
+    },
+    version1: function() {
+        var version = window.localStorage.getItem("__version");
+        console.log(version);
+        if (version == "1" || !version) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 });
 

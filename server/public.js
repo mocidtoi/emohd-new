@@ -32,6 +32,47 @@ kodiIP = null, kodiUser = null, kodiPassword=null, netatmoURL=null, netatmoUser=
 
 var useBcast = (process.env.USE_BCAST=="yes");
 
+var byteDelimParserState = {
+    bufseq: new Buffer(8),
+    j: 0 // This is for handling incomplete messages received from ZNP
+};
+
+var byteDelimiter = function(emitter, buffer) {
+    myLog('----------');
+    myLog(buffer);
+    myLog('RAW: ' + buffer);
+    myLog('----------');
+
+    //var j = byteDelimParserState.lastIdx;
+    for (var i = 0; i < buffer.length; i++) {
+        if (buffer[i] == 0x44) { //New msg
+            byteDelimParserState.j = 0;
+            byteDelimParserState.bufseq[0] = buffer[i];
+        }
+
+        if (byteDelimParserState.bufseq[0] == 0x44) {
+            byteDelimParserState.bufseq[byteDelimParserState.j] = buffer[i];
+
+            if (byteDelimParserState.j == 7) { //Full length msg
+                myLog('+++++++++++++++');
+                myLog(byteDelimParserState.bufseq);
+                myLog('FULL MSG: ' + byteDelimParserState.bufseq);
+                myLog('+++++++++++++++');
+
+                emitter.emit('data', byteDelimParserState.bufseq);
+                //byteDelimParserState.lastIdx = 0;
+                byteDelimParserState.j = 0;
+                byteDelimParserState.bufseq = new Buffer(8);
+                break;
+            }
+            else {
+                byteDelimParserState.j++;
+                //byteDelimParserState.lastIdx = j;
+            }
+        }
+    }
+}
+/*
 var byteDelimiter = function(emitter, buffer) {
     myLog('----------');
     myLog(buffer);
@@ -66,6 +107,8 @@ var byteDelimiter = function(emitter, buffer) {
         }
     }
 };
+*/
+
 function sendPermitJoin(validSec) {
     var buffer = new Buffer(8);
     buffer[0] = 0x44;
@@ -393,15 +436,30 @@ var Device = sequelize.define('device', {
 }, {
     hooks: {
         beforeDestroy: function(dev) {
-            Favorite.destroy({
-                where:{
+            Favorite.findAll({
+                where: {
                     deviceId: dev.id
                 }
+            }).then(function(favs){
+                favs.forEach(function(fav){
+                    myLog("remove Favorite SUCCESS " + fav);
+                    fav.destroy();
+                });
+            }).catch(function(err){
+                myLog("remove Favorite vvvv Error: " + err);
             });
-            SceneDev.destroy({
+
+            SceneDev.findAll({
                 where: {
                     devId: dev.id
                 }
+            }).then(function(sds){
+                sds.forEach(function(sd){
+                    myLog("remove scenedev SUCCESS " + sd);
+                    sd.destroy();
+                });
+            }).catch(function(err){
+                myLog("remove scenedev vvvv Error: " + err);
             });
         }
     },
@@ -772,14 +830,16 @@ Meteor.startup(function() {
         future.return();
     });
     future.wait();
-    loadKodiParams();
-    loadNetatmoParams();
+    //loadKodiParams();
+    //loadNetatmoParams();
     scheduleCheck(nCheck, checkAll);
-    KodiReload();
+    //KodiReload();
+/*
     kodiPlay(0, function(err, res) {
         console.log("kodiPlay");
         if(err) console.log(err);
     });
+*/
 });
 
 function addGroup(arg, callback) {
@@ -1172,13 +1232,6 @@ Meteor.publish('data', function(token) {
         self.changed('device', dev.id, dev.toJSON());
         myLog('Device updated');
     });
-    Device.addHook('beforeDestroy', self._session.id, function(dev, option){
-        Favorite.destroy({
-            where:{
-                deviceId: dev.id
-            }
-        });
-    });
     Device.addHook('afterDestroy', self._session.id, function(dev, option) {
         myLog("device (" + dev.id + ") removed");
         self.removed('device', dev.id);
@@ -1229,7 +1282,6 @@ Meteor.publish('data', function(token) {
         Task.removeHook('afterDestroy', self._session.id);
         Device.removeHook('afterCreate', self._session.id);
         Device.removeHook('afterUpdate', self._session.id);
-        Device.removeHook('beforeDestroy', self._session.id);
         Device.removeHook('afterDestroy', self._session.id);
         IRHub.removeHook('afterCreate', self._session.id);
         IRHub.removeHook('afterUpdate', self._session.id);
@@ -1450,7 +1502,6 @@ function doScene(sceneId) {
                         }, function(res) {
                             myLog(res);
                         });
-                        emitSceneAction(sceneId);
                         break;
                     case 3:
                         curtainUp(devId);
@@ -1463,6 +1514,7 @@ function doScene(sceneId) {
                         break;
                 }
             }
+            emitSceneAction(sceneId);
         }).catch(function(err){
             myLog("Error: " + err.toString());
         });
@@ -1560,7 +1612,7 @@ function curtainUp(curtainId) {
             var devCtrl = new Buffer(8);
             devCtrl[0] = 0x44;
             devCtrl[1] = 0x31;
-            devCtrl[2] = 0x34;
+            devCtrl[2] = useBcast?0x32:0x34;
             devCtrl[3] = dev.idx1; // Button 1 --> Up curtain
             devCtrl[4] = dev.netadd / 256;
             devCtrl[5] = dev.netadd % 256;
@@ -1594,7 +1646,7 @@ function curtainDown(curtainId) {
             var devCtrl = new Buffer(8);
             devCtrl[0] = 0x44;
             devCtrl[1] = 0x31;
-            devCtrl[2] = 0x34;
+            devCtrl[2] = useBcast?0x32:0x34;
             devCtrl[3] = dev.idx; // Button 0 --> Up curtain
             devCtrl[4] = dev.netadd / 256;
             devCtrl[5] = dev.netadd % 256;
@@ -2025,6 +2077,26 @@ if (Meteor.isServer) {
             var time = new Date(now);
             var _time = addZero(time.getHours()) + ":" + addZero(time.getMinutes());
             return _time;
-        }
+        },
+        getServerInfo: function () {
+            var version = process.env.MODEL_VER;
+            if (!version) {
+                version = "Not Available";
+            }
+            var serial = process.env.SERIAL;
+            if (!serial) {
+                serial = "Not Available";
+            }
+            var ip = process.env.IP_ETHERNET;
+            if (!ip) {
+                ip = "Not Available";
+            }
+            var gw = process.env.GW;
+            if (!gw) {
+                gw = "Not Available";
+            }
+
+            return {version: version, serial: serial, ip: ip, gw: gw};
+        }    
     });
 }

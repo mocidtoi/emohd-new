@@ -3,26 +3,27 @@
         <ul class="room-list">
             {{#each group}}
             <li>
-                <div>
-                <a style="width:auto;text-align: left;display: inline-block;" class="update-room" data-room-id="{{id}}">{{name}}</a>
-                <a href="#" data-toggle="modal" data-target="#add_device" data-room-id="{{id}}"><i class="icon iot-color-brand icon-fit iot-icon-plus align-right"></i></a></div>
-                <ul style="overflow:hidden;" class="device-list">
-                    {{#each device id}}{{#if removable}}
-                    <li><div style="text-align:center; border:none;">
-                    <a class="removeAction iot-color-brand text-center" data-room-id="{{roomId}}">{{_ "delete"}}</a>
-                    </div></li>
-                    {{else}}
-                    <li><div class="{{containerClass type}}">
-                        <a href="#" class="button-style-1" data-id="{{id}}" data-name="{{name}}" data-irModelId="{{irModelId}}" data-irHubId="{{irHubDevId irHubId}}" data-irHubKey="{{irHubKey irHubId}}">
-                            <i class="icon icon-big {{itemClass type id}} iot-icon-{{itemIcon type icon}}"></i>
-                            <span>{{name}}</span>
-                        </a>
-                        <a class="iot-color-brand button-style-2 align-right" href="/Device/{{groupId}}/{{id}}">
-                            <i class="icon iot-icon-settings align-right"></i>
-                        </a>
-                    </div></li>
-                    {{/if}}{{/each}}
-                </ul>
+                <div class="room-item" data-room-id="{{id}}" data-room-name="{{name}}">
+                    <a style="width:auto;text-align: left;display: inline-block;" class="update-room text-uppercase">{{name}}</a>
+                    <a href="#" data-toggle="modal" data-target="#add_device" data-room-id="{{id}}"><i class="optional icon iot-color-brand icon-fit iot-icon-plus align-right"></i></a>
+                </div>
+                    <ul id="room-item-{{id}}" style="overflow:hidden;" class=" collapse device-list">
+                        {{#each device id}}{{#if removable}}
+                        <li><div style="text-align:center; border:none;">
+                        <a class="removeAction iot-color-brand text-center" data-room-id="{{roomId}}">{{_ "delete"}}</a>
+                        </div></li>
+                        {{else}}
+                        <li><div class="{{containerClass type}}">
+                            <a href="#" class="button-style-1" data-id="{{id}}" data-name="{{name}}" data-irModelId="{{irModelId}}" data-irHubId="{{irHubDevId irHubId}}" data-irHubKey="{{irHubKey irHubId}}">
+                                <i class="icon icon-big {{itemClass type id}} iot-icon-{{itemIcon type icon}}"></i>
+                                <span class="iot-color-lg">{{name}}</span>
+                            </a>
+                            <a class="iot-color-brand button-style-2 align-right" href="/Device/{{groupId}}/{{id}}">
+                                <i class="icon iot-icon-settings align-right"></i>
+                            </a>
+                        </div></li>
+                        {{/if}}{{/each}}
+                    </ul>
             </li>
             {{/each}}
         </ul>

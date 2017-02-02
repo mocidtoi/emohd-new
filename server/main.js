@@ -85,6 +85,30 @@ Meteor.methods({
         configProcess.on('close', function(code){
             console.log("Config done, return code: " + code);
         });
+    },
+    configNetwork: function(dhcp, ipaddr, netmask, gateway) {
+        check(dhcp, Boolean);
+        var configProcess;
+        if( dhcp ) {
+            configProcess=spawn(CONFIG.wifi_config, []);
+        } 
+        else {
+            check(ipaddr, String);
+            check(netmask, String);
+            check(gateway, String);
+            console.log(CONFIG.wifi_config + " " + ipaddr + " " + netmask + " " + gateway);
+            configProcess=spawn(CONFIG.wifi_config, [ipaddr, netmask, gateway]);
+        }
+        configProcess.on('error', function(err){
+            console.log('Error:' + err);
+        });
+        configProcess.stdout.on('data', function(data) {
+            console.log('output:' + data);
+        });
+        configProcess.on('close', function(code){
+            console.log("Config done, return code: " + code);
+        });
+   
     }
 });
 

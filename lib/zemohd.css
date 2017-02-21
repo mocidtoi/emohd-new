@@ -658,3 +658,12 @@ span.ir-label {
 .text-black {
     color: black;
 }
+.delete-item {
+    list-style: none;
+    text-align: center;
+    padding: 0.4em 0;
+    margin: 0 2em;
+    font-size: 1.4em;
+    color: #337ab7;
+    text-transform: uppercase;
+}

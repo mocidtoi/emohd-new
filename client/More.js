@@ -61,6 +61,11 @@ Template.More.events({
             alert(TAPi18n.__("Not supported for browser"));
         }
     },
+    'click a#diagnostic': function(event, instance) {
+        Meteor.call("diagnostic", function (error, result) {
+            console.log("Diagnostic: " + result);
+        });
+    },
     'click a.ir-hub': function(event, instance) {
         Session.set('ir-hub-id', event.currentTarget.getAttribute('data-id'));
         Session.set('ir-hub-name', event.currentTarget.getAttribute('data-name'));
@@ -96,7 +101,6 @@ Template.More.helpers({
     },
     time :function() {
         var time = Session.get("time");
-        console.log(time);
         return time;
     }
 });

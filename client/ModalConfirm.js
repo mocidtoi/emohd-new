@@ -7,6 +7,15 @@ Template.ModalConfirm.helpers({
     },
     content: function() {
         return Session.get('confirm-content');
+    },
+    dev: function() {
+        var devId = Session.get('deviceTarget');
+        devId = parseInt(devId);
+        var device = Device.find({id: devId}).fetch()[0];
+        if (device) {
+            var netAdd = device.netadd;
+        }
+        return Device.find({netadd: netAdd}).fetch();
     }
 });
 

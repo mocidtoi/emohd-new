@@ -63,7 +63,6 @@ var byteDelimiter = function(emitter, buffer) {
                 //byteDelimParserState.lastIdx = 0;
                 byteDelimParserState.j = 0;
                 byteDelimParserState.bufseq = new Buffer(8);
-                break;
             }
             else {
                 byteDelimParserState.j++;
@@ -204,10 +203,20 @@ if (process.env.MOCKUP == 'yes') {
 }
 else {
     SerialPort = Meteor.npmRequire("serialport");
-    serialPort = new SerialPort.SerialPort(process.env.TTY, {
-        baudrate: 115200,
-        parser: byteDelimiter
-    });
+
+    if (process.env.MODEL_VER === 2) {
+        serialPort = new SerialPort(process.env.TTY, {
+            baudrate: 115200,
+            parser: byteDelimiter
+        });
+    }
+    else {
+        serialPort = new SerialPort.SerialPort(process.env.TTY, {
+            baudrate: 115200,
+            parser: byteDelimiter
+        });
+
+    }
 }
 
 Meteor.onConnection(function(){
@@ -2087,7 +2096,7 @@ if (Meteor.isServer) {
             if (!serial) {
                 serial = "Not Available";
             }
-            var ip = process.env.IP_ETHERNET;
+            var ip = process.env.IP;
             if (!ip) {
                 ip = "Not Available";
             }
@@ -2097,6 +2106,16 @@ if (Meteor.isServer) {
             }
 
             return {version: version, serial: serial, ip: ip, gw: gw};
-        }    
+        },
+        diagnostic: function() {
+            var buffer = new Buffer(8);
+            buffer[0] = 0x44;
+            buffer[1] = 0x31;
+            buffer[2] = 0x32;
+            buffer[7] = 0x36; // 0x30 = '0': COMMAND_OFF, 0x31: COMMAND_ON, 0x32: COMMAND_CHECK, 0x33: COMMAND_TOA, 0x34: COMMAND_PERJOIN, 0x35: TOGGLE, 0x36: DAG
+            serialPort.write(buffer);
+            console.log('Diagnostic: ' + buffer);
+            return JSON.stringify(buffer);
+        }
     });
 }

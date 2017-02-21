@@ -887,9 +887,12 @@ Template.ModalAbout.events({
             else if (result.version === "2") {
                 instance.$('#dhomeVersion').val(Constants.DHOME_V2);
             }
+            else {
+                instance.$('#dhomeVersion').val(Constants.DHOME_V1);
+            }
 
             instance.$('#dhomeSerial').val(result.serial);
-            instance.$('#dhomeIP').val(result.ip);
+            instance.$('#dhomeIp').val(result.ip);
         });
     }
 });
@@ -910,6 +913,29 @@ Template.ModalNetwork.events({
        var ip = instance.$('#dhomeIpNetwork').val();
        var netmask = instance.$('#dhomeNetmask').val();
        var gw = instance.$('#dhomeGateway').val();
+
+       if( (!ip || ip.length <= 0) && !dhcp) {
+           instance.$('#dhomeIpNetwork').parent().addClass('has-error');
+           setTimeout(function(){
+               instance.$('#dhomeIpNetwork').parent().removeClass('has-error');
+               }, 2000);
+           return;
+       }
+       else if( !netmask || netmask.length <= 0) {
+           instance.$('#dhomeNetmask').parent().addClass('has-error');
+           setTimeout(function(){
+                   instance.$('#dhomeNetmask').parent().removeClass('has-error');
+                   }, 2000);
+           return;
+       }
+       else if ( !gw || gw.length <= 0) {
+           instance.$('#dhomeGateway').parent().addClass('has-error');
+           setTimeout(function(){
+                   instance.$('#dhomeGateway').parent().removeClass('has-error');
+                   }, 2000);
+           return;
+       }
+
        console.log('config ' + dhcp + " " + ip + " " + netmask + " " + gw);
        Meteor.call('configNetwork', dhcp, ip, netmask, gw);
     },
@@ -917,6 +943,7 @@ Template.ModalNetwork.events({
         Meteor.call("getServerInfo", function (error, result) {
             instance.$('#dhomeIpNetwork').val(result.ip);
             instance.$('#dhomeNetmask').val("255.255.255.0");
+            instance.$('#dhomeGateway').val(result.gw);
         });
     }
 });

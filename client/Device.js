@@ -139,8 +139,15 @@ Template.Device.events({
     },
     'click button#removeDevice': function(event) {
         var devId = parseInt(Router.current().params.id);
-        myConfirm( TAPi18n.__("Are you sure?"), TAPi18n.__("Do you really want to remove this device?"), function() {
-            Meteor.apply('removeDevice', [devId], {wait:false});
+        var netAddr = Device.find({id: devId}).fetch()[0].netadd;
+        var devs =  Device.find({netadd: netAddr}).fetch();
+
+        //myConfirm( TAPi18n.__("Are you sure?"), TAPi18n.__("Do you really want to remove this device?"), function() {
+        Session.set('deviceTarget', devId);
+        myConfirm( TAPi18n.__("Are you sure?"), TAPi18n.__("deleteList"), function() {
+            for (var i = 0; i < devs.length; i++) {
+                Meteor.apply('removeDevice', [devs[i].id], {wait:false});
+            }
             Router.go('/Rooms');
         });
     },

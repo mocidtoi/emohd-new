@@ -1,5 +1,6 @@
 {
     "Are you sure?":"Bạn có chắc không?",
+    "deleteList":"Các thiết bị hoặc kịch bản dưới đây sẽ bị xóa:",
     "Do you really want to remove this button?":"Bạn thực sự muốn loại bỏ phím này?",
     "Do you really want to remove this button from this scene?":"Bạn thực sự muốn loại bỏ phím này khỏi kịch bản?",
     "Do you really want to remove this task?":"Bạn thực sự muốn xóa sự kiện này?",
@@ -100,5 +101,6 @@
     "IP Address": "Địa chỉ mạng",
     "version": "Phiên bản",
     "dhcp": "Tự nhận địa chỉ IP",
+    "Diagnostic": "Quét phím",
     "_":""
 }

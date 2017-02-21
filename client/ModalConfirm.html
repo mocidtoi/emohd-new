@@ -7,6 +7,9 @@
                 </div>
                 <div class="modal-body">
                     <p>{{content}}</p>
+                    {{#each dev}}
+                    <li class="delete-item">{{name}}</li>
+                    {{/each}}
                 </div>
                 <div class="modal-footer">
                     <button id="ok" type="button" class="btn btn-block btn-primary" data-dismiss="modal">Ok</button>

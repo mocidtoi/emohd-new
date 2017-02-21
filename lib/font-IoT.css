@@ -285,3 +285,6 @@
 .iot-icon-network:before {
   content: "\3d";
 }
+.iot-icon-bullseye:before {
+  content: "\3e";
+}

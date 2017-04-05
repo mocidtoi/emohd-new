@@ -204,18 +204,19 @@ if (process.env.MOCKUP == 'yes') {
 else {
     SerialPort = Meteor.npmRequire("serialport");
 
-    if (process.env.MODEL_VER === 2) {
+    if (process.env.MODEL_VER == Constants.DHOME_V2) {
+        myLog("MODEL Ver.2");       
         serialPort = new SerialPort(process.env.TTY, {
             baudrate: 115200,
             parser: byteDelimiter
         });
     }
     else {
+        myLog("MODEL Ver.1");       
         serialPort = new SerialPort.SerialPort(process.env.TTY, {
             baudrate: 115200,
             parser: byteDelimiter
         });
-
     }
 }
 
@@ -1495,7 +1496,6 @@ function doScene(sceneId) {
             }
         }).then(function(sds) {
             for( var i = 0; i < sds.length; i++ ) {
-                console.log("ZZZ: " + sds.length);
                 var devId = sds[i].devId;
                 var sdAction = parseInt(sds[i].action);
 

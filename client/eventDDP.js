@@ -10,6 +10,8 @@ configNotifier = function() {
         Session.set('endpoint', response.endpoint);
         console.log("Notifier event");
         var foundGangs = [null, null, null, null];
+
+/*
         Device.find({
             netadd: parseInt(response.netadd, 16),
             endpoint: response.endpoint
@@ -24,6 +26,14 @@ configNotifier = function() {
             if(device.idx1 != null && device.idx1 != undefined) {
                 foundGangs[parseInt(String.fromCharCode(device.idx1))] = device;
             }
+        });
+*/
+        //Remove device which have same netadd
+        Device.find({
+            netadd: parseInt(response.netadd, 16),
+            endpoint: response.endpoint
+        }).forEach(function(device) {
+            Meteor.apply('removeDevice', [device.id], {wait:false});
         });
 
         switch (response.endpoint) {
